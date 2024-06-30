@@ -1,5 +1,6 @@
 import Shabu from "/Shabu.png";
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Navbar,
   Collapse,
@@ -29,7 +30,7 @@ import {
   TagIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
-//ลูกๆของ NavListMenu
+//nav dropdown info
 const navListMenuItems = [
   {
     title: "Products",
@@ -77,7 +78,7 @@ const navListMenuItems = [
     icon: TagIcon,
   },
 ];
-
+//nav dropdown
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
@@ -152,7 +153,7 @@ function NavListMenu() {
     </React.Fragment>
   );
 }
-
+//nav
 function NavList() {
   return (
     <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
@@ -207,7 +208,7 @@ export default function Header() {
         </div>
         <div className="hidden gap-2 lg:flex">
           <Button variant="gradient" size="sm">
-            Admin Log In
+            <Link to={"/admin"}>Admin Log In</Link>
           </Button>
         </div>
         <IconButton
@@ -226,7 +227,7 @@ export default function Header() {
         <NavList />
         <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
           <Button variant="gradient" size="sm" fullWidth>
-            Admin Log In
+            <Link to={"/admin"}>Admin Log In</Link>
           </Button>
         </div>
       </Collapse>

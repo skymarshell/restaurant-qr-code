@@ -5,7 +5,7 @@ import Header from "./components/header/Header";
 import Menu from "./components/header/Menu";
 import SummaryOrder from "./components/header/Summary_order";
 
-const DataContext = createContext();
+export const DataContext = createContext();
 
 function App() {
   //all menu
@@ -27,4 +27,4 @@ function App() {
 }
 
 export default App;
-export { DataContext };
+

@@ -1,16 +1,37 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Admin_login() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    console.log(`Username: ${username}, Password: ${password}`);
+    const data = { username, password };
 
-    setUsername("");
-    setPassword("");
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/admin/login",
+        data
+      );
+
+      if (response.status === 200) {
+        navigate("/Admin_main");
+        localStorage.setItem("username", username);
+      } else {
+        console.log("Unexpected status code:", response.status);
+      }
+    } catch (error) {
+      if (error.response.status === 404) {
+        alert("Admin not found");
+      } else {
+        console.error("Error:", error.response.data);
+      }
+    }
   };
 
   return (
@@ -59,4 +80,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Admin_login;

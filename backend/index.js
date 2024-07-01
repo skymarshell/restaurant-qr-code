@@ -5,23 +5,20 @@ const cors = require('cors');
 const mysql = require('mysql2');
 const db = require('./db');
 
+//setting
 app.use(cors());
+app.use(express.json());
 
-
-
+//import routes
+const admin = require('./routes/admin')
 
 app.get('/', (req, res) => {
-      // db.query('SELECT * FROM city', (err, result) => {
-      //       if (err) {
-      //             console.error('Error executing query:', err);
-      //             res.status(500).send('Internal Server Error');
-      //             return;
-      //       }
-      //       res.json(result);
-      // });
       res.json("Hello, world!");
 });
 
+//admin route
+app.use('/admin', admin)
+
 app.listen(port, () => {
-      console.log(`app listening on port ${port} \nhttp://localhost:3000/`)
+      console.log(`app listening on port ${port} \nhttp://localhost:${port}/`)
 })

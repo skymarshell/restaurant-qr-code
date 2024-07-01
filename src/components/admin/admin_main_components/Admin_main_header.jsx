@@ -1,5 +1,5 @@
-import Shabu from "/Shabu.png";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   Navbar,
@@ -163,9 +163,13 @@ function NavList() {
         variant="small"
         color="blue-gray"
         className="font-medium">
-        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">Home</ListItem>
+        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
+          Dashboard
+        </ListItem>
       </Typography>
+
       <NavListMenu />
+
       <Typography
         as="a"
         href="#"
@@ -173,14 +177,62 @@ function NavList() {
         color="blue-gray"
         className="font-medium">
         <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
-          Contact Us
+          Menu Management
+        </ListItem>
+      </Typography>
+      <Typography
+        as="a"
+        href="#"
+        variant="small"
+        color="blue-gray"
+        className="font-medium">
+        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
+          Customers
+        </ListItem>
+      </Typography>
+
+      <Typography
+        as="a"
+        href="#"
+        variant="small"
+        color="blue-gray"
+        className="font-medium">
+        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
+          Orders
+        </ListItem>
+      </Typography>
+      <Typography
+        as="a"
+        href="#"
+        variant="small"
+        color="blue-gray"
+        className="font-medium">
+        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
+          View menu
+        </ListItem>
+      </Typography>
+      <Typography
+        as="a"
+        href="#"
+        variant="small"
+        color="blue-gray"
+        className="font-medium">
+        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
+          Settings
         </ListItem>
       </Typography>
     </List>
   );
 }
 
-export default function Header() {
+function Admin_main_header() {
+  const navigate = useNavigate();
+
+  function handleLogOut() {
+    localStorage.removeItem("username");
+    navigate("/admin_login");
+  }
+
   const [openNav, setOpenNav] = React.useState(false);
 
   React.useEffect(() => {
@@ -199,17 +251,24 @@ export default function Header() {
           variant="h6"
           className="mr-4 cursor-pointer py-1.5 lg:ml-2">
           <div className="lg:flex lg:justify-center lg:items-center gap-2 text-center">
-            <img src={Shabu} alt="shabu logo" width="100px" />
-            <p>โต๊ะ X</p>
+            <img src="/Shabu.png" alt="shabu logo" width="100px" />
+            <p>{localStorage.getItem("username")}</p>
           </div>
         </Typography>
+
+        {/* middle list */}
         <div className="hidden lg:block overflow-auto mx-8 max-w-[600px]">
           <NavList />
         </div>
-        <div className="hidden gap-2 lg:flex ">
+
+        <div className="hidden gap-2 lg:flex">
           <Link to="/Admin_login" className="w-full">
-            <Button variant="gradient" size="sm" fullWidth>
-              Admin Log In
+            <Button
+              variant="gradient"
+              size="sm"
+              fullWidth
+              nClick={handleLogOut}>
+              Log out
             </Button>
           </Link>
         </div>
@@ -225,12 +284,17 @@ export default function Header() {
           )}
         </IconButton>
       </div>
+
       <Collapse open={openNav}>
         <NavList />
         <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
           <Link to="/Admin_login" className="w-full">
-            <Button variant="gradient" size="sm" fullWidth>
-              Admin Log In
+            <Button
+              variant="gradient"
+              size="sm"
+              fullWidth
+              onClick={handleLogOut}>
+              Log out
             </Button>
           </Link>
         </div>
@@ -238,3 +302,5 @@ export default function Header() {
     </Navbar>
   );
 }
+
+export default Admin_main_header;

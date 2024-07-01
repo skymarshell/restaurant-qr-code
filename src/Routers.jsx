@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 //pages
 import App from "./App.jsx";
-import Admin from "./components/admin/Admin.jsx";
+import Admin_login from "./components/admin/Admin_login.jsx";
+import Admin_main from "./components/admin/Admin_main.jsx";
 
 const Routers = createBrowserRouter([
   {
@@ -14,8 +15,12 @@ const Routers = createBrowserRouter([
     element: <div>Error page</div>,
   },
   {
-    path: "/admin",
-    element: <Admin />,
+    path: "/admin_login",
+    element: <Admin_login />,
+  },
+  {
+    path: "/Admin_main",
+    element: <Admin_main />,
   },
 ]);
 

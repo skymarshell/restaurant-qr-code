@@ -4,7 +4,7 @@ const db = mysql.createPool({
       host: 'localhost',
       user: 'root',
       password: '123456',
-      database: 'world',
+      database: 'restaurant',
 });
 
 
@@ -18,6 +18,9 @@ db.getConnection((err, connection) => {
 });
 
 
-
+//200 OK:
+//201 Created:
+//400 Bad Request:
+//404 Not Found:
 
 module.exports = db;

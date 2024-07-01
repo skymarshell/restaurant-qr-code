@@ -190,7 +190,16 @@ function NavList() {
           Customers
         </ListItem>
       </Typography>
-
+      <Typography
+        as="a"
+        href="#"
+        variant="small"
+        color="blue-gray"
+        className="font-medium">
+        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
+          Settings
+        </ListItem>
+      </Typography>
       <Typography
         as="a"
         href="#"
@@ -209,16 +218,6 @@ function NavList() {
         className="font-medium">
         <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
           View menu
-        </ListItem>
-      </Typography>
-      <Typography
-        as="a"
-        href="#"
-        variant="small"
-        color="blue-gray"
-        className="font-medium">
-        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
-          Settings
         </ListItem>
       </Typography>
     </List>

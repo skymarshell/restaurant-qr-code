@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { IoClose } from "react-icons/io5";
-import { MdOutlineMenu } from "react-icons/md";
+import React, { useState, useContext } from "react";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import {
   Typography,
   List,
@@ -22,10 +21,11 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-
+import { GiHamburgerMenu } from "react-icons/gi";
+import { AdminContext } from "../Admin_main";
 function Admin_main_sidebar() {
+  const { sideBarShow, setSideBarShow } = useContext(AdminContext);
   const [open, setOpen] = useState(0);
-  const [sideBarShow, setSideBarShow] = useState(true);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -33,19 +33,16 @@ function Admin_main_sidebar() {
 
   return (
     <>
-      {!sideBarShow && (
-        <MdOutlineMenu onClick={() => setSideBarShow(true)} className="fixed" />
-      )}
       <div
-        className={`fixed top-0 left-0 h-full  duration-300 z-10 ${
-          sideBarShow ? "translate-x-0" : "-translate-x-full"
-        }`}>
-        <Card className="min-h-dvh w-full max-w-[15rem] p-1 shadow-xl shadow-blue-gray-900/5 rounded-none rounded-r-lg">
-          <div>
-            <IoClose
+        className={`fixed top-0 left-0 h-full lg:static lg:translate-x-0 duration-300 z-10 bg-white shadow-lg
+          ${sideBarShow ? "translate-x-0" : "-translate-x-full"}`}>
+        <Card className="min-h-screen w-full max-w-[15rem] p-1 shadow-xl shadow-blue-gray-900/5 rounded-none rounded-r-lg">
+          <div className="lg:hidden flex justify-end p-2">
+            <button
               onClick={() => setSideBarShow(false)}
-              className="text-2xl ms-auto me-3 mt-3 hover:cursor-pointer"
-            />
+              className="p-2 bg-blue-gray-200 rounded-full shadow-md hover:bg-blue-gray-300 transition duration-200">
+              <IoIosArrowBack className="text-xl" />
+            </button>
           </div>
           <div className="mb-2 p-4">
             <Typography variant="h5" color="blue-gray">

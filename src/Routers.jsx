@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.jsx";
 import Admin_login from "./components/admin/Admin_login.jsx";
 import Admin_main from "./components/admin/Admin_main.jsx";
+import Customer_main from "./components/customer/Customer_main.jsx";
 
 const Routers = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const Routers = createBrowserRouter([
   {
     path: "/Admin_main",
     element: <Admin_main />,
+  },
+  {
+    path: "/customer/:time/:id",
+    element: <Customer_main />,
   },
 ]);
 

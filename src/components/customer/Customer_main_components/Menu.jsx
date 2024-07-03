@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { DataContext } from "../../App";
+import { DataContext } from "../Customer_main"
 import { menu } from "@material-tailwind/react";
 function Menu() {
   const { menus, SetMenus, orders, setOrders } = useContext(DataContext);

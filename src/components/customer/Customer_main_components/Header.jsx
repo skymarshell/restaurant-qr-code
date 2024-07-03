@@ -1,6 +1,7 @@
 import Shabu from "/Shabu.png";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+// import style
 import {
   Navbar,
   Collapse,
@@ -30,6 +31,9 @@ import {
   TagIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
+// dataContext
+import { DataContext } from "../Customer_main";
+
 //nav dropdown info
 const navListMenuItems = [
   {
@@ -163,7 +167,9 @@ function NavList() {
         variant="small"
         color="blue-gray"
         className="font-medium">
-        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">Home</ListItem>
+        <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
+          Home
+        </ListItem>
       </Typography>
       <NavListMenu />
       <Typography
@@ -181,6 +187,9 @@ function NavList() {
 }
 
 export default function Header() {
+  const { menus, SetMenus, orders, setOrders, id, time } =
+    useContext(DataContext);
+
   const [openNav, setOpenNav] = React.useState(false);
 
   React.useEffect(() => {
@@ -200,7 +209,9 @@ export default function Header() {
           className="mr-4 cursor-pointer py-1.5 lg:ml-2">
           <div className="lg:flex lg:justify-center lg:items-center gap-2 text-center">
             <img src={Shabu} alt="shabu logo" width="100px" />
-            <p>โต๊ะ X</p>
+            <p>
+              โต๊ะ {id} เวลา {time}
+            </p>
           </div>
         </Typography>
         <div className="hidden lg:block overflow-auto mx-8 max-w-[600px]">

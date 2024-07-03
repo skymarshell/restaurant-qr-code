@@ -1,10 +1,15 @@
 import React, { useContext, useState } from "react";
-import { DataContext } from "../../App";
+import { DataContext } from "../Customer_main";
 
-function SummaryOrder() {
+
+function Summary_order() {
+  // info
   const { menus, SetMenus, orders, setOrders } = useContext(DataContext);
+  // set pop-up summary order
   const [popUp, setPopUp] = useState(false);
-  const [alert, setAlert] = useState(false)
+  // alert for success send order
+  const [alert, setAlert] = useState(false);
+  
   function handleConfrim() {
     setPopUp(false);
     setOrders([]);
@@ -13,8 +18,11 @@ function SummaryOrder() {
 
   return (
     <>
+      {/* footer */}
       <aside className="w-full fixed bottom-0 right-0 z-10 text-center bg-blue-500 hover:bg-blue-800">
-        <button onClick={() => setPopUp(true)}>Confirm order</button>
+        <button onClick={() => setPopUp(true)} className="w-full">
+          Confirm order
+        </button>
       </aside>
       {/* pop-up */}
       {popUp && (
@@ -32,7 +40,7 @@ function SummaryOrder() {
             ))}
             <div className="flex gap-8 mt-3">
               <button onClick={() => setPopUp(false)} className="mt-4">
-                Close
+                Return
               </button>
               <button onClick={handleConfrim} className="mt-4">
                 Confrim
@@ -48,4 +56,4 @@ function SummaryOrder() {
   );
 }
 
-export default SummaryOrder;
+export default Summary_order;

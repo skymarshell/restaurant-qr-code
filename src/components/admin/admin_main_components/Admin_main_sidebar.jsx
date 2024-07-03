@@ -24,7 +24,8 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AdminContext } from "../Admin_main";
 function Admin_main_sidebar() {
-  const { sideBarShow, setSideBarShow } = useContext(AdminContext);
+  const { sideBarShow, setSideBarShow, handleLogOut } =
+    useContext(AdminContext);
   const [open, setOpen] = useState(0);
 
   const handleOpen = (value) => {
@@ -162,7 +163,7 @@ function Admin_main_sidebar() {
               </ListItemPrefix>
               Settings
             </ListItem>
-            <ListItem>
+            <ListItem onClick={handleLogOut}>
               <ListItemPrefix>
                 <PowerIcon className="h-5 w-5" />
               </ListItemPrefix>

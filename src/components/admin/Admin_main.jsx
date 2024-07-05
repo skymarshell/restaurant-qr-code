@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export const AdminContext = createContext();
 
 function Admin_main() {
-  // loginCheck();
+
 
   const navigate = useNavigate();
 

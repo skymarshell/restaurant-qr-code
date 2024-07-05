@@ -21,8 +21,9 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { GiHamburgerMenu } from "react-icons/gi";
+
 import { AdminContext } from "../Admin_main";
+
 function Admin_main_sidebar() {
   const { sideBarShow, setSideBarShow, handleLogOut } =
     useContext(AdminContext);
@@ -35,7 +36,7 @@ function Admin_main_sidebar() {
   return (
     <>
       <div
-        className={`fixed top-0 left-0 h-full lg:static lg:translate-x-0 duration-300 z-10 bg-white shadow-lg
+        className={`fixed top-0 left-0 h-full lg:static lg:translate-x-0  duration-300 z-10 bg-white shadow-lg
           ${sideBarShow ? "translate-x-0" : "-translate-x-full"}`}>
         <Card className="min-h-screen w-full max-w-[15rem] p-1 shadow-xl shadow-blue-gray-900/5 rounded-none rounded-r-lg">
           <div className="lg:hidden flex justify-end p-2">

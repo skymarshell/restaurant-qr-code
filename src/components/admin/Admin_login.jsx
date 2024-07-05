@@ -20,8 +20,8 @@ function Admin_login() {
       );
 
       if (response.status === 200) {
-        navigate("/Admin_main");
         localStorage.setItem("username", username);
+        navigate("/Admin_main");
       } else {
         console.log("Unexpected status code:", response.status);
       }

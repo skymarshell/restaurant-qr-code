@@ -86,9 +86,9 @@ router.post('/categories/insert', (req, res) => {
       })
 })
 
-router.delete('/categories/delete', (req, res) => {
-      const category_id = req.query.category_id;
-      const category_name = req.query.category_name;
+router.delete('/categories/delete/:id/:name', (req, res) => {
+      const category_id = req.params.id;
+      const category_name = req.params.name;
 
       const sql = "DELETE FROM category WHERE category_name = ? and category_id = ?";
       db.query(sql, [category_name, category_id], (err, result) => {

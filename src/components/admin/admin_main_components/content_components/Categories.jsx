@@ -1,4 +1,3 @@
-import { alert } from "@material-tailwind/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -38,24 +37,22 @@ function Category_item({ category_id, category_name, get_categories, index }) {
 
   async function deleteCategory(category_id, category_name) {
     try {
-      const response = await axios.delete(
-        "http://localhost:3000/admin/categories/delete",
-        { params: { category_id, category_name } }
-      );
+      if (confirm(`Delete ${category_name} ? `)) {
+        const deleteCategory = await axios.delete(
+          `http://localhost:3000/admin/categories/delete/${category_id}/${category_name}`
+        );
 
-      if (response.status === 200 && response.data) {
-        window.alert(response.data.message || "Category deleted successfully");
-        get_categories(); // Refresh the categories list
+        if (deleteCategory.status == 200) {
+          alert(deleteCategory.data.message);
+        }
       } else {
-        window.alert("Unexpected response from server.");
+        return;
       }
     } catch (error) {
-      window.alert(
-        error.response && error.response.data && error.response.data.error
-          ? error.response.data.error
-          : "An error occurred while deleting the category."
-      );
+      console.log(error);
     }
+
+    get_categories();
   }
 
   function handleEditToggle() {

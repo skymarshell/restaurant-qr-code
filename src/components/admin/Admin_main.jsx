@@ -28,7 +28,7 @@ function Admin_main() {
       }}>
       <div className="mx-auto min-h-dvh bg-blue-gray-100">
         <Admin_main_header />
-        <div className="flex">
+        <div className="flex min-h-dvh">
           <Admin_main_sidebar />
           <Admin_main_content />
         </div>

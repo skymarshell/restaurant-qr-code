@@ -1,7 +1,8 @@
+import { alert } from "@material-tailwind/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function Category_item({ category_id, category_name, get_categories }) {
+function Category_item({ category_id, category_name, get_categories, index }) {
   const [editCategoryName, setEditCategoryName] = useState(category_name); // Initialize with category_name
   const [edit, setEdit] = useState(false);
 
@@ -10,28 +11,51 @@ function Category_item({ category_id, category_name, get_categories }) {
       const data = { category_id, category_name: editCategoryName };
 
       const sendData = await axios.post(
-        "http://localhost:3000/admin/categories",
+        "http://localhost:3000/admin/categories/update",
         data
       );
 
-      var result = confirm(`Change ${category_name} to ${editCategoryName} ?`);
+      const result = confirm(
+        `Change ${category_name} to ${editCategoryName} ?`
+      );
       if (result) {
         if (sendData.status == 200) {
           alert(`Submitting edit ${category_name} to  ${editCategoryName}`);
         }
       } else {
-        setEdit(false);
         setEditCategoryName(category_name);
         return;
       }
-
-      get_categories();
     } catch (error) {
-      alert(error);
+      setEditCategoryName(category_name);
+      alert(error.response.data.error);
     }
 
     setEdit(false);
     // get new data
+    get_categories();
+  }
+
+  async function deleteCategory(category_id, category_name) {
+    try {
+      const response = await axios.delete(
+        "http://localhost:3000/admin/categories/delete",
+        { params: { category_id, category_name } }
+      );
+
+      if (response.status === 200 && response.data) {
+        window.alert(response.data.message || "Category deleted successfully");
+        get_categories(); // Refresh the categories list
+      } else {
+        window.alert("Unexpected response from server.");
+      }
+    } catch (error) {
+      window.alert(
+        error.response && error.response.data && error.response.data.error
+          ? error.response.data.error
+          : "An error occurred while deleting the category."
+      );
+    }
   }
 
   function handleEditToggle() {
@@ -43,9 +67,9 @@ function Category_item({ category_id, category_name, get_categories }) {
   }
 
   return (
-    <div className="flex md:flex-row flex-col gap-2 items-center mt-4">
+    <li className="flex md:flex-row flex-col gap-2 items-center mt-4">
       <div>
-        <p>{category_id}</p>
+        <p>{index + 1}</p>
       </div>
       <div>
         {!edit ? (
@@ -60,7 +84,11 @@ function Category_item({ category_id, category_name, get_categories }) {
         )}
       </div>
       <div className="flex gap-2 flex-wrap items-center justify-center">
-        <button className="btn btn-error">Delete</button>
+        <button
+          className="btn btn-error"
+          onClick={() => deleteCategory(category_id, category_name)}>
+          Delete
+        </button>
         <button
           className="btn btn-active btn-accent"
           onClick={handleEditToggle}>
@@ -74,25 +102,49 @@ function Category_item({ category_id, category_name, get_categories }) {
           </button>
         )}
       </div>
-    </div>
+    </li>
   );
 }
 
 function Add_item({ categories, get_categories }) {
-  console.log(categories);
-
-  const [isDuplicate, setIsDuplicate] = useState(false);
-  const [categoriesData, setCategoriesData] = useState(categories);
   const [value, setValue] = useState("");
   const [isError, setIsError] = useState(false);
 
-  function insert_category() {
+  async function insert_category() {
     // insert data to db
+    const insert_value = value.trim();
+    console.log(insert_value);
+
+    try {
+      const insert = await axios.post(
+        "http://localhost:3000/admin/categories/insert",
+        {
+          category_name: insert_value,
+        }
+      );
+
+      if (insert.status === 200) {
+        alert(`inserted ${insert_value} successfully`);
+      }
+
+      setValue("");
+    } catch (error) {
+      alert(error);
+    }
+
+    // get new data
+    get_categories();
   }
 
   function handleOnchange(e) {
     const inputValue = e.target.value;
     setValue(inputValue);
+
+    if (categories.find((c) => c.category_name === inputValue)) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+    }
   }
 
   return (
@@ -112,13 +164,17 @@ function Add_item({ categories, get_categories }) {
         </div>
         <div className="card-body">
           <h2 className="card-title text-red-500 text-center mx-auto">
-            Categories cannot be duplicate
+            {isError == true ? "*Category is duplicate !!*" : ""}
           </h2>
           <p className="text-red-500 text-center">
-            {isError == true ? "*Category is duplicate !!*" : ""}
+            {isError == true ? `${value} already exists` : ""}
           </p>
           <div className="card-actions justify-center">
-            <button className="btn btn-primary" id="insert-btn">
+            <button
+              className="btn btn-primary"
+              id="insert-btn"
+              disabled={isError == true || value == ""}
+              onClick={insert_category}>
               Insert Category
             </button>
           </div>
@@ -151,9 +207,16 @@ function Categories() {
     <section>
       <p>Current Categories</p>
       <div>
-        {categories.map((category) => (
-          <Category_item {...category} get_categories={get_categories} />
-        ))}
+        <ul>
+          {categories.map((category, index) => (
+            <Category_item
+              key={index}
+              {...category}
+              index={index}
+              get_categories={get_categories}
+            />
+          ))}
+        </ul>
       </div>
       <div>
         <Add_item categories={categories} get_categories={get_categories} />

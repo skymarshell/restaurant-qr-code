@@ -41,13 +41,13 @@ function Admin_main_sidebar() {
   return (
     <>
       <div
-        className={`fixed top-0 left-0 h-full lg:static lg:translate-x-0  duration-300 z-10 bg-white shadow-lg
+        className={`fixed top-0 left-0  lg:static lg:translate-x-0  duration-300 z-10 bg-white shadow-lg
           ${sideBarShow ? "translate-x-0" : "-translate-x-full"}`}>
         <Card className="min-h-screen w-full max-w-[15rem] p-1 shadow-xl shadow-blue-gray-900/5 rounded-none rounded-r-lg">
           <div className="lg:hidden flex justify-end p-2">
             <button
               onClick={() => setSideBarShow(false)}
-              className="p-2 bg-blue-gray-200 rounded-full shadow-md hover:bg-blue-gray-300 transition duration-200">
+              className="p-2 min-h-full bg-blue-gray-200 rounded-full shadow-md hover:bg-blue-gray-300 transition duration-200">
               <IoIosArrowBack className="text-xl" />
             </button>
           </div>
@@ -129,10 +129,8 @@ function Admin_main_sidebar() {
                 </AccordionHeader>
               </ListItem>
               <AccordionBody className="py-1">
-                <List
-                  className="p-0"
-                  onClick={() => setCurrectPage("Categories")}>
-                  <ListItem>
+                <List className="p-0">
+                  <ListItem onClick={() => setCurrectPage("Categories")}>
                     <ListItemPrefix>
                       <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                     </ListItemPrefix>

@@ -16,7 +16,7 @@ function Admin_main_header() {
     <header className="w-full bg-white p-3 shadow-md">
       <div className="container mx-auto flex flex-row-reverse lg:flex-row justify-between items-center">
         <h1 className="text-xl font-bold">
-          Admin System {localStorage.getItem("username")}
+          Admin System {sessionStorage.getItem("username")}
         </h1>
         <button
           onClick={() => setSideBarShow(true)}

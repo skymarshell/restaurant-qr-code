@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 function Login_check({ children }) {
-  const isAuthenticated = localStorage.getItem("username");
+  const isAuthenticated = sessionStorage.getItem("username");
 
   if (!isAuthenticated) {
     return <Navigate to="/admin_login" />;

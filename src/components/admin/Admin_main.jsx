@@ -7,11 +7,10 @@ import { useNavigate } from "react-router-dom";
 export const AdminContext = createContext();
 
 function Admin_main() {
-
-
   const navigate = useNavigate();
 
   const [sideBarShow, setSideBarShow] = useState(false);
+  const [currectPage, setCurrectPage] = useState("dashboard");
 
   function handleLogOut() {
     localStorage.removeItem("username");
@@ -20,7 +19,13 @@ function Admin_main() {
 
   return (
     <AdminContext.Provider
-      value={{ sideBarShow, setSideBarShow, handleLogOut }}>
+      value={{
+        sideBarShow,
+        setSideBarShow,
+        handleLogOut,
+        currectPage,
+        setCurrectPage,
+      }}>
       <div className="mx-auto min-h-dvh bg-blue-gray-100">
         <Admin_main_header />
         <div className="flex">

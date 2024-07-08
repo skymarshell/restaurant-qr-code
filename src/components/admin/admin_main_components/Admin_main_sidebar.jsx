@@ -25,8 +25,13 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AdminContext } from "../Admin_main";
 
 function Admin_main_sidebar() {
-  const { sideBarShow, setSideBarShow, handleLogOut } =
-    useContext(AdminContext);
+  const {
+    sideBarShow,
+    setSideBarShow,
+    handleLogOut,
+    currectPage,
+    setCurrectPage,
+  } = useContext(AdminContext);
   const [open, setOpen] = useState(0);
 
   const handleOpen = (value) => {
@@ -52,6 +57,7 @@ function Admin_main_sidebar() {
             </Typography>
           </div>
           <List>
+            {/* dashboard */}
             <Accordion
               open={open === 1}
               icon={
@@ -97,6 +103,9 @@ function Admin_main_sidebar() {
                 </List>
               </AccordionBody>
             </Accordion>
+            {/* end dashboard */}
+
+            {/* Menu Management */}
             <Accordion
               open={open === 2}
               icon={
@@ -115,27 +124,31 @@ function Admin_main_sidebar() {
                     <ShoppingBagIcon className="h-5 w-5" />
                   </ListItemPrefix>
                   <Typography color="blue-gray" className="mr-auto font-normal">
-                    E-Commerce
+                    Menu Management
                   </Typography>
                 </AccordionHeader>
               </ListItem>
               <AccordionBody className="py-1">
-                <List className="p-0">
+                <List
+                  className="p-0"
+                  onClick={() => setCurrectPage("Categories")}>
                   <ListItem>
                     <ListItemPrefix>
                       <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                     </ListItemPrefix>
-                    Orders
+                    Categories
                   </ListItem>
                   <ListItem>
                     <ListItemPrefix>
                       <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                     </ListItemPrefix>
-                    Products
+                    Foods
                   </ListItem>
                 </List>
               </AccordionBody>
             </Accordion>
+            {/*end Menu Management */}
+
             <hr className="my-2 border-blue-gray-50" />
             <ListItem>
               <ListItemPrefix>
@@ -151,6 +164,12 @@ function Admin_main_sidebar() {
                   className="rounded-full"
                 />
               </ListItemSuffix>
+            </ListItem>
+            <ListItem>
+              <ListItemPrefix>
+                <Cog6ToothIcon className="h-5 w-5" />
+              </ListItemPrefix>
+              View menu
             </ListItem>
             <ListItem>
               <ListItemPrefix>

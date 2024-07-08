@@ -7,7 +7,7 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
       const username = req.body.username
       const password = req.body.password
-   
+
       const sql = "Select * from admin WHERE username = ? and password = ?"
       db.query(sql, [username, password], (err, result) => {
             if (err) {
@@ -22,6 +22,17 @@ router.post('/login', (req, res) => {
       })
 })
 
-
+router.get('/get_categories', (req, res) => {
+      const sql = "SELECT * FROM category"
+      db.query(sql, (err, result) => {
+            if (err) {
+                  console.log(err)
+                  return
+            }
+            else {
+                  res.status(200).json(result)
+            }
+      })
+})
 
 module.exports = router

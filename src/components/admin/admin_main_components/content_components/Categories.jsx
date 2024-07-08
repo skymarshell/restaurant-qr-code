@@ -86,9 +86,14 @@ function Add_item({ categories, get_categories }) {
   const [value, setValue] = useState("");
   const [isError, setIsError] = useState(false);
 
-  function insert_category() {}
+  function insert_category() {
+    // insert data to db
+  }
 
-  function handleOnchange(e) {}
+  function handleOnchange(e) {
+    const inputValue = e.target.value;
+    setValue(inputValue);
+  }
 
   return (
     <div className="max-w-screen-2xl  p-3  mx-auto mt-11">

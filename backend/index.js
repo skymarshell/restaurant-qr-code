@@ -11,6 +11,7 @@ app.use(express.json());
 
 //import routes
 const admin = require('./routes/admin')
+const category = require('./routes/category')
 
 app.get('/', (req, res) => {
       res.json("Hello, world!");
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 
 //admin route
 app.use('/admin', admin)
+app.use('/category', category)
 
 app.listen(port, () => {
       console.log(`app listening on port ${port} \nhttp://localhost:${port}/`)

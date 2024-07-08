@@ -13,7 +13,7 @@ function Admin_main_header() {
   }
 
   return (
-    <header className="w-full bg-white p-3 shadow-md sticky top-0">
+    <header className="w-full bg-white p-3 shadow-md sticky top-0 z-20  ">
       <div className="container mx-auto flex flex-row-reverse lg:flex-row justify-between items-center">
         <h1 className="text-xl font-bold">
           Admin System {sessionStorage.getItem("username")}

@@ -10,7 +10,7 @@ function Category_item({ category_id, category_name, get_categories, index }) {
       const data = { category_id, category_name: editCategoryName };
 
       const sendData = await axios.post(
-        "http://localhost:3000/admin/categories/update",
+        "http://localhost:3000/category/update",
         data
       );
 
@@ -39,7 +39,7 @@ function Category_item({ category_id, category_name, get_categories, index }) {
     try {
       if (confirm(`Delete ${category_name} ? `)) {
         const deleteCategory = await axios.delete(
-          `http://localhost:3000/admin/categories/delete/${category_id}/${category_name}`
+          `http://localhost:3000/category/delete/${category_id}/${category_name}`
         );
 
         if (deleteCategory.status == 200) {
@@ -114,7 +114,7 @@ function Add_item({ categories, get_categories }) {
 
     try {
       const insert = await axios.post(
-        "http://localhost:3000/admin/categories/insert",
+        "http://localhost:3000/category/insert",
         {
           category_name: insert_value,
         }
@@ -187,7 +187,7 @@ function Categories() {
   async function get_categories() {
     try {
       const response = await axios.get(
-        "http://localhost:3000/admin/categories"
+        "http://localhost:3000/category"
       );
       setCategories(response.data);
     } catch (error) {

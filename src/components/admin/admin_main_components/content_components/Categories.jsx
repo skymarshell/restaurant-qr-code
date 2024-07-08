@@ -4,10 +4,16 @@ import React, { useEffect, useState } from "react";
 function Category_item({ category_id, category_name, get_categories, index }) {
   const [editCategoryName, setEditCategoryName] = useState(category_name); // Initialize with category_name
   const [edit, setEdit] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
 
   async function submit_edit_category(id) {
     try {
       const data = { category_id, category_name: editCategoryName };
+
+      if (isChanged == false) {
+        setEdit(false);
+        return;
+      }
 
       const sendData = await axios.post(
         "http://localhost:3000/category/update",
@@ -19,6 +25,7 @@ function Category_item({ category_id, category_name, get_categories, index }) {
       );
       if (result) {
         if (sendData.status == 200) {
+          setIsChanged(false);
           alert(`Submitting edit ${category_name} to  ${editCategoryName}`);
         }
       } else {
@@ -76,7 +83,10 @@ function Category_item({ category_id, category_name, get_categories, index }) {
             type="text"
             value={editCategoryName}
             className="w-full ps-2 p-2 rounded-md"
-            onChange={(e) => setEditCategoryName(e.target.value)}
+            onChange={(e) => {
+              setEditCategoryName(e.target.value);
+              setIsChanged(true);
+            }}
           />
         )}
       </div>
@@ -113,12 +123,9 @@ function Add_item({ categories, get_categories }) {
     console.log(insert_value);
 
     try {
-      const insert = await axios.post(
-        "http://localhost:3000/category/insert",
-        {
-          category_name: insert_value,
-        }
-      );
+      const insert = await axios.post("http://localhost:3000/category/insert", {
+        category_name: insert_value,
+      });
 
       if (insert.status === 200) {
         alert(`inserted ${insert_value} successfully`);
@@ -186,9 +193,7 @@ function Categories() {
 
   async function get_categories() {
     try {
-      const response = await axios.get(
-        "http://localhost:3000/category"
-      );
+      const response = await axios.get("http://localhost:3000/category");
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);

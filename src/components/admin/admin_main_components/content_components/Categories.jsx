@@ -54,7 +54,7 @@ function Category_item({ category_id, category_name, get_categories }) {
           <input
             type="text"
             value={editCategoryName}
-            className="w-full"
+            className="w-full ps-2 p-2 rounded-md"
             onChange={(e) => setEditCategoryName(e.target.value)}
           />
         )}
@@ -73,6 +73,51 @@ function Category_item({ category_id, category_name, get_categories }) {
             Submit
           </button>
         )}
+      </div>
+    </div>
+  );
+}
+
+function Add_item({ categories, get_categories }) {
+  console.log(categories);
+
+  const [isDuplicate, setIsDuplicate] = useState(false);
+  const [categoriesData, setCategoriesData] = useState(categories);
+  const [value, setValue] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  function insert_category() {}
+
+  function handleOnchange(e) {}
+
+  return (
+    <div className="max-w-screen-2xl  p-3  mx-auto mt-11">
+      <p className="text-center text-2xl font-bold">Add item</p>
+      <div className="p-3 py-10 md:max-w-screen-md w-full card card-compact bg-base-100  shadow-xl mx-auto">
+        <div>
+          <div className="flex items-center justify-center gap-2 ">
+            <p className="">Category name</p>
+            <input
+              type="text"
+              className="md:w-96 w-full ps-2 p-1 border-2 border-black rounded-md"
+              onChange={handleOnchange}
+              value={value}
+            />
+          </div>
+        </div>
+        <div className="card-body">
+          <h2 className="card-title text-red-500 text-center mx-auto">
+            Categories cannot be duplicate
+          </h2>
+          <p className="text-red-500 text-center">
+            {isError == true ? "*Category is duplicate !!*" : ""}
+          </p>
+          <div className="card-actions justify-center">
+            <button className="btn btn-primary" id="insert-btn">
+              Insert Category
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -104,6 +149,9 @@ function Categories() {
         {categories.map((category) => (
           <Category_item {...category} get_categories={get_categories} />
         ))}
+      </div>
+      <div>
+        <Add_item categories={categories} get_categories={get_categories} />
       </div>
     </section>
   );

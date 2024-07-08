@@ -22,8 +22,8 @@ router.post('/login', (req, res) => {
       })
 })
 
-router.get('/get_categories', (req, res) => {
-      const sql = "SELECT * FROM category"
+router.get('/categories', (req, res) => {
+      const sql = "SELECT * FROM category ORDER BY category_id"
       db.query(sql, (err, result) => {
             if (err) {
                   console.log(err)
@@ -34,5 +34,23 @@ router.get('/get_categories', (req, res) => {
             }
       })
 })
+
+router.post('/categories', (req, res) => {
+      const category_id = req.body.category_id
+      const category_name = req.body.category_name
+      const sql = "UPDATE category SET category_name = ? WHERE category_id = ?";
+      db.query(sql, [category_name, category_id], (err, result) => {
+            if (err) {
+                  console.error("Error updating category:", err);
+                  res.status(500).json({ error: "Error updating category" });
+                  return
+            }
+            else {
+                  console.log("Category updated successfully");
+                  res.status(200).json(result);
+            }
+      })
+})
+
 
 module.exports = router

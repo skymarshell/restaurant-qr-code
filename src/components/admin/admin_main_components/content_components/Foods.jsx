@@ -134,27 +134,61 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getCategory }) => {
   const [foodImageFile, setFoodImageFile] = useState(null); // State for file input
   const [categoryId, setCategoryId] = useState("");
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     let fileName;
+  //     // Append file with timestamp to FormData if a file is selected
+  //     if (foodImageFile) {
+  //       const originalName = foodImageFile.name;
+  //       const fileExtension = foodImageFile.name.split(".").pop();
+  //       const timestamp = Date.now();
+  //       fileName = `${originalName}_${timestamp}.${fileExtension}`;
+  //     }
+  //     console.log(
+  //       `${foodName}\n${foodDescription}\n${fileName}\n${categoryId}`
+  //     );
+  //     const response = await axios.post("http://localhost:3000/food/menu", {
+  //       food_name: foodName,
+  //       food_description: foodDescription,
+  //       food_image: fileName,
+  //       category_id: categoryId,
+  //     });
+
+  //     if (response.status === 201) {
+  //       alert("New food item added successfully");
+  //       onAdd(response.data); // Notify parent component about the new addition
+  //       // Clear form fields after successful addition
+  //       setFoodName("");
+  //       setFoodDescription("");
+  //       setFoodImageFile(null);
+  //       setCategoryId("");
+  //       setIsAddingFood(false); // Close modal after successful addition
+  //     }
+  //   } catch (error) {
+  //     console.log("Error adding new food item:", error);
+  //     alert("Error adding new food item:", error);
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      let fileName;
-      // Append file with timestamp to FormData if a file is selected
-      if (foodImageFile) {
-        const originalName = foodImageFile.name;
-        const fileExtension = foodImageFile.name.split(".").pop();
-        const timestamp = Date.now();
-        fileName = `${originalName}_${timestamp}.${fileExtension}`;
-      }
-      console.log(
-        `${foodName}\n${foodDescription}\n${fileName}\n${categoryId}`
+      const formData = new FormData();
+      formData.append("food_name", foodName);
+      formData.append("food_description", foodDescription);
+      formData.append("category_id", categoryId);
+      formData.append("food_image", foodImageFile); // Append the file object
+      const response = await axios.post(
+        "http://localhost:3000/food/menu",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
-      const response = await axios.post("http://localhost:3000/food/menu", {
-        food_name: foodName,
-        food_description: foodDescription,
-        food_image: fileName,
-        category_id: categoryId,
-      });
 
       if (response.status === 201) {
         alert("New food item added successfully");

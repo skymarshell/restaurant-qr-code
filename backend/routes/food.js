@@ -1,5 +1,22 @@
 const { express, router, db } = require('./common_import');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
+// Set up multer storage
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.resolve(__dirname, '../../public')); // Specify the destination path
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const getFileName = file.originalname.split(".")[0]
+        cb(null, getFileName + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+// Create multer instance
+const upload = multer({ storage: storage });
 
 
 // Get all food items
@@ -40,30 +57,52 @@ router.put('/menu/:foodId', (req, res) => {
 });
 
 // Delete a food item
+// Delete a food item and its associated image
 router.delete('/menu/:foodId', (req, res) => {
     const { foodId } = req.params;
 
-    const sql = "DELETE FROM restaurant.food WHERE food_id = ?";
-    const values = [foodId];
-
-    db.query(sql, values, (err, result) => {
-        if (err) {
-            console.error('Error deleting food item:', err);
-            res.status(500).json({ error: "Error deleting food item" });
+    // Step 1: Fetch food item details to get the filename
+    const fetchSql = "SELECT food_image FROM restaurant.food WHERE food_id = ?";
+    db.query(fetchSql, [foodId], (fetchErr, fetchResult) => {
+        if (fetchErr) {
+            console.error('Error fetching food item:', fetchErr);
+            res.status(500).json({ error: "Error fetching food item" });
         } else {
-            console.log(`Food item with ID ${foodId} deleted successfully`);
-            res.status(200).json({ message: `Food item with ID ${foodId} deleted successfully` });
+            const { food_image } = fetchResult[0];
+
+            // Step 2: Delete the file from the filesystem
+            const filePath = path.resolve(__dirname, '../../public', food_image);
+            fs.unlink(filePath, (unlinkErr) => {
+                if (unlinkErr) {
+                    console.error('Error deleting food image:', unlinkErr);
+                    res.status(500).json({ error: "Error deleting food image" });
+                } else {
+                    // Step 3: Delete the food item from the database
+                    const deleteSql = "DELETE FROM restaurant.food WHERE food_id = ?";
+                    db.query(deleteSql, [foodId], (deleteErr, deleteResult) => {
+                        if (deleteErr) {
+                            console.error('Error deleting food item:', deleteErr);
+                            res.status(500).json({ error: "Error deleting food item" });
+                        } else {
+                            console.log(`Food item with ID ${foodId} and image deleted successfully`);
+                            res.status(200).json({ message: `Food item with ID ${foodId} deleted successfully` });
+                        }
+                    });
+                }
+            });
         }
     });
 });
 
 // Insert a new food item
-router.post('/menu', (req, res) => {
-    const { food_name, food_description, food_image, category_id } = req.body;
-    console.log(food_name, food_description, food_image, category_id);
+// POST route for adding a new food item with image upload
+router.post('/menu', upload.single('food_image'), (req, res) => {
+    const { food_name, food_description, category_id } = req.body;
+    const food_image = req.file.filename; // Get the uploaded file name from multer
+
     const sql = `
-        INSERT INTO food (food_name, food_description, food_image, category_id)
-        VALUES (?, ?, ?, ?)
+      INSERT INTO food (food_name, food_description, food_image, category_id)
+      VALUES (?, ?, ?, ?)
     `;
     const values = [food_name, food_description, food_image, category_id];
 

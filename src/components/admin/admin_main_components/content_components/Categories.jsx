@@ -1,17 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function Category_item({ category_id, category_name, get_categories, index }) {
-  const [editCategoryName, setEditCategoryName] = useState(category_name); // Initialize with category_name
+function CategoryItem({ category_id, category_name, get_categories, index }) {
+  const [editCategoryName, setEditCategoryName] = useState(category_name);
   const [edit, setEdit] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-
-  async function submit_edit_category(id) {
+  const originalName = category_name;
+  async function submitEditCategory(id) {
     try {
       const data = { category_id, category_name: editCategoryName };
 
-      if (isChanged == false) {
+      if (!isChanged || editCategoryName == originalName) {
         setEdit(false);
+        return;
+      }
+      if (editCategoryName == "") {
+        alert("Please insert category");
         return;
       }
 
@@ -20,51 +24,48 @@ function Category_item({ category_id, category_name, get_categories, index }) {
         data
       );
 
-      const result = confirm(
+      const result = window.confirm(
         `Change ${category_name} to ${editCategoryName} ?`
       );
       if (result) {
-        if (sendData.status == 200) {
-          setIsChanged(false);
-          alert(`Submitting edit ${category_name} to  ${editCategoryName}`);
+        if (sendData.status !== 200) {
+          setEditCategoryName(category_name);
+          return;
         }
-      } else {
-        setEditCategoryName(category_name);
-        return;
       }
     } catch (error) {
       setEditCategoryName(category_name);
       alert(error.response.data.error);
     }
-
     setEdit(false);
+    setIsChanged(false);
     // get new data
     get_categories();
   }
 
   async function deleteCategory(category_id, category_name) {
     try {
-      if (confirm(`Delete ${category_name} ? `)) {
+      if (window.confirm(`Delete ${category_name} ? `)) {
         const deleteCategory = await axios.delete(
           `http://localhost:3000/category/delete/${category_id}/${category_name}`
         );
 
-        if (deleteCategory.status == 200) {
+        if (deleteCategory.status === 200) {
           alert(deleteCategory.data.message);
         }
       } else {
         return;
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    } finally {
+      setEditCategoryName("");
+      get_categories();
     }
-
-    get_categories();
   }
 
   function handleEditToggle() {
     if (edit) {
-      // If edit mode is being turned off, reset the input to the original category name
       setEditCategoryName(category_name);
     }
     setEdit(!edit);
@@ -72,17 +73,17 @@ function Category_item({ category_id, category_name, get_categories, index }) {
 
   return (
     <li className="flex md:flex-row flex-col gap-2 items-center mt-4">
-      <div>
-        <p>{index + 1}</p>
+      <div className="w-12">
+        <p className="text-center">{index + 1}</p>
       </div>
-      <div>
+      <div className="flex-grow">
         {!edit ? (
           <p>{category_name}</p>
         ) : (
           <input
             type="text"
             value={editCategoryName}
-            className="w-full ps-2 p-2 rounded-md"
+            className="w-full px-2 py-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
             onChange={(e) => {
               setEditCategoryName(e.target.value);
               setIsChanged(true);
@@ -90,7 +91,7 @@ function Category_item({ category_id, category_name, get_categories, index }) {
           />
         )}
       </div>
-      <div className="flex gap-2 flex-wrap items-center justify-center">
+      <div className="flex gap-2 items-center">
         <button
           className="btn btn-error"
           onClick={() => deleteCategory(category_id, category_name)}>
@@ -104,7 +105,7 @@ function Category_item({ category_id, category_name, get_categories, index }) {
         {edit && (
           <button
             className="btn btn-primary"
-            onClick={() => submit_edit_category(category_id)}>
+            onClick={() => submitEditCategory(category_id)}>
             Submit
           </button>
         )}
@@ -113,14 +114,12 @@ function Category_item({ category_id, category_name, get_categories, index }) {
   );
 }
 
-function Add_item({ categories, get_categories }) {
+function AddCategory({ categories, get_categories }) {
   const [value, setValue] = useState("");
   const [isError, setIsError] = useState(false);
 
-  async function insert_category() {
-    // insert data to db
+  async function insertCategory() {
     const insert_value = value.trim();
-    console.log(insert_value);
 
     try {
       const insert = await axios.post("http://localhost:3000/category/insert", {
@@ -128,7 +127,7 @@ function Add_item({ categories, get_categories }) {
       });
 
       if (insert.status === 200) {
-        alert(`inserted ${insert_value} successfully`);
+        alert(`Inserted ${insert_value} successfully`);
       }
 
       setValue("");
@@ -136,49 +135,42 @@ function Add_item({ categories, get_categories }) {
       alert(error);
     }
 
-    // get new data
     get_categories();
   }
 
-  function handleOnchange(e) {
+  function handleOnChange(e) {
     const inputValue = e.target.value;
     setValue(inputValue);
 
-    if (categories.find((c) => c.category_name === inputValue)) {
-      setIsError(true);
-    } else {
-      setIsError(false);
-    }
+    setIsError(categories.find((c) => c.category_name === inputValue));
   }
 
   return (
-    <div className="max-w-screen-2xl  p-3  mx-auto mt-11">
-      <p className="text-center text-2xl font-bold">Add item</p>
-      <div className="p-3 py-10 md:max-w-screen-md w-full card card-compact bg-base-100  shadow-xl mx-auto">
-        <div>
-          <div className="flex items-center justify-center gap-2 ">
-            <p className="">Category name</p>
-            <input
-              type="text"
-              className="md:w-96 w-full ps-2 p-1 border-2 border-black rounded-md"
-              onChange={handleOnchange}
-              value={value}
-            />
-          </div>
+    <div className="max-w-screen-2xl p-3 mx-auto mt-11">
+      <p className="text-center text-2xl font-bold">Add Category</p>
+      <div className="p-3 py-10 md:max-w-screen-md w-full card card-compact bg-base-100 shadow-xl mx-auto">
+        <div className="flex items-center justify-center gap-2">
+          <p>Category Name</p>
+          <input
+            type="text"
+            className="w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            onChange={handleOnChange}
+            value={value}
+          />
         </div>
         <div className="card-body">
-          <h2 className="card-title text-red-500 text-center mx-auto">
-            {isError == true ? "*Category is duplicate !!*" : ""}
-          </h2>
-          <p className="text-red-500 text-center">
-            {isError == true ? `${value} already exists` : ""}
-          </p>
+          {isError && (
+            <div className="text-red-500 text-center">
+              *Category is duplicate!!*
+              <br />
+              {`${value} already exists`}
+            </div>
+          )}
           <div className="card-actions justify-center">
             <button
-              className="btn btn-primary"
-              id="insert-btn"
-              disabled={isError == true || value == ""}
-              onClick={insert_category}>
+              className={`btn btn-primary`}
+              disabled={isError || !value}
+              onClick={insertCategory}>
               Insert Category
             </button>
           </div>
@@ -191,9 +183,11 @@ function Add_item({ categories, get_categories }) {
 function Categories() {
   const [categories, setCategories] = useState([]);
 
-  async function get_categories() {
+  async function getCategories() {
     try {
-      const response = await axios.get("http://localhost:3000/category");
+      const response = await axios.get(
+        "http://localhost:3000/category/categories"
+      );
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -202,26 +196,28 @@ function Categories() {
   }
 
   useEffect(() => {
-    get_categories();
+    getCategories();
   }, []);
 
   return (
     <section>
-      <p>Current Categories</p>
-      <div>
+      <p className="text-center text-2xl font-bold mt-8 mb-4">
+        Current Categories
+      </p>
+      <div className="max-w-screen-2xl mx-auto">
         <ul>
           {categories.map((category, index) => (
-            <Category_item
+            <CategoryItem
               key={index}
               {...category}
               index={index}
-              get_categories={get_categories}
+              get_categories={getCategories}
             />
           ))}
         </ul>
       </div>
       <div>
-        <Add_item categories={categories} get_categories={get_categories} />
+        <AddCategory categories={categories} get_categories={getCategories} />
       </div>
     </section>
   );

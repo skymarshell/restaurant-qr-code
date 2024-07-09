@@ -135,8 +135,8 @@ function Admin_main_sidebar() {
                       <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                     </ListItemPrefix>
                     Categories
-                  </ListItem>
-                  <ListItem>
+                  </ListItem >
+                  <ListItem onClick={() => setCurrectPage("Foods")}>
                     <ListItemPrefix>
                       <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                     </ListItemPrefix>

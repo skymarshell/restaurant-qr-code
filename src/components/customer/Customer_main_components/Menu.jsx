@@ -52,7 +52,7 @@ function Menu() {
           <li className={`${item_style} `}>
             <div>
               <img
-                src="/เนื้อ/ฮิเรนิกุ Hireniku.png"
+                src="/ฮิเรนิกุ Hireniku.png"
                 alt="ฮิเรนิกุ Hireniku.png"
                 className={`${img_style}`}
               />
@@ -68,7 +68,7 @@ function Menu() {
           <li className={`${item_style}`}>
             <div>
               <img
-                src="/เนื้อ/คินนิกุ kinnilu.png"
+                src="/คินนิกุ kinnilu.png"
                 className={`${img_style}`}
               />
               <p className="text-center">คินนิกุ</p>

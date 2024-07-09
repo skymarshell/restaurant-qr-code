@@ -1,8 +1,8 @@
 const { express, router, db } = require('./common_import')
 
 
-router.get('/', (req, res) => {
-      const sql = "SELECT * FROM category ORDER BY category_id"
+router.get('/categories', (req, res) => {
+      const sql = "SELECT * FROM category ORDER BY category_id "
       db.query(sql, (err, result) => {
             if (err) {
                   console.log(err)

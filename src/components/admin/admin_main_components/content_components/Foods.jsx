@@ -15,7 +15,9 @@ const FoodItem = ({
   const [editFoodName, setEditFoodName] = useState(food_name);
   const [editFoodDescription, setEditFoodDescription] =
     useState(food_description);
-  const [isSaving, setIsSaving] = useState(false); // State to manage saving state
+  const [editFoodCategory, setEditFoodCategory] = useState(category_id);
+  const [foodImageFile, setFoodImageFile] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const confirmDelete = () => {
     if (window.confirm(`Are you sure you want to delete ${food_name}?`)) {
@@ -30,43 +32,56 @@ const FoodItem = ({
   const handleSave = async () => {
     setIsSaving(true); // Set saving state while sending request
     try {
-      const updatedFood = {
-        food_id,
-        food_name: editFoodName,
-        food_description: editFoodDescription,
-        food_image,
-        category_id,
-      };
+        const formData = new FormData();
+        formData.append("food_name", editFoodName);
+        formData.append("food_description", editFoodDescription);
+        formData.append("category_id", editFoodCategory);
+        if (foodImageFile) {
+            formData.append("food_image", foodImageFile);
+        }
 
-      const response = await axios.put(
-        `http://localhost:3000/food/menu/${food_id}`,
-        updatedFood
-      );
+        const response = await axios.put(
+            `http://localhost:3000/food/menu/${food_id}`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
 
-      if (response.status === 200) {
-        alert(`Food item with ID ${food_id} updated successfully`);
-        onEdit(updatedFood); // Update local state or trigger reload
-      }
+        if (response.status === 200) {
+            alert(`Food item with ID ${food_id} updated successfully`);
+            const updatedFood = response.data;
+            onEdit(updatedFood); // Update local state or trigger reload
+        }
     } catch (error) {
-      console.error("Error updating food item:", error);
-      alert("Error updating food item:", error);
+        console.error("Error updating food item:", error);
+        alert("Error updating food item:", error);
     } finally {
-      setIsSaving(false); // Reset saving state after request completes
-      setEditMode(false); // Exit edit mode after saving
+        setIsSaving(false); // Reset saving state after request completes
+        setEditMode(false); // Exit edit mode after saving
     }
+};
+
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFoodImageFile(file);
   };
 
   const getCategoryName = (categoryId) => {
-    const category = categories.find((cat) => cat.category_id === categoryId);
+    const category = categories.find((cat) => cat.category_id == categoryId);
     return category ? category.category_name : "Unknown Category";
   };
 
   return (
     <div className="p-4 border rounded-md shadow-md">
       <img
-        src={food_image}
+        src={`/${food_image}`}
         alt={food_name}
         className="w-full h-32 object-cover mb-4"
+        key={food_image} // Force re-render when image changes
       />
       {editMode ? (
         <div className="mb-4">
@@ -82,16 +97,35 @@ const FoodItem = ({
             rows="3"
             className="w-full mt-2 px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500"
           />
+          <select
+            value={editFoodCategory}
+            onChange={(e) => setEditFoodCategory(e.target.value)}
+            className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500">
+            <option value="" disabled hidden>
+              Select Category
+            </option>
+            {categories.map((category) => (
+              <option key={category.category_id} value={category.category_id}>
+                {category.category_name}
+              </option>
+            ))}
+          </select>
+          <input
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={handleFileChange}
+            className="w-full mt-2 px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500"
+          />
         </div>
       ) : (
         <>
           <h2 className="text-lg font-semibold">{food_name}</h2>
           <p className="text-gray-500">{food_description}</p>
+          <p className="text-gray-700 font-semibold">
+            Category : {getCategoryName(category_id)}
+          </p>
         </>
       )}
-      <p className="text-gray-700 font-semibold">
-        Category : {getCategoryName(category_id)}
-      </p>
       <div className="mt-4 flex justify-end gap-1">
         {editMode ? (
           <>
@@ -127,50 +161,12 @@ const FoodItem = ({
     </div>
   );
 };
-
-const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getCategory }) => {
+const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
   const [foodName, setFoodName] = useState("");
   const [foodDescription, setFoodDescription] = useState("");
   const [foodImageFile, setFoodImageFile] = useState(null); // State for file input
   const [categoryId, setCategoryId] = useState("");
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     let fileName;
-  //     // Append file with timestamp to FormData if a file is selected
-  //     if (foodImageFile) {
-  //       const originalName = foodImageFile.name;
-  //       const fileExtension = foodImageFile.name.split(".").pop();
-  //       const timestamp = Date.now();
-  //       fileName = `${originalName}_${timestamp}.${fileExtension}`;
-  //     }
-  //     console.log(
-  //       `${foodName}\n${foodDescription}\n${fileName}\n${categoryId}`
-  //     );
-  //     const response = await axios.post("http://localhost:3000/food/menu", {
-  //       food_name: foodName,
-  //       food_description: foodDescription,
-  //       food_image: fileName,
-  //       category_id: categoryId,
-  //     });
-
-  //     if (response.status === 201) {
-  //       alert("New food item added successfully");
-  //       onAdd(response.data); // Notify parent component about the new addition
-  //       // Clear form fields after successful addition
-  //       setFoodName("");
-  //       setFoodDescription("");
-  //       setFoodImageFile(null);
-  //       setCategoryId("");
-  //       setIsAddingFood(false); // Close modal after successful addition
-  //     }
-  //   } catch (error) {
-  //     console.log("Error adding new food item:", error);
-  //     alert("Error adding new food item:", error);
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -180,6 +176,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getCategory }) => {
       formData.append("food_description", foodDescription);
       formData.append("category_id", categoryId);
       formData.append("food_image", foodImageFile); // Append the file object
+
       const response = await axios.post(
         "http://localhost:3000/food/menu",
         formData,
@@ -204,6 +201,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getCategory }) => {
       console.log("Error adding new food item:", error);
       alert("Error adding new food item:", error);
     }
+    getMenu()
   };
 
   const handleCancel = (e) => {
@@ -247,7 +245,6 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getCategory }) => {
               onChange={(e) => setFoodDescription(e.target.value)}
               rows="3"
               className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500"
-              required
             />
           </div>
           <div className="mb-4">
@@ -351,11 +348,10 @@ function Foods() {
     }
   };
 
-  const handleAddFood = (newFood) => {
-    getMenu();
+const handleAddFood = (newFood) => {
     setFoodMenus((prevMenus) => [...prevMenus, newFood]);
     setIsAddingFood(false); // Close modal after adding food
-  };
+};
 
   return (
     <div className="container mx-auto p-4">
@@ -391,6 +387,7 @@ function Foods() {
           </div>
           {isAddingFood && (
             <AddFoodModal
+            
               categories={categories}
               onAdd={handleAddFood}
               setIsAddingFood={setIsAddingFood}

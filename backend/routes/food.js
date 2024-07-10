@@ -33,16 +33,18 @@ router.get('/menu', (req, res) => {
     });
 });
 
+
 // Update a food item
-router.put('/menu/:foodId', (req, res) => {
+router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
     const { foodId } = req.params;
-    const { food_name, food_description, food_image, category_id } = req.body;
+    const { food_name, food_description, category_id } = req.body;
+    const food_image = req.file ? req.file.filename : null; // Get the uploaded file name from multer
 
     const sql = `
     UPDATE restaurant.food 
     SET food_name = ?, food_description = ?, food_image = ?, category_id = ? 
     WHERE food_id = ?
-  `;
+    `;
     const values = [food_name, food_description, food_image, category_id, foodId];
 
     db.query(sql, values, (err, result) => {
@@ -51,10 +53,22 @@ router.put('/menu/:foodId', (req, res) => {
             res.status(500).json({ error: "Error updating food item" });
         } else {
             console.log(`Food item with ID ${foodId} updated successfully`);
-            res.status(200).json({ message: `Food item with ID ${foodId} updated successfully` });
+            // Fetch the updated food item
+            const getUpdatedFoodSql = `SELECT * FROM restaurant.food WHERE food_id = ?`;
+            db.query(getUpdatedFoodSql, [foodId], (err, updatedFoodResult) => {
+                if (err) {
+                    console.error('Error fetching updated food item:', err);
+                    res.status(500).json({ error: "Error fetching updated food item" });
+                } else {
+                    res.status(200).json(updatedFoodResult[0]);
+                }
+            });
         }
     });
 });
+
+
+
 
 // Delete a food item
 // Delete a food item and its associated image

@@ -135,7 +135,7 @@ function Admin_main_sidebar() {
                       <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                     </ListItemPrefix>
                     Categories
-                  </ListItem >
+                  </ListItem>
                   <ListItem onClick={() => setCurrectPage("Foods")}>
                     <ListItemPrefix>
                       <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
@@ -175,11 +175,12 @@ function Admin_main_sidebar() {
               </ListItemPrefix>
               Profile
             </ListItem>
-            <ListItem>
+
+            <ListItem onClick={() => setCurrectPage("Customer view")}>
               <ListItemPrefix>
                 <Cog6ToothIcon className="h-5 w-5" />
               </ListItemPrefix>
-              Settings
+              Customer view
             </ListItem>
             <ListItem onClick={handleLogOut}>
               <ListItemPrefix>

@@ -187,7 +187,7 @@ function NavList() {
 }
 
 export default function Header() {
-  const { menus, SetMenus, orders, setOrders, id, time } =
+  const { menus, SetMenus, orders, setOrders, id, time, isAdmin } =
     useContext(DataContext);
 
   const [openNav, setOpenNav] = React.useState(false);
@@ -209,9 +209,7 @@ export default function Header() {
           className="mr-4 cursor-pointer py-1.5 lg:ml-2">
           <div className="lg:flex lg:justify-center lg:items-center gap-2 text-center">
             <img src={Shabu} alt="shabu logo" width="100px" />
-            <p>
-              โต๊ะ {id} เวลา {time}
-            </p>
+            <p>{isAdmin == true ? "Admin" : `โต๊ะ ${id} เวลา ${time}`}</p>
           </div>
         </Typography>
         <div className="hidden lg:block overflow-auto mx-8 max-w-[600px]">

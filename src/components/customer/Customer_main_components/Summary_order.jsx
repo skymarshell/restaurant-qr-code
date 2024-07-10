@@ -1,15 +1,15 @@
 import React, { useContext, useState } from "react";
 import { DataContext } from "../Customer_main";
 
-
 function Summary_order() {
   // info
-  const { menus, SetMenus, orders, setOrders } = useContext(DataContext);
+  const { menus, SetMenus, orders, setOrders, isAdmin } =
+    useContext(DataContext);
   // set pop-up summary order
   const [popUp, setPopUp] = useState(false);
   // alert for success send order
   const [alert, setAlert] = useState(false);
-  
+
   function handleConfrim() {
     setPopUp(false);
     setOrders([]);
@@ -19,7 +19,10 @@ function Summary_order() {
   return (
     <>
       {/* footer */}
-      <aside className="w-full fixed bottom-0 right-0 z-10 text-center bg-blue-500 hover:bg-blue-800">
+      <aside
+        className={`w-full fixed bottom-0 right-0 z-10 text-center bg-blue-500 hover:bg-blue-800 ${
+          isAdmin == true ? "hidden" : " "
+        }`}>
         <button onClick={() => setPopUp(true)} className="w-full">
           Confirm order
         </button>

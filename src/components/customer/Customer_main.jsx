@@ -8,7 +8,7 @@ import Summary_order from "./Customer_main_components/Summary_order";
 
 export const DataContext = createContext();
 
-function Customer_main() {
+function Customer_main({ isAdmin }) {
   //all menu
   const [menus, SetMenus] = useState([]);
   //user order menu
@@ -20,7 +20,7 @@ function Customer_main() {
     <div className="min-h-dvh w-full">
       <div className="mx-auto max-w-screen-xl px-4 py-2">
         <DataContext.Provider
-          value={{ menus, SetMenus, orders, setOrders, id, time }}>
+          value={{ menus, SetMenus, orders, setOrders, id, time, isAdmin }}>
           <Header />
           <Menu />
           <Summary_order />

@@ -3,7 +3,7 @@ import { AdminContext } from "../Admin_main";
 //content_components
 import Categories from "./content_components/Categories";
 import Foods from "./content_components/Foods";
-
+import Customer_main from "../../customer/Customer_main";
 function Admin_main_content() {
   const {
     sideBarShow,
@@ -25,6 +25,7 @@ function Admin_main_content() {
       <article className="border-4 border-white p-3 min-h-dvh">
         {currectPage == "Categories" && <Categories />}
         {currectPage == "Foods" && <Foods />}
+        {currectPage == "Customer view" && <Customer_main isAdmin={true} />}
       </article>
     </main>
   );

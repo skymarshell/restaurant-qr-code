@@ -216,7 +216,9 @@ export default function Header() {
           <NavList />
         </div>
         <div className="hidden gap-2 lg:flex ">
-          <Link to="/Admin_login" className="w-full">
+          <Link
+            to="/Admin_login"
+            className={`w-full ${isAdmin == true ? "hidden" : ""} `}>
             <Button variant="gradient" size="sm" fullWidth>
               Admin Log In
             </Button>
@@ -237,7 +239,9 @@ export default function Header() {
       <Collapse open={openNav}>
         <NavList />
         <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-          <Link to="/Admin_login" className="w-full">
+          <Link
+            to="/Admin_login"
+            className={`w-full ${isAdmin == true ? "hidden" : ""}`}>
             <Button variant="gradient" size="sm" fullWidth>
               Admin Log In
             </Button>

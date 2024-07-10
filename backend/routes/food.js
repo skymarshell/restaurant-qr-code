@@ -27,7 +27,7 @@ router.get('/menu', (req, res) => {
             console.error('Error querying food table:', err);
             res.status(500).json({ error: "Error querying food table" });
         } else {
-            console.log('Get food data');
+           
             res.status(200).json(result);
         }
     });

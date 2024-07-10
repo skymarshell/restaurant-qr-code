@@ -1,19 +1,31 @@
 import React, { useContext, useState } from "react";
 import { DataContext } from "../Customer_main";
+import axios from "axios";
 
 function Summary_order() {
   // info
-  const { menus, SetMenus, orders, setOrders, isAdmin } =
-    useContext(DataContext);
+  const { id, orders, setOrders, isAdmin } = useContext(DataContext);
   // set pop-up summary order
   const [popUp, setPopUp] = useState(false);
   // alert for success send order
   const [alert, setAlert] = useState(false);
 
-  function handleConfrim() {
+  async function handleConfrim() {
+    console.log(orders);
     setPopUp(false);
     setOrders([]);
     //send to backend
+    try {
+      const send = await axios.post(
+        "http://localhost:3000/customer_order/send_order",
+        {
+          id,
+          orders,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -37,7 +49,7 @@ function Summary_order() {
             </div>
             {orders.map((order, index) => (
               <div key={index} className=" flex gap-6 justify-between">
-                <p className="w-8/12 overflow-auto">{order.id}</p>
+                <p className="w-8/12 overflow-auto">{order.name}</p>
                 <p>{order.quantity}</p>
               </div>
             ))}

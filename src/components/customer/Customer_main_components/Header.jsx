@@ -187,7 +187,7 @@ function NavList() {
 }
 
 export default function Header() {
-  const { menus, SetMenus, orders, setOrders, id, time, isAdmin } =
+  const {  id, time, isAdmin } =
     useContext(DataContext);
 
   const [openNav, setOpenNav] = React.useState(false);

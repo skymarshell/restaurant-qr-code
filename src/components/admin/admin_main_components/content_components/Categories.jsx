@@ -57,7 +57,7 @@ function CategoryItem({ category_id, category_name, get_categories, index }) {
         return;
       }
     } catch (error) {
-      console.error(error);
+      alert(error.response.data.error);
     } finally {
       setEditCategoryName("");
       get_categories();

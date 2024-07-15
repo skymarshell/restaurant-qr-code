@@ -73,7 +73,7 @@ router.delete('/delete/:id/:name', (req, res) => {
       db.query(sql, [category_name, category_id], (err, result) => {
             if (err) {
                   console.error("Error deleting category:", err);
-                  res.status(500).json({ error: "Error deleting category" });
+                  res.status(500).json({ error: `โปรดลบอาหารหมวดหมู่ "${category_name}" ก่อน` });
                   return;
             } else {
                   console.log("Category deleted successfully");

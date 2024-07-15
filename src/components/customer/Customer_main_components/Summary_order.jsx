@@ -16,6 +16,10 @@ function Summary_order() {
     setOrders([]);
     //send to backend
     try {
+      if (orders.length <= 0) {
+        return;
+      }
+
       const send = await axios.post(
         "http://localhost:3000/customer_order/send_order",
         {
@@ -34,8 +38,11 @@ function Summary_order() {
       <aside
         className={`w-full fixed bottom-0 right-0 z-10 text-center bg-blue-500 hover:bg-blue-800 ${
           isAdmin == true ? "hidden" : " "
-        }`}>
-        <button onClick={() => setPopUp(true)} className="w-full">
+        } ${orders.length <= 0 ? "hidden" : "block"}`}>
+        <button
+          onClick={() => setPopUp(true)}
+          disabled={orders.length <= 0}
+          className="w-full">
           Confirm order
         </button>
       </aside>

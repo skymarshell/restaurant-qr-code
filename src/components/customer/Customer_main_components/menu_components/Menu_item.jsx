@@ -54,16 +54,16 @@ function Menu_item({ name, image }) {
 
   return (
     <>
-      <li  className="flex items-center   p-3 my-3 sm:gap-20 gap-6 border-0 border-solid shadow-md backdrop-saturate-200 backdrop-blur-2xl bg-opacity-80 border-white/80 bg-white">
+      <li className="flex items-center justify-between  p-3 my-3 sm:gap-20 gap-6 border-0 border-solid shadow-md backdrop-saturate-200 backdrop-blur-2xl bg-opacity-80 border-white/80 bg-white">
         <div>
           <img
             src={`/${image}`}
             alt={`${image}`}
-            className={`w-[250px] lg:w-[300px]`}
+            className={`w-[250px] lg:w-auto lg:h-[200px]`}
           />
           <p className="text-center">{name}</p>
         </div>
-        <div className="flex items-center justify-center md:gap-11  gap-4">
+        <div className="flex items-center justify-center md:gap-11  gap-4 me-6">
           <button onClick={() => decrease_quantity(name)}>-</button>
           <p>{quantity}</p>
           <button onClick={() => increase_quantity(name)}>+</button>

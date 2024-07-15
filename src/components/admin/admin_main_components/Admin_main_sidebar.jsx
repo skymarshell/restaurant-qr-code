@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import {
   Typography,
@@ -23,6 +23,7 @@ import {
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import { AdminContext } from "../Admin_main";
+import axios from "axios";
 
 function Admin_main_sidebar() {
   const {
@@ -33,10 +34,31 @@ function Admin_main_sidebar() {
     setCurrectPage,
   } = useContext(AdminContext);
   const [open, setOpen] = useState(0);
-
+  const [waitingOrderCount, setWaitingOrderCount] = useState(0);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
+  async function getWaitingOrderCount() {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/customer_order/waiting_orderCount"
+      );
+      setWaitingOrderCount(response.data[0]["count(order_status)"]);
+    } catch (error) {
+      alert(error.respone.data.error);
+    }
+  }
+  useEffect(() => {
+    getWaitingOrderCount();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getWaitingOrderCount();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -148,14 +170,14 @@ function Admin_main_sidebar() {
             {/*end Menu Management */}
 
             <hr className="my-2 border-blue-gray-50" />
-            <ListItem>
+            <ListItem onClick={() => setCurrectPage("Orders")}>
               <ListItemPrefix>
                 <InboxIcon className="h-5 w-5" />
               </ListItemPrefix>
-              Inbox
+              Orders
               <ListItemSuffix>
                 <Chip
-                  value="14"
+                  value={waitingOrderCount}
                   size="sm"
                   variant="ghost"
                   color="blue-gray"

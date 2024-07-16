@@ -27,7 +27,7 @@ router.get('/menu', (req, res) => {
             console.error('Error querying food table:', err);
             res.status(500).json({ error: "Error querying food table" });
         } else {
-           
+
             res.status(200).json(result);
         }
     });
@@ -35,15 +35,21 @@ router.get('/menu', (req, res) => {
 
 
 // Update a food item
+// Update a food item
 router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
     const { foodId } = req.params;
     const { food_name, food_description, category_id } = req.body;
-    const food_image = req.file ? req.file.filename : null; // Get the uploaded file name from multer
+
+    // Check if req.file exists and is not null before assigning food_image
+    let food_image = null;
+    if (req.file) {
+        food_image = req.file.filename;
+    }
 
     const sql = `
-    UPDATE restaurant.food 
-    SET food_name = ?, food_description = ?, food_image = ?, category_id = ? 
-    WHERE food_id = ?
+      UPDATE restaurant.food 
+      SET food_name = ?, food_description = ?, food_image = IFNULL(?, food_image), category_id = ? 
+      WHERE food_id = ?
     `;
     const values = [food_name, food_description, food_image, category_id, foodId];
 
@@ -69,7 +75,6 @@ router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
 
 
 
-
 // Delete a food item
 // Delete a food item and its associated image
 router.delete('/menu/:foodId', (req, res) => {
@@ -88,6 +93,7 @@ router.delete('/menu/:foodId', (req, res) => {
             const filePath = path.resolve(__dirname, '../../public', food_image);
             fs.unlink(filePath, (unlinkErr) => {
                 if (unlinkErr) {
+                 
                     console.error('Error deleting food image:', unlinkErr);
                     res.status(500).json({ error: "Error deleting food image" });
                 } else {

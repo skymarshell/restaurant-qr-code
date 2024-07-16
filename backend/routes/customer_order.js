@@ -1,5 +1,5 @@
 const { express, router, db } = require('./common_import');
-
+const { getDateTime } = require("../functions")
 
 router.get('/waiting_orderCount', (req, res) => {
     db.query("SELECT count(order_status) FROM customer_order WHERE order_status = ?", [2], (err, result) => {
@@ -8,7 +8,7 @@ router.get('/waiting_orderCount', (req, res) => {
             return
         } else {
 
-            res.status(200).json(result );
+            res.status(200).json(result);
         }
 
     })
@@ -20,8 +20,8 @@ router.get('/get_order', (req, res) => {
     const offset = (page - 1) * limit;
 
     const sql = view === "waiting orders"
-        ? `SELECT * FROM customer_order WHERE order_status = 2 ORDER BY order_status DESC LIMIT ${limit} OFFSET ${offset}`
-        : `SELECT * FROM customer_order ORDER BY order_status DESC LIMIT ${limit} OFFSET ${offset}`;
+        ? `SELECT * FROM customer_order WHERE order_status = 2 ORDER BY order_status DESC,order_id DESC LIMIT ${limit} OFFSET ${offset}`
+        : `SELECT * FROM customer_order ORDER BY order_status DESC,order_id DESC LIMIT ${limit} OFFSET ${offset}`;
 
     const countSql = view === "waiting orders"
         ? `SELECT COUNT(*) as total FROM customer_order WHERE order_status = 2`
@@ -77,16 +77,8 @@ router.post('/send_order', (req, res) => {
     // Construct the order_text
     let order_text = orders.map(order => `${order["name"]} : ${order["quantity"]}`).join(',');
 
-    // Get the current date
-    //YYYY-MM-DD HH-MM-S
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+
+    const currentTime = getDateTime()
 
 
 

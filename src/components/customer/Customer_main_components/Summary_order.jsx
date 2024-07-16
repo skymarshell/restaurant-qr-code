@@ -28,7 +28,7 @@ function Summary_order() {
         }
       );
     } catch (error) {
-      console.log(error);
+      alert("Cant send order ", error);
     }
   }
 

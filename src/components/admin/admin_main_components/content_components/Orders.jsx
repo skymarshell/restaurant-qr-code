@@ -3,6 +3,7 @@ import React, { useEffect, useState, createContext } from "react";
 import moment from "moment";
 import Order_item from "./Orders_components/Order_item";
 import Order_pagination from "./Orders_components/Order_pagination";
+import Order_search from "./Orders_components/Order_search";
 
 export const OrderContext = createContext("");
 
@@ -82,19 +83,6 @@ function Orders() {
     }
   };
 
-  function showOrder(order) {
-    const orderSplit = order.split(",");
-    return (
-      <div>
-        {orderSplit.map((o, index) => (
-          <p key={index} className="ml-4 text-gray-700">
-            - {o}
-          </p>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <>
       <OrderContext.Provider
@@ -109,7 +97,7 @@ function Orders() {
           confirmOrder,
           cancelOrder,
         }}>
-        <Order_item showOrder={showOrder} />
+        <Order_item />
         <Order_pagination />
       </OrderContext.Provider>
     </>

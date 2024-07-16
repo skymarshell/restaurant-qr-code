@@ -1,7 +1,20 @@
 import React, { useContext } from "react";
 import { OrderContext } from "../Orders";
 
-function Order_item({ showOrder }) {
+function showOrder(order) {
+  const orderSplit = order.split(",");
+  return (
+    <div>
+      {orderSplit.map((o, index) => (
+        <p key={index} className="ml-4 text-gray-700">
+          - {o}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function Order_item() {
   const {
     order,
     orderLength,

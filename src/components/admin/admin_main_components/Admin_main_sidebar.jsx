@@ -185,11 +185,11 @@ function Admin_main_sidebar() {
                 />
               </ListItemSuffix>
             </ListItem>
-            <ListItem onClick={() => setCurrectPage("Table status")}>
+            <ListItem onClick={() => setCurrectPage("Tables")}>
               <ListItemPrefix>
                 <Cog6ToothIcon className="h-5 w-5" />
               </ListItemPrefix>
-              Table status
+              Tables
             </ListItem>
             <ListItem onClick={() => setCurrectPage("Customer view")}>
               <ListItemPrefix>

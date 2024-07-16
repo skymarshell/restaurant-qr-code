@@ -5,7 +5,7 @@ import Categories from "./content_components/Categories";
 import Foods from "./content_components/Foods";
 import Customer_main from "../../customer/Customer_main";
 import Orders from "./content_components/Orders";
-import Table_status from "./content_components/Table_status";
+import Tables from "./content_components/Tables";
 
 function Admin_main_content() {
   const {
@@ -30,7 +30,7 @@ function Admin_main_content() {
         {currectPage == "Foods" && <Foods />}
         {currectPage == "Customer view" && <Customer_main isAdmin={true} />}
         {currectPage == "Orders" && <Orders />}
-        {currectPage == "Table status" && <Table_status/>}
+        {currectPage == "Tables" && <Tables />}
       </article>
     </main>
   );

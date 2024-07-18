@@ -14,6 +14,7 @@ const admin = require('./routes/admin')
 const category = require('./routes/category')
 const food = require('./routes/food')
 const customer_order = require('./routes/customer_order')
+const tables = require('./routes/tables')
 
 app.get('/', (req, res) => {
       res.json("Hello, world!");
@@ -24,6 +25,7 @@ app.use('/admin', admin)
 app.use('/category', category)
 app.use('/food', food)
 app.use('/customer_order', customer_order)
+app.use('/tables', tables)
 
 app.listen(port, () => {
       console.log(`app listening on port ${port} \nhttp://localhost:${port}/`)

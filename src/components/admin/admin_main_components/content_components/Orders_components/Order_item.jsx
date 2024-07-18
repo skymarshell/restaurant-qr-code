@@ -31,7 +31,7 @@ function Order_item() {
           ? `Waiting orders: ${orderLength} orders`
           : `Total orders: ${orderLength} orders `}
       </h1>
-      <div className="flex gap-3 mb-5">
+      <div className="flex gap-3 mb-5 flex-col md:flex-row">
         <button
           onClick={() => setViewMode("view all orders")}
           className="btn btn-info">

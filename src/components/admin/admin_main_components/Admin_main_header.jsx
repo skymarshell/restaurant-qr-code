@@ -16,10 +16,10 @@ function Admin_main_header() {
     <header className="w-full bg-white p-3 shadow-md sticky top-0 z-20  ">
       <div className="container mx-auto flex flex-row-reverse lg:flex-row justify-between items-center">
         <h1 className="text-xl font-bold">
-          Admin System {sessionStorage.getItem("username")}
+          Admin System username : {sessionStorage.getItem("username")}
         </h1>
         <button
-          onClick={() => setSideBarShow(true)}
+          onClick={() => setSideBarShow(!sideBarShow)}
           className="text-blue-600 lg:hidden">
           <GiHamburgerMenu />
         </button>

@@ -5,26 +5,10 @@ function Table_show({ tables }) {
   if (!tables.length) {
     return <p>No tables available</p>;
   }
-
-  const qrCodeBase = `http://localhost:5173/customer/1/`;
-
-  function getDateTime() {
-    // Get the current date
-    //YYYY-MM-DD HH-MM-S
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-    return currentTime;
-  }
+  const maxTime = 150;
+  const qrCodeBase = `http://localhost:5173/customer`;
 
   function endTime(start_time) {
-    const maxTime = 150;
     const splitStartTime = start_time.split(":");
     const startTimeHour = splitStartTime[0];
     const startTimeMinute = splitStartTime[1];
@@ -32,6 +16,9 @@ function Table_show({ tables }) {
     let endTimeHour = Math.floor(maxTime / 60) + parseInt(startTimeHour);
     //30
     let endTimeMinute = (maxTime % 60) + parseInt(startTimeMinute);
+    if (endTimeHour >= 24) {
+      endTimeHour -= 24;
+    }
     if (endTimeMinute >= 60) {
       endTimeHour += 1;
       endTimeMinute %= 60;
@@ -43,6 +30,48 @@ function Table_show({ tables }) {
     return endTime;
   }
 
+  function remaining_time(start_time, end_time) {
+    function getDateTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      return `${hours}:${minutes}`;
+    }
+
+    function timeToMinutes(time) {
+      const [hour, minute] = time.split(":").map(Number);
+      return hour * 60 + minute;
+    }
+
+    // Get current time and convert to minutes
+    const currentTime = getDateTime();
+    const currentTimeMinutes = timeToMinutes(currentTime);
+
+    // Convert start and end times to minutes
+    const startTimeMinutes = timeToMinutes(start_time);
+    let endTimeMinutes = timeToMinutes(end_time);
+
+    // Handle end time rollover to the next day
+    if (startTimeMinutes > endTimeMinutes) {
+      endTimeMinutes += 24 * 60; // Add 24 hours in minutes
+    }
+
+    let remainingMinutes = endTimeMinutes - currentTimeMinutes;
+
+    // If the remaining minutes are negative, it means the time is up
+    if (remainingMinutes < 0) {
+      return "Time's up.";
+    }
+
+    // Convert remaining minutes back to hours and minutes
+    const remainingHours = Math.floor(remainingMinutes / 60);
+    const remainingMinutesPart = remainingMinutes % 60;
+
+    // Format the result as HH:MM
+    return `${remainingHours}:${
+      remainingMinutesPart < 10 ? "0" : ""
+    }${remainingMinutesPart} hours.`;
+  }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
       {tables.map((table, index) => (
@@ -58,7 +87,13 @@ function Table_show({ tables }) {
           </div>
           <div>
             <p>Start time: {table.start_time}</p>
-            <p>Remaining time: {endTime(table.start_time)}</p>
+            <div>
+              <p>End time: {endTime(table.start_time)}</p>
+              <p>
+                Remaining time :{" "}
+                {remaining_time(table.start_time, endTime(table.start_time))}{" "}
+              </p>
+            </div>
           </div>
 
           <p>Number of customers: {table.customer_count}</p>
@@ -75,7 +110,7 @@ function Table_show({ tables }) {
             <QRCode
               size={256}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              value={``}
+              value={`${qrCodeBase}/${table.start_time}/${table.table_number}`}
               viewBox={`0 0 256 256`}
             />
           </div>

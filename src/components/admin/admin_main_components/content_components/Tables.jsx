@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import Table_show from "./Tables_components/Table_show";
+import Table_item from "./Tables_components/Table_item";
 import axios from "axios";
 
 function Tables() {
   const [tables, setTables] = useState([]);
-  const [isEdit, setIsEdit] = useState(false); // State to track editing status
+  const [isEdit, setIsEdit] = useState(false);
 
   async function getTable() {
     try {
       const response = await axios.get("http://localhost:3000/tables/table");
       setTables(response.data);
-      console.log(tables);
+      console.log(response.data); // Updated to log the response data
     } catch (error) {
       console.error("Error fetching tables:", error);
       alert("Error fetching tables. Please try again later.");
@@ -18,27 +18,32 @@ function Tables() {
   }
 
   useEffect(() => {
-    // Fetch data initially
     getTable();
 
-    // Interval to fetch data every 10 seconds if not in edit mode
     const interval = setInterval(() => {
       if (!isEdit) {
         getTable();
       }
-    }, 10000); // 10000 milliseconds = 10 seconds
+    }, 10000);
 
-    // Clean up interval on component unmount or re-render
     return () => {
       clearInterval(interval);
     };
-  }, [isEdit]); // Dependency on isEdit to start/stop interval based on edit mode
+  }, [isEdit]);
 
   return (
     <div className="max-w-screen-xl mx-auto p-6">
       <p>Tables</p>
-      {/* Pass tables and setIsEdit as props to Table_show */}
-      <Table_show tables={tables} setIsEdit={setIsEdit} />
+      <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+        {tables.map((table) => (
+          <Table_item
+            key={table.table_number}
+            table={table}
+            setIsEdit={setIsEdit}
+            getTable={getTable}
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,11 +1,23 @@
 import React, { useState } from "react";
 import QRCode from "react-qr-code";
 import axios from "axios";
+import { HiMiniEllipsisVertical } from "react-icons/hi2";
 
-function Table_item({ table, setIsEdit, getTable }) {
+function Table_item({ table, getTable, tableUrl }) {
   const maxTime = 150; // Maximum time in minutes
   const qrCodeBase = `http://localhost:5173/customer`; // Base URL for QR code
-  const [available, setAvailable] = useState(table.status);
+  const [viewQrCode, setViewQrCode] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [customerNumber, setCustomerNumber] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function getDateTime() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  }
+
   function endTime(start_time) {
     if (start_time == "-") {
       return "-";
@@ -33,13 +45,6 @@ function Table_item({ table, setIsEdit, getTable }) {
   function remaining_time(start_time, end_time) {
     if (start_time == "-") {
       return "-";
-    }
-
-    function getDateTime() {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, "0");
-      const minutes = String(now.getMinutes()).padStart(2, "0");
-      return `${hours}:${minutes}`;
     }
 
     function timeToMinutes(time) {
@@ -81,8 +86,72 @@ function Table_item({ table, setIsEdit, getTable }) {
     }${remainingMinutesPart} hours.`;
   }
 
+  function handleViewQrCode() {
+    setViewQrCode(!viewQrCode);
+  }
+
+  async function handleStart(e, tableNumber) {
+    e.preventDefault();
+    try {
+      const response = await axios.put(`${tableUrl}/table/start`, {
+        table_number: tableNumber,
+        customer_count: customerNumber,
+        start_time: getDateTime(),
+      });
+      console.log(response.data.message);
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+    getTable();
+  }
+
+  function handleEdit() {
+    setEdit(!edit);
+  }
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setCustomerNumber(value);
+    if (parseInt(value) < 1) {
+      setErrorMessage(
+        "Number of customers must be greater than or equal to 1."
+      );
+    } else {
+      setErrorMessage("");
+    }
+  };
+
+  async function handleReset(tableNumber) {
+    try {
+      if (confirm(`Reset table ${tableNumber} ? `) == true) {
+        const response = await axios.put(`${tableUrl}/table/reset`, {
+          table_number: tableNumber,
+        });
+        getTable();
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+  }
+
   return (
-    <div className="border border-white p-4">
+    <div className="border border-white p-4 relative">
+      {/* ..., delete ,edit */}
+      <div className="w-full mb-3 flex sm:flex-row flex-col-reverse justify-end sm:items-center items-end">
+        {edit && (
+          <div className="w-full flex gap-4 mt-3 sm:mt-0 sm:me-3 sm:flex-row flex-col justify-center sm:justify-end items-center">
+            <button className="w-1/2  sm:w-auto btn btn-error">Delete</button>
+            <button className="w-1/2 sm:w-auto btn btn-info">Edit</button>
+          </div>
+        )}
+        <HiMiniEllipsisVertical
+          onClick={handleEdit}
+          className="cursor-pointer"
+        />
+      </div>
       {/* table,status */}
       <div className="flex flex-col lg:flex-row justify-between border-b-2 border-black pb-3">
         <p className="text-center">
@@ -95,61 +164,94 @@ function Table_item({ table, setIsEdit, getTable }) {
           Status: {table.status}
         </p>
       </div>
-      {/* start_time,endTime,Remaining*/}
-      <div className="mt-4">
-        <p>Start time: {table.start_time}</p>
-        <div>
-          <p>End time: {endTime(table.start_time)}</p>
-          <div className={`flex`}>
-            <p>Remaining time :</p>
-            <p
-              className={`ms-1 ${
-                remaining_time(table.start_time, endTime(table.start_time)) ===
-                "Time's up."
-                  ? "bg-orange-600 rounded-lg px-3"
-                  : ""
-              }`}>
-              {remaining_time(table.start_time, endTime(table.start_time))}
-            </p>
+      {/* show all info if unavailable */}
+      {table.status == "unavailable" && (
+        <>
+          {/* start_time,endTime,Remaining*/}
+          <div className="mt-4">
+            <p>Start time: {table.start_time}</p>
+            <div>
+              <p>End time: {endTime(table.start_time)}</p>
+              <div className={`flex`}>
+                <p>Remaining time :</p>
+                <p
+                  className={`ms-1 ${
+                    remaining_time(
+                      table.start_time,
+                      endTime(table.start_time)
+                    ) === "Time's up."
+                      ? "bg-orange-600 rounded-lg px-3"
+                      : ""
+                  }`}>
+                  {remaining_time(table.start_time, endTime(table.start_time))}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
+          {/* Number of customers */}
+          <p>
+            Number of customers:{" "}
+            {table.customer_count === 0 ? "-" : table.customer_count}
+          </p>
+        </>
+      )}
+      {/* btn*/}
+      <div className="mt-2">
+        {/* btn if unavailable*/}
+        {table.status == "unavailable" && (
+          <div>
+            {/* btn */}
+            <div className="flex justify-center items-center gap-x-3">
+              <button
+                onClick={() => handleReset(table.table_number)}
+                className="btn btn-accent">
+                Reset
+              </button>
+              <button
+                onClick={handleViewQrCode}
+                className="btn btn-secondary text-black">
+                View QR code
+              </button>
+            </div>
+            {viewQrCode == true && (
+              <div className="text-center absolute w-full h-full inset-0 bg-black bg-opacity-80">
+                <QRCode
+                  className="bg-white h-2/3 p-3 mx-auto"
+                  value={`${qrCodeBase}/${table.start_time}/${table.table_number}`}
+                />
+                <div className="mt-2 flex items-center justify-center gap-4">
+                  <button className="btn btn-error" onClick={handleViewQrCode}>
+                    Close
+                  </button>
+                  <button className="btn btn-warning">Print</button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        {/* btn if available*/}
+        {table.status == "available" && (
+          <div className="text-center">
+            <label htmlFor="customer_count">Number of customers</label>
+            <form
+              className="flex flex-col justify-center items-center"
+              onSubmit={(e) => handleStart(e, table.table_number)}>
+              <input
+                type="number"
+                id="customer_count"
+                required
+                className="w-1/2 p-1 rounded-lg"
+                min={1}
+                onChange={handleChange}
+              />
+              {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+              <button type="submit" className="btn btn-success w-1/2 mt-3">
+                Start
+              </button>
+            </form>
+          </div>
+        )}
       </div>
-      {/* Number of customers */}
-      <p>
-        Number of customers:{" "}
-        {table.customer_count === 0 ? "-" : table.customer_count}
-      </p>
-      {/* btn */}
-      {available == "unavailable" && (
-        <div>
-          {/* btn */}
-          <div className="text-center">
-            <button className="btn btn-error">Delete</button>
-            <button className="btn btn-info">Edit</button>
-          </div>
-          {/* btn */}
-          <div className="text-center">
-            <button className="btn btn-accent">Reset</button>
-            <button className="btn btn-secondary text-black">
-              View QR code
-            </button>
-            <button className="btn btn-warning">Print</button>
-          </div>
-          <QRCode
-            size={256}
-            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-            value={`${qrCodeBase}/${table.start_time}/${table.table_number}`}
-            viewBox={`0 0 256 256`}
-          />
-        </div>
-      )}
-
-      {available == "available" && (
-        <div>
-          <button className="btn btn-error">Delete</button>
-          <button className="btn btn-success">Start</button>
-        </div>
-      )}
     </div>
   );
 }

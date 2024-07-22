@@ -4,11 +4,10 @@ import axios from "axios";
 
 function Tables() {
   const [tables, setTables] = useState([]);
-  const [isEdit, setIsEdit] = useState(false);
-
+  const tableUrl = "http://localhost:3000/tables";
   async function getTable() {
     try {
-      const response = await axios.get("http://localhost:3000/tables/table");
+      const response = await axios.get(`${tableUrl}/table`);
       setTables(response.data);
       console.log(response.data); // Updated to log the response data
     } catch (error) {
@@ -21,15 +20,13 @@ function Tables() {
     getTable();
 
     const interval = setInterval(() => {
-      if (!isEdit) {
-        getTable();
-      }
-    }, 10000);
+      getTable();
+    }, 30000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [isEdit]);
+  }, []);
 
   return (
     <div className="max-w-screen-xl mx-auto p-6">
@@ -39,8 +36,8 @@ function Tables() {
           <Table_item
             key={table.table_number}
             table={table}
-            setIsEdit={setIsEdit}
             getTable={getTable}
+            tableUrl={tableUrl}
           />
         ))}
       </div>

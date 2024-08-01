@@ -10,6 +10,12 @@ function Orders_history() {
   const [OrderHistory, setOrderHistory] = useState([]);
   const [error, setError] = useState(null);
 
+  const orderStatusMessages = {
+    2: "Waiting for delivery",
+    1: "Order successfully",
+    "-1": "Order canceled",
+  };
+
   // Prevent click events inside the modal from closing the modal
   const handleModalClick = (e) => {
     e.stopPropagation();
@@ -37,8 +43,8 @@ function Orders_history() {
     const day = format(date, "d");
     const month = format(date, "M");
     const year = parseInt(format(date, "yyyy")) + 543; // Adding 543 to the year
-    const hours = format(date, "H");
-    const minutes = format(date, "m");
+    const hours = format(date, "H").padStart(2, "0");
+    const minutes = format(date, "m").padStart(2, "0");
 
     return `${day}/${month}/${year}, ${hours}:${minutes}`;
   };
@@ -62,11 +68,13 @@ function Orders_history() {
         {error && <p className="text-red-500">{error}</p>}{" "}
         {/* Display error if any */}
         {/* Display order history */}
-        <div className="mt-4">
+        <div className="mt-4 ">
           {OrderHistory.length > 0 ? (
             <ul>
               {OrderHistory.map((order) => (
-                <li key={order.order_id} className="border-b py-2">
+                <li
+                  key={order.order_id}
+                  className="p-2 bg-gray-100 rounded-lg shadow-gray-400  shadow-inner mt-4">
                   <p>
                     <strong>Order ID:</strong> {order.order_id}
                   </p>
@@ -80,7 +88,11 @@ function Orders_history() {
                     <strong>Table:</strong> {order.order_table}
                   </p>
                   <p>
-                    <strong>Status:</strong> {order.order_status}
+                    <strong>Status:</strong>
+                    <span>
+                      {orderStatusMessages[order.order_status] ||
+                        "Unknown status"}
+                    </span>
                   </p>
                 </li>
               ))}

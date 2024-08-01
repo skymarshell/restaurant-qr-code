@@ -20,8 +20,8 @@ router.get('/get_order', (req, res) => {
     const offset = (page - 1) * limit;
 
     const sql = view === "waiting orders"
-        ? `SELECT * FROM customer_order WHERE order_status = 2 ORDER BY order_status DESC,order_id DESC LIMIT ${limit} OFFSET ${offset}`
-        : `SELECT * FROM customer_order ORDER BY order_status DESC,order_id DESC LIMIT ${limit} OFFSET ${offset}`;
+        ? `SELECT * FROM customer_order WHERE order_status = 2 ORDER BY order_status DESC,order_id LIMIT ${limit} OFFSET ${offset}`
+        : `SELECT * FROM customer_order ORDER BY order_status DESC,order_id LIMIT ${limit} OFFSET ${offset}`;
 
     const countSql = view === "waiting orders"
         ? `SELECT COUNT(*) as total FROM customer_order WHERE order_status = 2`
@@ -79,14 +79,14 @@ router.get('/orders_history/:time/:id', (req, res) => {
     const sql = `
       SELECT * FROM customer_order
       WHERE STR_TO_DATE(order_date, '%Y-%m-%d %H:%i:%s') 
-      BETWEEN ? AND ?
+      BETWEEN ? AND ? AND order_table = ? ORDER BY order_id DESC
     `;
 
     const startDateTime = `${datePart} ${timePart}`;
     const endDateTime = `${datePart} ${endTime}`;
 
     // Execute the query
-    db.query(sql, [startDateTime, endDateTime], (err, results) => {
+    db.query(sql, [startDateTime, endDateTime, id], (err, results) => {
         if (err) {
             console.error('SQL error:', err);
             return res.status(500).json({ error: 'Database query failed' });

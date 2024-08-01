@@ -20,8 +20,8 @@ router.get('/get_order', (req, res) => {
     const offset = (page - 1) * limit;
 
     const sql = view === "waiting orders"
-        ? `SELECT * FROM customer_order WHERE order_status = 2 ORDER BY order_status DESC,order_id LIMIT ${limit} OFFSET ${offset}`
-        : `SELECT * FROM customer_order ORDER BY order_status DESC,order_id LIMIT ${limit} OFFSET ${offset}`;
+        ? `SELECT * FROM customer_order WHERE order_status = 2 ORDER BY order_status DESC , order_id LIMIT ${limit} OFFSET ${offset}`
+        : `SELECT * FROM customer_order ORDER BY order_status DESC , order_id LIMIT ${limit} OFFSET ${offset}`;
 
     const countSql = view === "waiting orders"
         ? `SELECT COUNT(*) as total FROM customer_order WHERE order_status = 2`
@@ -49,31 +49,33 @@ router.get('/orders_history/:time/:id', (req, res) => {
     const maxTime = 150; // Duration in minutes
     const { time, id } = req.params;
 
-    // Split the date and time
+    // Parse the input time
     const [datePart, timePart] = time.split(' ');
-    const [h, m, s] = timePart.split(':');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hours, minutes, seconds] = timePart.split(':').map(Number);
 
-    // Convert to integers
-    const hours = parseInt(h, 10);
-    const minutes = parseInt(m, 10);
+    // Create a Date object from the parsed parts
+    const startDate = new Date(year, month - 1, day, hours, minutes, seconds);
 
-    // Calculate end time
-    let endMinutes = minutes + (maxTime % 60); // Add remaining minutes
-    let endHours = hours + Math.floor(maxTime / 60); // Add hours
+    // Calculate the end time by adding maxTime in minutes
+    const endDate = new Date(startDate.getTime() + (maxTime * 60000)); // Add maxTime in milliseconds
 
-    // Handle overflow in minutes
-    if (endMinutes >= 60) {
-        endHours += Math.floor(endMinutes / 60); // Convert overflow to hours
-        endMinutes = endMinutes % 60; // Keep minutes within 0-59
-    }
+    // Format dates back to SQL DATETIME string format
+    const formatDateTime = (date) => {
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const dd = String(date.getDate()).padStart(2, '0');
+        const hh = String(date.getHours()).padStart(2, '0');
+        const min = String(date.getMinutes()).padStart(2, '0');
+        const ss = String(date.getSeconds()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+    };
 
-    // Optionally handle day overflow (e.g., hours exceeding 24)
-    endHours = endHours % 24; // Uncomment if you need to handle day overflow
+    const formattedStartDateTime = formatDateTime(startDate);
+    const formattedEndDateTime = formatDateTime(endDate);
 
-    // Format end time with leading zeros if needed
-    const formattedEndHours = endHours.toString().padStart(2, '0');
-    const formattedEndMinutes = endMinutes.toString().padStart(2, '0');
-    const endTime = `${formattedEndHours}:${formattedEndMinutes}:59`;
+    console.log(formattedStartDateTime);
+    console.log(formattedEndDateTime);
 
     // Build SQL query with parameterized values
     const sql = `
@@ -82,11 +84,8 @@ router.get('/orders_history/:time/:id', (req, res) => {
       BETWEEN ? AND ? AND order_table = ? ORDER BY order_id DESC
     `;
 
-    const startDateTime = `${datePart} ${timePart}`;
-    const endDateTime = `${datePart} ${endTime}`;
-
     // Execute the query
-    db.query(sql, [startDateTime, endDateTime, id], (err, results) => {
+    db.query(sql, [formattedStartDateTime, formattedEndDateTime, id], (err, results) => {
         if (err) {
             console.error('SQL error:', err);
             return res.status(500).json({ error: 'Database query failed' });
@@ -95,6 +94,7 @@ router.get('/orders_history/:time/:id', (req, res) => {
         res.json(results);
     });
 });
+
 
 router.post('/confirm_order', (req, res) => {
     const { orderId } = req.body;

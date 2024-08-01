@@ -47,7 +47,7 @@ router.put('/table/reset', (req, res) => {
       if (result[0].count > 0) {
         const cancelOrder = `
         UPDATE customer_order SET
-        order_status = ? WHERE order_table = ?
+        order_status = ? WHERE order_table = ? 
         `
         db.query(cancelOrder, [-1, table_number], (err, result) => {
           if (err) {

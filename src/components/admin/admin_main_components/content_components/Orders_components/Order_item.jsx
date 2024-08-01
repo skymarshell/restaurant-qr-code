@@ -56,7 +56,7 @@ function Order_item() {
               <button
                 onClick={() => cancelOrder(o.order_id)}
                 className="btn btn-error">
-                Cancel order
+                Cancel
               </button>
               <button
                 onClick={() => confirmOrder(o.order_id)}

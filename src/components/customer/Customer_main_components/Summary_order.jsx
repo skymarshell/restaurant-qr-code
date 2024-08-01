@@ -4,16 +4,16 @@ import axios from "axios";
 
 function Summary_order() {
   // info
-  const { id, orders, setOrders, isAdmin } = useContext(DataContext);
+  const { id, orders, setOrders, isAdmin, alert, setAlert } =
+    useContext(DataContext);
   // set pop-up summary order
   const [popUp, setPopUp] = useState(false);
-  // alert for success send order
-  const [alert, setAlert] = useState(false);
 
   async function handleConfrim() {
     console.log(orders);
     setPopUp(false);
     setOrders([]);
+    setAlert(true);
     //send to backend
     try {
       if (orders.length <= 0) {

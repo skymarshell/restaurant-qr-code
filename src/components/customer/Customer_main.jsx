@@ -6,7 +6,8 @@ Header;
 import Header from "./Customer_main_components/Header";
 import Menu from "./Customer_main_components/Menu";
 import Summary_order from "./Customer_main_components/Summary_order";
-
+import Alert from "./Customer_main_components/Alert";
+import Orders_history from "./Customer_main_components/Orders_history";
 export const DataContext = createContext();
 
 function Customer_main({ isAdmin }) {
@@ -18,6 +19,11 @@ function Customer_main({ isAdmin }) {
   const [orders, setOrders] = useState([]);
   //custoer day,id
   const { time, id } = useParams();
+  //alert
+  const [alert, setAlert] = useState(false);
+  //view orders history ?
+  const [viewOrdersHistory, setViewOrdersHistory] = useState(true);
+
   //get menu
   async function getMenus() {
     try {
@@ -55,10 +61,16 @@ function Customer_main({ isAdmin }) {
             id,
             time,
             isAdmin,
+            alert,
+            setAlert,
+            viewOrdersHistory,
+            setViewOrdersHistory,
           }}>
           <Header />
           <Menu />
           <Summary_order />
+          <Alert />
+          {viewOrdersHistory == true && <Orders_history />}
         </DataContext.Provider>
       </div>
     </div>

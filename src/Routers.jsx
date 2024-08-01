@@ -5,6 +5,7 @@ import Admin_login from "./components/admin/Admin_login.jsx";
 import Admin_main from "./components/admin/Admin_main.jsx";
 import Customer_main from "./components/customer/Customer_main.jsx";
 import Login_check from "./components/admin/Login_check.jsx";
+import Customer_protect from "./components/customer/Customer_protect.jsx";
 
 const Routers = createBrowserRouter([
   {
@@ -30,7 +31,11 @@ const Routers = createBrowserRouter([
   },
   {
     path: "/customer/:time/:id",
-    element: <Customer_main />,
+    element: (
+      <Customer_protect>
+        <Customer_main />
+      </Customer_protect>
+    ),
   },
 ]);
 

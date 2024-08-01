@@ -12,10 +12,18 @@ function Table_item({ table, getTable, tableUrl }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   function getDateTime() {
+    // Get the current date
+    //YYYY-MM-DD HH-MM-S
     const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
-    return `${hours}:${minutes}`;
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    return currentTime;
   }
 
   function endTime(start_time) {
@@ -23,7 +31,11 @@ function Table_item({ table, getTable, tableUrl }) {
       return "-";
     }
 
-    const [startTimeHour, startTimeMinute] = start_time.split(":").map(Number);
+    let splitDateTime = String(start_time).split(" ");
+    let partDate = splitDateTime[0];
+    let partTime = splitDateTime[1];
+
+    const [startTimeHour, startTimeMinute] = partTime.split(":").map(Number);
 
     let endTimeHour = Math.floor(maxTime / 60) + startTimeHour;
     let endTimeMinute = (maxTime % 60) + startTimeMinute;
@@ -46,6 +58,7 @@ function Table_item({ table, getTable, tableUrl }) {
     if (start_time == "-") {
       return "-";
     }
+    start_time = start_time.split(" ")[1];
 
     function timeToMinutes(time) {
       const [hour, minute] = time.split(":").map(Number);
@@ -53,9 +66,8 @@ function Table_item({ table, getTable, tableUrl }) {
     }
 
     // Get current time and convert to minutes
-    const currentTime = getDateTime();
+    const currentTime = getDateTime().split(" ")[1];
     const currentTimeMinutes = timeToMinutes(currentTime);
-
     // Convert start and end times to minutes
     const startTimeMinutes = timeToMinutes(start_time);
     let endTimeMinutes = timeToMinutes(end_time);
@@ -137,6 +149,20 @@ function Table_item({ table, getTable, tableUrl }) {
     }
   }
 
+  function removeSeconds(timeString) {
+    // Split the timeString by colon
+    let timeParts = timeString.split(":");
+
+    // Check if the timeParts array has at least two elements (hours and minutes)
+    if (timeParts.length >= 2) {
+      // Join the first two parts (hours and minutes) with a colon
+      return timeParts[0] + ":" + timeParts[1];
+    }
+
+    // Return the original string if it's not in the expected format
+    return timeString;
+  }
+
   return (
     <div className="border border-white p-4 relative">
       {/* ..., delete ,edit */}
@@ -169,7 +195,7 @@ function Table_item({ table, getTable, tableUrl }) {
         <>
           {/* start_time,endTime,Remaining*/}
           <div className="mt-4">
-            <p>Start time: {table.start_time}</p>
+            <p>Start time: {removeSeconds(table.start_time.split(" ")[1])}</p>
             <div>
               <p>End time: {endTime(table.start_time)}</p>
               <div className={`flex`}>

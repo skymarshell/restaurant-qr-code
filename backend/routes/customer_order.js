@@ -45,6 +45,57 @@ router.get('/get_order', (req, res) => {
     });
 });
 
+router.get('/orders_history/:time/:id', (req, res) => {
+    const maxTime = 150; // Duration in minutes
+    const { time, id } = req.params;
+
+    // Split the date and time
+    const [datePart, timePart] = time.split(' ');
+    const [h, m, s] = timePart.split(':');
+
+    // Convert to integers
+    const hours = parseInt(h, 10);
+    const minutes = parseInt(m, 10);
+
+    // Calculate end time
+    let endMinutes = minutes + (maxTime % 60); // Add remaining minutes
+    let endHours = hours + Math.floor(maxTime / 60); // Add hours
+
+    // Handle overflow in minutes
+    if (endMinutes >= 60) {
+        endHours += Math.floor(endMinutes / 60); // Convert overflow to hours
+        endMinutes = endMinutes % 60; // Keep minutes within 0-59
+    }
+
+    // Optionally handle day overflow (e.g., hours exceeding 24)
+    endHours = endHours % 24; // Uncomment if you need to handle day overflow
+
+    // Format end time with leading zeros if needed
+    const formattedEndHours = endHours.toString().padStart(2, '0');
+    const formattedEndMinutes = endMinutes.toString().padStart(2, '0');
+    const endTime = `${formattedEndHours}:${formattedEndMinutes}:59`;
+
+    // Build SQL query with parameterized values
+    const sql = `
+      SELECT * FROM customer_order
+      WHERE STR_TO_DATE(order_date, '%Y-%m-%d %H:%i:%s') 
+      BETWEEN ? AND ?
+    `;
+
+    const startDateTime = `${datePart} ${timePart}`;
+    const endDateTime = `${datePart} ${endTime}`;
+
+    // Execute the query
+    db.query(sql, [startDateTime, endDateTime], (err, results) => {
+        if (err) {
+            console.error('SQL error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        res.json(results);
+    });
+});
+
 router.post('/confirm_order', (req, res) => {
     const { orderId } = req.body;
     const sql = `UPDATE customer_order SET order_status = 1 WHERE order_id = ?`;

@@ -159,6 +159,7 @@ function NavListMenu() {
 }
 //nav
 function NavList() {
+  const { viewOrdersHistory, setViewOrdersHistory } = useContext(DataContext);
   return (
     <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
       <Typography
@@ -181,13 +182,25 @@ function NavList() {
         <ListItem className="flex items-center gap-2 py-2 pr-4 text-center">
           Contact Us
         </ListItem>
+      </Typography>{" "}
+      <Typography
+        as="a"
+        href="#"
+        variant="small"
+        color="blue-gray"
+        className="font-medium">
+        <ListItem
+          onClick={() => setViewOrdersHistory(true)}
+          className="flex items-center gap-2 py-2 pr-4 text-center">
+          Orders history
+        </ListItem>
       </Typography>
     </List>
   );
 }
 
 export default function Header() {
-  const {  id, time, isAdmin } =
+  const { id, time, isAdmin, viewOrdersHistory, setViewOrdersHistory } =
     useContext(DataContext);
 
   const [openNav, setOpenNav] = React.useState(false);

@@ -12,6 +12,20 @@ router.get('/table', (req, res) => {
   });
 });
 
+router.get('/table/:time/:id', (req, res) => {
+  // http://localhost:5173/customer/14:22/1
+  const { time, id } = req.params
+  const sql = "SELECT * FROM tables WHERE table_number = ? and start_time=? ";
+  db.query(sql, [ id,time], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: "Database query error" });
+      return;
+    }
+    res.json(result.length);
+  });
+});
+
 router.put('/table/reset', (req, res) => {
   const { table_number } = req.body; // Extract from req.body
   const sql = `UPDATE tables SET 
@@ -28,7 +42,7 @@ router.put('/table/reset', (req, res) => {
 });
 
 router.put('/table/start', (req, res) => {
-  const { start_time, customer_count, table_number } = req.body; 
+  const { start_time, customer_count, table_number } = req.body;
   const sql = `UPDATE tables SET 
   start_time = ?, customer_count = ? ,status = ? 
   WHERE table_number = ?`

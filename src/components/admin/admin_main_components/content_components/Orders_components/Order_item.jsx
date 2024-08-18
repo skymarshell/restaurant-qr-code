@@ -49,30 +49,6 @@ function Order_item() {
           <div
             className="border-2 border-gray-300 rounded-lg p-4 shadow-lg"
             key={index}>
-            <div className="w-full sm:text-center lg:flex lg:justify-center lg:items-center ">
-              <div>
-                <p className="text-center">
-                  Table number:{" "}
-                  <span className="text-4xl">{o.order_table}</span>
-                </p>
-              </div>
-              <div
-                className={`  flex justify-end gap-1 mb-3 lg:flex-row flex-col  ${
-                  o.order_status == "2" ? "" : "hidden"
-                }`}>
-                <button
-                  onClick={() => cancelOrder(o.order_id)}
-                  className="btn btn-error">
-                  Cancel
-                </button>
-                <button
-                  onClick={() => confirmOrder(o.order_id)}
-                  className="btn btn-success">
-                  Confirm
-                </button>
-              </div>
-            </div>
-
             <div className="flex justify-between items-center mb-2">
               <div className="text-gray-800 font-semibold text-center">
                 Order ID: {o.order_id}
@@ -93,6 +69,29 @@ function Order_item() {
                   : "Order canceled"}
               </div>
             </div>
+            <div className="w-full sm:text-center lg:flex lg:justify-between lg:items-center ">
+              <div>
+                <p className="text-center">
+                  Table : <span className="text-4xl">{o.order_table}</span>
+                </p>
+              </div>
+              <div
+                className={`  flex justify-end gap-1 mb-3 lg:flex-row flex-col  ${
+                  o.order_status == "2" ? "" : "hidden"
+                }`}>
+                <button
+                  onClick={() => cancelOrder(o.order_id)}
+                  className="btn btn-error">
+                  Cancel
+                </button>
+                <button
+                  onClick={() => confirmOrder(o.order_id)}
+                  className="btn btn-success">
+                  Confirm
+                </button>
+              </div>
+            </div>
+
             <div className="border-t border-gray-200 mt-2 pt-2">
               {showOrder(o.orders)}
             </div>

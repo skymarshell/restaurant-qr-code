@@ -38,8 +38,8 @@ router.put('/table/reset', (req, res) => {
       return;
     }
 
-    const sqlCheckOrder = 'SELECT count(*) as "count" FROM customer_order WHERE order_table = ?';
-    db.query(sqlCheckOrder, [table_number], (err, result) => {
+    const sqlCheckOrder = 'SELECT count(*) as "count" FROM customer_order WHERE order_table = ? AND order_status = ?';
+    db.query(sqlCheckOrder, [table_number, 2], (err, result) => {
       if (err) {
         console.error('Error executing query:', err);
         return;
@@ -47,9 +47,9 @@ router.put('/table/reset', (req, res) => {
       if (result[0].count > 0) {
         const cancelOrder = `
         UPDATE customer_order SET
-        order_status = ? WHERE order_table = ? 
+        order_status = ? WHERE order_table = ? AND order_status = ?
         `
-        db.query(cancelOrder, [-1, table_number], (err, result) => {
+        db.query(cancelOrder, [-1, table_number, 2], (err, result) => {
           if (err) {
             console.error(err);
             res.status(500).json({ error: "Database query error" });

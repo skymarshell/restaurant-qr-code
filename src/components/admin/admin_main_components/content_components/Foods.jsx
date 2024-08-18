@@ -32,38 +32,38 @@ const FoodItem = ({
   const handleSave = async () => {
     setIsSaving(true); // Set saving state while sending request
     try {
-        const formData = new FormData();
-        formData.append("food_name", editFoodName);
-        formData.append("food_description", editFoodDescription);
-        formData.append("category_id", editFoodCategory);
-        if (foodImageFile) {
-            formData.append("food_image", foodImageFile);
-        }
+      const formData = new FormData();
+      formData.append("food_name", editFoodName);
+      formData.append("old_food_name", food_image);
+      formData.append("food_description", editFoodDescription);
+      formData.append("category_id", editFoodCategory);
+      if (foodImageFile) {
+        formData.append("food_image", foodImageFile);
+      }
 
-        const response = await axios.put(
-            `http://localhost:3000/food/menu/${food_id}`,
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }
-        );
-
-        if (response.status === 200) {
-            alert(`Food item with ID ${food_id} updated successfully`);
-            const updatedFood = response.data;
-            onEdit(updatedFood); // Update local state or trigger reload
+      const response = await axios.put(
+        `http://localhost:3000/food/menu/${food_id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
+      );
+
+      if (response.status === 200) {
+        alert(`Food item with ID ${food_id} updated successfully`);
+        const updatedFood = response.data;
+        onEdit(updatedFood); // Update local state or trigger reload
+      }
     } catch (error) {
-        console.error("Error updating food item:", error);
-        alert("Error updating food item:", error);
+      console.error("Error updating food item:", error);
+      alert("Error updating food item:", error);
     } finally {
-        setIsSaving(false); // Reset saving state after request completes
-        setEditMode(false); // Exit edit mode after saving
+      setIsSaving(false); // Reset saving state after request completes
+      setEditMode(false); // Exit edit mode after saving
     }
-};
-
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -201,7 +201,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
       console.log("Error adding new food item:", error);
       alert("Error adding new food item:", error);
     }
-    getMenu()
+    getMenu();
   };
 
   const handleCancel = (e) => {
@@ -348,10 +348,10 @@ function Foods() {
     }
   };
 
-const handleAddFood = (newFood) => {
+  const handleAddFood = (newFood) => {
     setFoodMenus((prevMenus) => [...prevMenus, newFood]);
     setIsAddingFood(false); // Close modal after adding food
-};
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -387,7 +387,6 @@ const handleAddFood = (newFood) => {
           </div>
           {isAddingFood && (
             <AddFoodModal
-            
               categories={categories}
               onAdd={handleAddFood}
               setIsAddingFood={setIsAddingFood}

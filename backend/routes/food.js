@@ -9,11 +9,12 @@ const storage = multer.diskStorage({
         cb(null, path.resolve(__dirname, '../../public')); // Specify the destination path
     },
     filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const getFileName = file.originalname.split(".")[0]
-        cb(null, getFileName + '-' + uniqueSuffix + path.extname(file.originalname));
+        const [name, type] = file.originalname.split('.');
+        const getFileName = `${name}-${Date.now()}.${type}`; // Add the dot before the file extension
+        cb(null, getFileName);
     }
 });
+
 
 // Create multer instance
 const upload = multer({ storage: storage });
@@ -38,7 +39,7 @@ router.get('/menu', (req, res) => {
 // Update a food item
 router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
     const { foodId } = req.params;
-    const { food_name, food_description, category_id } = req.body;
+    const { food_name, food_description, category_id, old_food_name } = req.body;
 
     // Check if req.file exists and is not null before assigning food_image
     let food_image = null;
@@ -47,7 +48,7 @@ router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
     }
 
     const sql = `
-      UPDATE restaurant.food 
+      UPDATE food 
       SET food_name = ?, food_description = ?, food_image = IFNULL(?, food_image), category_id = ? 
       WHERE food_id = ?
     `;
@@ -58,6 +59,18 @@ router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
             console.error('Error updating food item:', err);
             res.status(500).json({ error: "Error updating food item" });
         } else {
+            //delete old image
+            if (req.file) {
+
+                // Step 2: Delete the file from the filesystem
+                const filePath = path.resolve(__dirname, '../../public', old_food_name);
+                fs.unlink(filePath, (unlinkErr) => {
+                    if (unlinkErr) {
+                        console.error('Error deleting food image:', unlinkErr);
+                        res.status(500).json({ error: "Error deleting food image" });
+                    }
+                });
+            }
             console.log(`Food item with ID ${foodId} updated successfully`);
             // Fetch the updated food item
             const getUpdatedFoodSql = `SELECT * FROM restaurant.food WHERE food_id = ?`;
@@ -93,7 +106,7 @@ router.delete('/menu/:foodId', (req, res) => {
             const filePath = path.resolve(__dirname, '../../public', food_image);
             fs.unlink(filePath, (unlinkErr) => {
                 if (unlinkErr) {
-                 
+
                     console.error('Error deleting food image:', unlinkErr);
                     res.status(500).json({ error: "Error deleting food image" });
                 } else {

@@ -1,4 +1,4 @@
-const { express, router, db } = require('./common_import');
+const { express, router, db, fullTime } = require('./common_import');
 const { getDateTime } = require("../functions")
 
 router.get('/waiting_orderCount', (req, res) => {
@@ -21,7 +21,7 @@ router.get('/get_order', (req, res) => {
 
     const sql = view === "waiting orders"
         ? `SELECT * FROM customer_order WHERE order_status = 2 ORDER BY order_status DESC , order_id LIMIT ${limit} OFFSET ${offset}`
-        : `SELECT * FROM customer_order ORDER BY order_status DESC , order_id LIMIT ${limit} OFFSET ${offset}`;
+        : `SELECT * FROM customer_order ORDER BY order_status DESC , order_id DESC LIMIT ${limit} OFFSET ${offset}`;
 
     const countSql = view === "waiting orders"
         ? `SELECT COUNT(*) as total FROM customer_order WHERE order_status = 2`
@@ -46,7 +46,7 @@ router.get('/get_order', (req, res) => {
 });
 
 router.get('/orders_history/:time/:id', (req, res) => {
-    const maxTime = 150; // Duration in minutes
+    const maxTime = fullTime; // Duration in minutes
     const { time, id } = req.params;
 
     // Parse the input time

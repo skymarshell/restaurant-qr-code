@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import QRCode from "react-qr-code";
 import axios from "axios";
 import { HiMiniEllipsisVertical } from "react-icons/hi2";
+import { fullTime } from "../../../../../common_info";
 
 function Table_item({ table, getTable, tableUrl }) {
-  const maxTime = 150; // Maximum time in minutes
+  const maxTime = fullTime; // Maximum time in minutes
   const qrCodeBase = `http://localhost:5173/customer`; // Base URL for QR code
   const [viewQrCode, setViewQrCode] = useState(false);
   const [edit, setEdit] = useState(false);

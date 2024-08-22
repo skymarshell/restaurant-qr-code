@@ -1,8 +1,7 @@
 import React, { useState, createContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 // components
-Header;
 import Header from "./Customer_main_components/Header";
 import Menu from "./Customer_main_components/Menu";
 import Summary_order from "./Customer_main_components/Summary_order";
@@ -11,6 +10,7 @@ import Orders_history from "./Customer_main_components/Orders_history";
 export const DataContext = createContext();
 
 function Customer_main({ isAdmin }) {
+  const navigate = useNavigate();
   //all menu
   const [menus, setMenus] = useState([]);
   //all category
@@ -22,7 +22,25 @@ function Customer_main({ isAdmin }) {
   //alert
   const [alert, setAlert] = useState(false);
   //view orders history ?
-  const [viewOrdersHistory, setViewOrdersHistory] = useState(true);
+  const [viewOrdersHistory, setViewOrdersHistory] = useState(false);
+  //เช็คว่าโต๊ะ status available or unavailable
+  const checkStatus = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/tables/table/${time}/${id}`
+      );
+      console.log(res.data);
+
+      if (res.data != 1) {
+        if (isAdmin != true) {
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      window.alert(error);
+    }
+  };
 
   //get menu
   async function getMenus() {
@@ -46,6 +64,10 @@ function Customer_main({ isAdmin }) {
   useEffect(() => {
     getMenus();
     getCategories();
+
+    const status = setInterval(checkStatus, 1000);
+
+    return () => clearInterval(status);
   }, []);
 
   return (

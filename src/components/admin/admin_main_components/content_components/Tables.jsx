@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Table_add from "./Tables_components/Table_add";
 import Table_item from "./Tables_components/Table_item";
 import axios from "axios";
 
@@ -30,7 +31,9 @@ function Tables() {
 
   return (
     <div className="max-w-screen-xl mx-auto p-6">
-      <p>Tables</p>
+
+        <Table_add />
+
       <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
         {tables.map((table) => (
           <Table_item

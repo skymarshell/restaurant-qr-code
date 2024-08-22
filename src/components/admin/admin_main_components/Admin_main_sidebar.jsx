@@ -80,7 +80,7 @@ function Admin_main_sidebar() {
           </div>
           <List>
             {/* dashboard */}
-            <Accordion
+            {/* <Accordion
               open={open === 1}
               icon={
                 <ChevronDownIcon
@@ -94,9 +94,7 @@ function Admin_main_sidebar() {
                 <AccordionHeader
                   onClick={() => handleOpen(1)}
                   className="border-b-0 p-3">
-                  <ListItemPrefix>
-                    <PresentationChartBarIcon className="h-5 w-5" />
-                  </ListItemPrefix>
+                  <ListItemPrefix></ListItemPrefix>
                   <Typography color="blue-gray" className="mr-auto font-normal">
                     Dashboard
                   </Typography>
@@ -124,7 +122,14 @@ function Admin_main_sidebar() {
                   </ListItem>
                 </List>
               </AccordionBody>
-            </Accordion>
+            </Accordion> */}
+            {/* dashboard */}
+            <ListItem onClick={() => setCurrectPage("Dashboard")}>
+              <ListItemPrefix>
+                <PresentationChartBarIcon className="h-5 w-5" />
+              </ListItemPrefix>
+              Dashboard
+            </ListItem>
             {/* end dashboard */}
 
             {/* Menu Management */}

@@ -10,7 +10,7 @@ function Admin_main() {
   const navigate = useNavigate();
 
   const [sideBarShow, setSideBarShow] = useState(false);
-  const [currectPage, setCurrectPage] = useState("dashboard");
+  const [currectPage, setCurrectPage] = useState("Dashboard");
 
   function handleLogOut() {
     localStorage.removeItem("username");

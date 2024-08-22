@@ -95,6 +95,64 @@ router.get('/orders_history/:time/:id', (req, res) => {
     });
 });
 
+router.get('/analysis/:month/:year', (req, res) => {
+    const { month, year } = req.params;
+
+    const getCategory = `SELECT * FROM category`;
+    const getFood = `SELECT * FROM food`;
+    const getCustomerOrder = `SELECT * FROM customer_order WHERE order_status = 1`;
+    const countCustomer = `
+    SELECT sum(customer_count) as "customer_count" FROM customer_history
+    WHERE customer_date 
+    BETWEEN '${year}-${month.padStart(2, 0)}-01 00:00:00' AND '${year}-${month.padStart(2, 0)}-31 23:59:59';
+    `;
+    const countCustomerAllYear =
+        `
+    SELECT sum(customer_count) as "customer_count" FROM customer_history
+    WHERE customer_date 
+    BETWEEN '${year}-01-01 00:00:00' AND '${year}-12-31 23:59:59';
+    `
+
+
+
+    // Promisify db.query
+    const query = (sql) => {
+        return new Promise((resolve, reject) => {
+            db.query(sql, (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
+            });
+        });
+    };
+
+    // Execute all queries in parallel using Promise.all
+    Promise.all([
+        query(getCategory),
+        query(getFood),
+        query(countCustomer),
+        query(getCustomerOrder),
+        query(countCustomerAllYear)
+    ])
+        .then(([categories, foods, customerCount, customerOrders,customerAllYearCount]) => {
+            const data = {
+                customerCount: customerCount[0].customer_count, // Extract the count from the result
+                customerAllYearCount:customerAllYearCount[0].customer_count,
+                category: categories,
+                customerOrders: customerOrders,
+                food: foods,
+            };
+
+            res.json(data); // Send the collected data as a response
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).json({ error: 'Database query failed' });
+        });
+});
+
+
 
 router.post('/confirm_order', (req, res) => {
     const { orderId } = req.body;

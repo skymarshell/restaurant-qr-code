@@ -82,6 +82,12 @@ function Table_item({ table, getTable, tableUrl }) {
 
     // If the remaining minutes are negative, it means the time is up
     if (remainingMinutes < 0) {
+      try {
+        const response = axios.put(
+          `http://localhost:3000/tables/table/time_up`,
+          { table_number: table.table_number }
+        );
+      } catch (error) {}
       return "Time's up.";
     }
 
@@ -164,6 +170,13 @@ function Table_item({ table, getTable, tableUrl }) {
     return timeString;
   }
 
+  const tableStatusClass =
+    table.status === "available"
+      ? "bg-green-600"
+      : table.status === "unavailable"
+      ? "bg-red-300"
+      : "bg-orange-600";
+
   return (
     <div className="border border-white p-4 relative">
       {/* ..., delete ,edit */}
@@ -180,19 +193,17 @@ function Table_item({ table, getTable, tableUrl }) {
         />
       </div>
       {/* table,status */}
-      <div className="flex flex-col lg:flex-row justify-between border-b-2 border-black pb-3">
+      <div className="flex flex-col  justify-between border-b-2 border-black pb-3">
         <p className="text-center">
           Table number: <span className="text-4xl">{table.table_number}</span>
         </p>
         <p
-          className={`p-3 rounded-lg text-center flex justify-center items-center ${
-            table.status == "available" ? "bg-green-600" : "bg-red-300"
-          }`}>
-          Status: {table.status}
+          className={`p-3 rounded-lg text-center flex justify-center items-center ${tableStatusClass}`}>
+          Status: <span className="capitalize"> {table.status}</span>
         </p>
       </div>
       {/* show all info if unavailable */}
-      {table.status == "unavailable" && (
+      {(table.status == "unavailable" || table.status == "time's up") && (
         <>
           {/* start_time,endTime,Remaining*/}
           <div className="mt-4">
@@ -225,7 +236,7 @@ function Table_item({ table, getTable, tableUrl }) {
       {/* btn*/}
       <div className="mt-2">
         {/* btn if unavailable*/}
-        {table.status == "unavailable" && (
+        {(table.status == "unavailable" || table.status == "time's up") && (
           <div>
             {/* btn */}
             <div className="flex justify-center items-center gap-x-3">

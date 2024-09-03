@@ -24,7 +24,9 @@ router.get('/table/:time/:id', (req, res) => {
       res.status(500).json({ error: "Database query error" });
       return;
     }
-    res.json(result.length);
+
+
+    res.json({ len: result.length, result: { ...result } });
   });
 });
 

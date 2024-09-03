@@ -22,7 +22,7 @@ function Tables() {
 
     const interval = setInterval(() => {
       getTable();
-    }, 30000);
+    }, 10000);
 
     return () => {
       clearInterval(interval);

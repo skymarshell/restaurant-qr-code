@@ -59,7 +59,24 @@ function Table_item({ table, getTable, tableUrl }) {
     if (start_time == "-") {
       return "-";
     }
+    const date_start = start_time.split(" ")[0].split("-");
     start_time = start_time.split(" ")[1];
+    //start_time: 21:18:48
+    //console.log("start_time:", start_time);
+    //start_date: (3) ['2024', '08', '22']
+    //console.log("start_date:", date_start);
+    //
+    const startDay = date_start[2];
+    const startMonth = date_start[1];
+    const startYear = date_start[0];
+    // console.log("startDay", startDay); //22
+    // console.log("startMonth", startMonth); //08
+    // console.log("startYear", startYear); //2024
+
+    const D = new Date();
+    const cDate = parseInt(D.getDate());
+    const cMonth = parseInt(D.getMonth() + 1);
+    const cYear = D.getFullYear();
 
     function timeToMinutes(time) {
       const [hour, minute] = time.split(":").map(Number);
@@ -80,14 +97,50 @@ function Table_item({ table, getTable, tableUrl }) {
 
     let remainingMinutes = endTimeMinutes - currentTimeMinutes;
 
+    let date1Current = new Date(
+      `${String(cMonth).padStart(2, "0")}/${String(cDate).padStart(
+        2,
+        "0"
+      )}/${String(cYear)}`
+    );
+    let date2Start = new Date(
+      `${String(startMonth).padStart(2, "0")}/${String(startDay).padStart(
+        2,
+        "0"
+      )}/${String(startYear)}`
+    );
+
+    // Calculating the time difference
+    // of two dates
+    let Difference_In_Time = date1Current.getTime() - date2Start.getTime();
+
+    // Calculating the no. of days between
+    // two dates
+    let Difference_In_Days = Math.round(
+      Difference_In_Time / (1000 * 3600 * 24)
+    );
+
+    // To display the final no. of days (result)
+    // console.log(
+    //   "Total number of days between dates:\n" +
+    //     date1Current.toDateString() +
+    //     " and " +
+    //     date2Start.toDateString() +
+    //     " is: " +
+    //     Difference_In_Days +
+    //     " days"
+    // );
+
     // If the remaining minutes are negative, it means the time is up
-    if (remainingMinutes < 0) {
+    if (remainingMinutes < 0 || Difference_In_Time >= 2) {
       try {
         const response = axios.put(
           `http://localhost:3000/tables/table/time_up`,
           { table_number: table.table_number }
         );
-      } catch (error) {}
+      } catch (error) {
+        alert(error);
+      }
       return "Time's up.";
     }
 

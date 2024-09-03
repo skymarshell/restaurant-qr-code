@@ -31,8 +31,13 @@ function Customer_main({ isAdmin }) {
       );
       console.log(res.data);
 
-      if (res.data != 1) {
-        if (isAdmin != true) {
+      if (isAdmin != true) {
+        if (res.data.result[0].status == "time's up") {
+          window.alert("หมดเวลาใช้งาน");
+          navigate("/");
+        }
+        if (res.data.result[0].len == 0) {
+          window.alert("ไม่พบผู้ใช้งาน");
           navigate("/");
         }
       }

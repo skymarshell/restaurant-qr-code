@@ -229,7 +229,7 @@ export default function Header() {
         <div className="hidden lg:block overflow-auto mx-8 max-w-[600px]">
           <NavList />
         </div>
-        <div className="hidden gap-2 lg:flex ">
+        {/* <div className="hidden gap-2 lg:flex ">
           <Link
             to="/Admin_login"
             className={`w-full ${isAdmin == true ? "hidden" : ""} `}>
@@ -237,7 +237,7 @@ export default function Header() {
               Admin Log In
             </Button>
           </Link>
-        </div>
+        </div> */}
         <IconButton
           variant="text"
           color="blue-gray"
@@ -252,7 +252,7 @@ export default function Header() {
       </div>
       <Collapse open={openNav}>
         <NavList />
-        <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
+        {/* <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
           <Link
             to="/Admin_login"
             className={`w-full ${isAdmin == true ? "hidden" : ""}`}>
@@ -260,7 +260,7 @@ export default function Header() {
               Admin Log In
             </Button>
           </Link>
-        </div>
+        </div> */}
       </Collapse>
     </Navbar>
   );

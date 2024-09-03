@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+
 function Customer_protect({ children }) {
   const { time, id } = useParams();
   const [isValid, setIsValid] = useState(false);
+  const navigate = useNavigate(); // Move this inside the functional component
 
   useEffect(() => {
     const fetchTableData = async () => {
@@ -11,10 +13,12 @@ function Customer_protect({ children }) {
         const response = await axios.get(
           `http://localhost:3000/tables/table/${time}/${id}`
         );
-        if (response.data === 1) {
+        console.log(response.data);
+        if (response.data.len == 1) {
           setIsValid(true);
         } else {
-          setIsValid(false);
+          alert("ไม่พบผู้ใช้งาน");
+          navigate("/");
         }
       } catch (error) {
         console.error(error);
@@ -24,13 +28,14 @@ function Customer_protect({ children }) {
     fetchTableData();
   }, [time, id]);
 
-  return isValid == true ? (
-    children
-  ) : (
-    <p>
-      Not found table id: {id} with start time:{time}
-    </p>
-  );
+  // useEffect(() => {
+  //   if (isValid == false) {
+  //     alert("ไม่พบผู้ใช้งาน");
+  //     navigate("/"); // Navigate to the main page if not valid
+  //   }
+  // }, [isValid]);
+
+  return isValid ? children : null; // Render children only if valid
 }
 
 export default Customer_protect;

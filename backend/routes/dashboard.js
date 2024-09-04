@@ -1,5 +1,5 @@
 const { express, router, db, fullTime } = require('./common_import');
-
+const moment = require('moment')
 
 // orders chart
 router.get('/analysis/:day/:month/:year', async (req, res) => {
@@ -117,7 +117,7 @@ router.get('/chart', async (req, res) => {
       } else if (viewMode == "onlyMonth") {
             const { onlyMonth } = req.query
             //console.log(onlyMonth);
-            
+
             const now = new Date()
             sql = `SELECT orders
                   FROM restaurant.customer_order
@@ -153,6 +153,56 @@ router.get('/chart', async (req, res) => {
 });
 
 //customer history chart
+router.get('/customer_history_chart', async (req, res) => {
+      //input year and month
+      const year = req.query.year
+      const inputMonth = req.query.month
+      // Define a JavaScript function called lastday with parameters y (year) and m (month)
+      var lastday = function (y, m) {
+            // Create a new Date object representing the last day of the specified month
+            // By passing m + 1 as the month parameter and 0 as the day parameter, it represents the last day of the specified month
+            return new Date(y, m + 1, 0).getDate();
+      }
+      const date = [];
+      // -1 เพราะ index เรื่ม 0
+      for (let numDate = 1; numDate <= lastday(year, inputMonth - 1); numDate++) {
+            date.push(`${year}-${String(inputMonth).padStart(2, "0")}-${String(numDate).padStart(2, "0")}`);
+      }
 
+      const sql = `
+      SELECT 
+      CAST(customer_date AS DATE) AS uni_date,
+      SUM(customer_count) AS total_customers
+      FROM restaurant.customer_history
+      WHERE CAST(customer_date AS DATE) 
+      BETWEEN '${year}-${String(inputMonth).padStart(2, "0")}-01' 
+      AND LAST_DAY('${year}-${String(inputMonth).padStart(2, "0")}-01')
+      GROUP BY CAST(customer_date AS DATE)
+      ORDER BY uni_date
+      `
+      db.query(sql, (err, result) => {
+            if (err) {
+                  console.log(err);
+                  return
+            }
+            const splitCustomer_count = result.map((r) => {
+                  return { date: moment(r.uni_date).format("YYYY-MM-DD"), total_customers: r.total_customers }
+            })
+
+            const summarizeData = date.map((d) => {
+                  const found = splitCustomer_count.find((sc) => sc.date == d);
+                  if (found != undefined) {
+                        return found;
+                  } else {
+                        return { date: d, total_customers: 0 };
+                  }
+            });
+
+            console.log(summarizeData);
+            res.status(200).json(summarizeData)
+
+      })
+
+})
 
 module.exports = router

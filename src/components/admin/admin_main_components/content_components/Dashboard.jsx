@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BarChart } from "@mui/x-charts";
 import { ChartContainer } from "@mui/x-charts/ChartContainer";
 import { BarPlot } from "@mui/x-charts/BarChart";
+import moment from "moment/moment";
 //icon
 import { FaSearch } from "react-icons/fa";
 //Componentts
@@ -54,11 +55,29 @@ export default function Dashboard() {
     };
   }, [selectedDay, selectedMonth, selectedYear]);
 
+  //
+  function order_status_text(status) {
+    let showText, classText;
+
+    if (status == 1) {
+      showText = "Order completed";
+      classText = "bg-green-400";
+    } else if (status == -1) {
+      showText = "Order canceled";
+      classText = "bg-red-400";
+    } else {
+      showText = "Waiting";
+      classText = "bg-yellow-400";
+    }
+
+    return <span className={`${classText} px-2 py-1 rounded-md`}>{showText}</span>;
+  }
+
   return (
     <>
       <main className="mt-10">
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <article className="bg-white p-4 shadow rounded  text-center h-full relative">
+          <article className="bg-white p-4 shadow rounded  text-center h-full relative lg:col-span-2">
             <div>
               <Day_Month_Year_select
                 selectedDay={selectedDay}
@@ -75,27 +94,36 @@ export default function Dashboard() {
               />
             </div>
           </article>
-          <article className="bg-white p-4 shadow rounded">
+          {/* <article className="bg-white p-4 shadow rounded">
             <p className="font-bold text-center">หมวดหมู่สินค้า</p>
             {categories.map((category) => (
               <p key={category.category_id}>{category.category_name}</p>
             ))}
-          </article>
-          <article className="bg-white p-4 shadow rounded overflow-auto max-h-[220px]">
+          </article> */}
+          <article className="bg-white p-4 shadow rounded overflow-auto max-h-[220px] lg:col-span-2">
             <p className="font-bold text-center">ออร์เดอร์ล่าสุด</p>
             {latestOrder.map((order) => (
-              <p key={order.order_id} className="border-b-4 ">
-                โต๊ะ {order.order_table}({order.order_id}){" "}
+              <div key={order.order_id} className="border-b-4 ">
+                <p>
+                  <span>โต๊ะ {order.order_table}</span>
+                  <span>({order.order_id}) </span>
+                  <span>
+                    {moment(order.order_date)
+                      .add(543, "year")
+                      .format("DD-MM-YYYY")}
+                  </span>
+                  <span> {order_status_text(order.order_status)}</span>
+                </p>
                 <p>- {order.orders}</p>
-              </p>
+              </div>
             ))}
           </article>
-          <article className="bg-white p-4 shadow rounded">
+          {/* <article className="bg-white p-4 shadow rounded">
             <p className="font-bold">อาหารที่ขาย</p>
             {foods.map((food) => (
               <p key={food.food_id}>{food.food_name}</p>
             ))}
-          </article>
+          </article> */}
           <article className="bg-white p-4 shadow rounded grid-cols-1 md:col-span-2 lg:col-span-4">
             <FoodChart latestOrder={latestOrder} />
           </article>

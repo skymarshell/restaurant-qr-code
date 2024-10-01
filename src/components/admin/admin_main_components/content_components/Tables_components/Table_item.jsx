@@ -36,7 +36,9 @@ function Table_item({ table, getTable, tableUrl }) {
     let partDate = splitDateTime[0];
     let partTime = splitDateTime[1];
 
-    const [startTimeHour, startTimeMinute] = partTime.split(":").map(Number);
+    const [startTimeHour, startTimeMinute] = String(partTime)
+      .split(":")
+      .map(Number);
 
     let endTimeHour = Math.floor(maxTime / 60) + startTimeHour;
     let endTimeMinute = (maxTime % 60) + startTimeMinute;
@@ -59,19 +61,19 @@ function Table_item({ table, getTable, tableUrl }) {
     if (start_time == "-") {
       return "-";
     }
+    // 2024-10-01 20:56:17
+    // console.log(start_time);
+    // 23:26
+    //console.log("endTime", end_time);
+
     const date_start = start_time.split(" ")[0].split("-");
+    // console.log(date_start);
+
     start_time = start_time.split(" ")[1];
-    //start_time: 21:18:48
-    //console.log("start_time:", start_time);
-    //start_date: (3) ['2024', '08', '22']
-    //console.log("start_date:", date_start);
-    //
+    //console.log(date_start);
     const startDay = date_start[2];
     const startMonth = date_start[1];
     const startYear = date_start[0];
-    // console.log("startDay", startDay); //22
-    // console.log("startMonth", startMonth); //08
-    // console.log("startYear", startYear); //2024
 
     const D = new Date();
     const cDate = parseInt(D.getDate());
@@ -120,17 +122,6 @@ function Table_item({ table, getTable, tableUrl }) {
       Difference_In_Time / (1000 * 3600 * 24)
     );
 
-    // To display the final no. of days (result)
-    // console.log(
-    //   "Total number of days between dates:\n" +
-    //     date1Current.toDateString() +
-    //     " and " +
-    //     date2Start.toDateString() +
-    //     " is: " +
-    //     Difference_In_Days +
-    //     " days"
-    // );
-
     // If the remaining minutes are negative, it means the time is up
     if (remainingMinutes < 0 || Difference_In_Time >= 2) {
       try {
@@ -170,7 +161,7 @@ function Table_item({ table, getTable, tableUrl }) {
         customer_count: customerNumber,
         start_time: getDateTime(),
       });
-      console.log(response.data.message);
+      //alert(response.data.message);
     } catch (error) {
       console.log(error);
       alert(error);
@@ -211,7 +202,7 @@ function Table_item({ table, getTable, tableUrl }) {
 
   function removeSeconds(timeString) {
     // Split the timeString by colon
-    let timeParts = timeString.split(":");
+    let timeParts = String(timeString).split(":");
 
     // Check if the timeParts array has at least two elements (hours and minutes)
     if (timeParts.length >= 2) {

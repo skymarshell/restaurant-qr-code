@@ -10,6 +10,8 @@ const FoodItem = ({
   onDelete,
   onEdit,
   categories,
+  getCategory,
+  getMenu,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [editFoodName, setEditFoodName] = useState(food_name);
@@ -61,9 +63,12 @@ const FoodItem = ({
         onEdit(updatedFood); // Update local state or trigger reload
       }
     } catch (error) {
-      console.error("Error updating food item:", error);
-      alert("Error updating food item:", error);
+      // Display the specific error message from the backend
+      console.error("Error updating food item:", error.response.data.error); // Custom message
+      alert(`Error: ${error.response.data.error}`); // Show alert to user with the error message
     } finally {
+      getCategory();
+      getMenu();
       setIsSaving(false); // Reset saving state after request completes
       setEditMode(false); // Exit edit mode after saving
     }

@@ -6,11 +6,11 @@ const fs = require('fs');
 // Set up multer storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.resolve(__dirname, '../../public')); // Specify the destination path
+        cb(null, path.resolve(__dirname, '../../restaurant-qr-code/public')); // Specify the destination path
     },
     filename: function (req, file, cb) {
         const [name, type] = file.originalname.split('.');
-        const getFileName = `${name}-${Date.now()}.${type}`; // Add the dot before the file extension
+        const getFileName = `${Date.now()}-${name}.${type}`; // Add the dot before the file extension
         cb(null, getFileName);
     }
 });
@@ -57,13 +57,13 @@ router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
     db.query(sql, values, (err, result) => {
         if (err) {
             console.error('Error updating food item:', err);
-            res.status(500).json({ error: "Error updating food item" });
+            res.status(500).json({ error: "ชื่ออาหารซํ้ากัน" });
         } else {
             //delete old image
             if (req.file) {
 
                 // Step 2: Delete the file from the filesystem
-                const filePath = path.resolve(__dirname, '../../public', old_food_name);
+                const filePath = path.resolve(__dirname, '../../restaurant-qr-code/public', old_food_name);
                 fs.unlink(filePath, (unlinkErr) => {
                     if (unlinkErr) {
                         console.error('Error deleting food image:', unlinkErr);
@@ -103,7 +103,7 @@ router.delete('/menu/:foodId', (req, res) => {
             const { food_image } = fetchResult[0];
 
             // Step 2: Delete the file from the filesystem
-            const filePath = path.resolve(__dirname, '../../public', food_image);
+            const filePath = path.resolve(__dirname, '../../restaurant-qr-code/public', food_image);
             fs.unlink(filePath, (unlinkErr) => {
                 if (unlinkErr) {
 
@@ -130,6 +130,8 @@ router.delete('/menu/:foodId', (req, res) => {
 // Insert a new food item
 // POST route for adding a new food item with image upload
 router.post('/menu', upload.single('food_image'), (req, res) => {
+
+
     const { food_name, food_description, category_id } = req.body;
     const food_image = req.file.filename; // Get the uploaded file name from multer
 

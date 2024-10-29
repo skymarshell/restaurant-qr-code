@@ -47,9 +47,8 @@ function Foods() {
   const handleDelete = async (foodId) => {
     try {
       await axios.delete(`http://localhost:3000/food/menu/${foodId}`);
-      setFoodMenus((prevMenus) =>
-        prevMenus.filter((menu) => menu.food_id !== foodId)
-      );
+      getCategory();
+      getMenu();
     } catch (error) {
       console.error("Error deleting food item:", error);
       alert("Error deleting food item:", error);
@@ -107,6 +106,8 @@ function Foods() {
                 {...menu}
                 categories={categories}
                 onDelete={handleDelete}
+                getCategory={getCategory}
+                getMenu={getMenu}
                 onEdit={(updatedFood) => {
                   // Update local state with edited food item
                   setFoodMenus((prevMenus) =>

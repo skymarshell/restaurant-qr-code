@@ -26,24 +26,6 @@ function Order_item() {
 
   return (
     <div className="max-w-screen-xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800 ">
-        {viewMode === "waiting orders"
-          ? `Waiting orders: ${orderLength} orders`
-          : `Total orders: ${orderLength} orders `}
-      </h1>
-      <div className="flex gap-3 mb-5 flex-col md:flex-row">
-        <button
-          onClick={() => setViewMode("view all orders")}
-          className="btn btn-info">
-          View all orders
-        </button>
-        <button
-          onClick={() => setViewMode("waiting orders")}
-          className="btn btn-warning">
-          View waiting orders
-        </button>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3  gap-10 ">
         {order.map((o, index) => (
           <div

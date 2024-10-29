@@ -4,6 +4,7 @@ import moment from "moment";
 import Order_item from "./Orders_components/Order_item";
 import Order_pagination from "./Orders_components/Order_pagination";
 import Order_search from "./Orders_components/Order_search";
+import Order_select from "./Orders_components/Order_select";
 
 export const OrderContext = createContext("");
 
@@ -97,6 +98,7 @@ function Orders() {
           confirmOrder,
           cancelOrder,
         }}>
+        <Order_select />
         <Order_item />
         <Order_pagination />
       </OrderContext.Provider>

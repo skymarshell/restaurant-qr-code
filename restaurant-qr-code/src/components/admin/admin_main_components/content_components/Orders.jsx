@@ -13,14 +13,26 @@ function Orders() {
   const [orderLength, setOrderLength] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [viewMode, setViewMode] = useState("waiting orders");
-
+  const [viewMode, setViewMode] = useState("view all orders");
+  const [viewBy, setViewBy] = useState("0");
+  // date view
+  const [viewDate, setViewDate] = useState("");
+  const [viewMonth, setViewMonth] = useState("");
+  const [viewYear, setViewYear] = useState("");
   async function getOrder(page = 1) {
     try {
       const response = await axios.get(
         `http://localhost:3000/customer_order/get_order`,
         {
-          params: { page, limit: 9, view: viewMode },
+          params: {
+            page,
+            limit: 9,
+            view: viewMode,
+            viewBy,
+            viewDate,
+            viewMonth,
+            viewYear,
+          },
         }
       );
       const formattedOrders = response.data.orders.map((order) => ({
@@ -40,21 +52,21 @@ function Orders() {
     }
   }
 
+  //  data
   useEffect(() => {
     getOrder(currentPage);
-  }, [currentPage, viewMode]);
+    const interval = setInterval(() => {
+      getOrder(currentPage);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [currentPage, viewMode, viewBy, viewDate, viewMonth, viewYear]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [viewMode]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      getOrder(currentPage);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [currentPage, viewMode]);
+  useEffect(() => {}, [currentPage, viewMode]);
 
   const confirmOrder = async (orderId) => {
     try {
@@ -97,6 +109,14 @@ function Orders() {
           setViewMode,
           confirmOrder,
           cancelOrder,
+          viewBy,
+          setViewBy,
+          viewDate,
+          viewMonth,
+          viewYear,
+          setViewDate,
+          setViewMonth,
+          setViewYear,
         }}>
         <Order_select />
         <Order_item />

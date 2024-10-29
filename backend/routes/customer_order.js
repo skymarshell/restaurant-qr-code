@@ -16,18 +16,214 @@ router.get('/waiting_orderCount', (req, res) => {
 
 router.get('/get_order', (req, res) => {
     //page,limit=9 9 item per page,view = waiting orders || view all orders
-    const { page, limit, view } = req.query;
+    // viewBy = 0 -> View all.
+    // viewBy = 1 -> View orders this day.
+    // viewBy = 2 -> View orders by date.
+    // waiting order = 2
+    const { page, limit, view, viewBy, viewDate, viewMonth, viewYear } = req.query;
     const offset = (page - 1) * limit;
 
-    const sql = view === "waiting orders"
-        ? `SELECT * FROM customer_order WHERE order_status = 2 ORDER BY order_status DESC , order_id LIMIT ${limit} OFFSET ${offset}`
-        : `SELECT * FROM customer_order ORDER BY order_status DESC , order_id DESC LIMIT ${limit} OFFSET ${offset}`;
+    console.log(view, viewBy, viewDate, viewMonth, viewYear);
 
-    const countSql = view === "waiting orders"
-        ? `SELECT COUNT(*) as total FROM customer_order WHERE order_status = 2`
-        : `SELECT COUNT(*) as total FROM customer_order`;
 
-    db.query(sql, (err, orders) => {
+    /* SELECT * FROM restaurant.customer_order WHERE order_date between '2024-08-21 00:00:00' AND '2024-08-21 23:59:59'; */
+
+    // const sql = view === "waiting orders"
+    //     ? `SELECT * FROM customer_order WHERE order_status = 2 ORDER BY order_status DESC , order_id LIMIT ${limit} OFFSET ${offset}`
+    //     : `SELECT * FROM customer_order ORDER BY order_status DESC , order_id DESC LIMIT ${limit} OFFSET ${offset}`;
+
+    let sql2, countSql;
+    let d = new Date(); // Use new Date() to get a Date object
+    let date = String(d.getDate()).padStart(2, '0'); // Ensure date is zero-padded
+    let month = String(d.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so add 1 and zero-pad
+    let year = d.getFullYear();
+    // viewBy = 0 -> View all.
+    // viewBy = 1 -> View orders this day.
+    // viewBy = 2 -> View orders by date.
+    // cancel = -1
+    // sent = 1
+    // waiting order = 2
+    if (view == 'view all orders') {
+
+        // view all status
+        if (viewBy == 0) {
+            sql2 = `
+        SELECT * FROM customer_order       
+        ORDER BY order_status DESC, order_id 
+        LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = "SELECT COUNT(*) as total FROM customer_order"
+        }
+        else if (viewBy == 1) {
+            sql2 = `
+                SELECT * FROM customer_order 
+                WHERE order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
+                '${year}-${month}-${date} 23:59:59' 
+                ORDER BY order_status DESC, order_id 
+                LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order 
+            WHERE order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
+            '${year}-${month}-${date} 23:59:59'
+            ORDER BY order_status DESC, order_id 
+            LIMIT ${limit} OFFSET ${offset}
+            `
+        }
+        else if (viewBy == 2) {
+            // //View orders by date.
+            sql2 = `
+                SELECT * FROM customer_order 
+                WHERE order_date BETWEEN '${viewYear}-${viewMonth}-${viewDate} 00:00:00' AND 
+                '${viewYear}-${viewMonth}-${viewDate} 23:59:59' 
+                ORDER BY order_status DESC, order_id 
+                LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order 
+                WHERE order_date BETWEEN '${viewYear}-${viewMonth}-${viewDate} 00:00:00' AND 
+                '${viewYear}-${viewMonth}-${viewDate} 23:59:59'
+                ORDER BY order_status DESC, order_id 
+                LIMIT ${limit} OFFSET ${offset}
+                `
+        }
+        
+
+    }
+    else if (view == "waiting orders") {
+        // view all date
+        if (viewBy == 0) {
+            sql2 = `
+            SELECT * FROM customer_order 
+            WHERE order_status = 2            
+            ORDER BY order_status DESC, order_id 
+            LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order 
+            WHERE order_status = 2          
+            `
+        }
+        //View orders this day.
+        else if (viewBy == 1) {
+            sql2 = `
+                SELECT * FROM customer_order 
+                WHERE order_status = 2 
+                AND order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
+                '${year}-${month}-${date} 23:59:59' 
+                ORDER BY order_status DESC, order_id 
+                LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order 
+                WHERE order_status = 2                
+                AND order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
+                '${year}-${month}-${date} 23:59:59'        
+                `
+        } else if (viewBy == 2) {
+            // //View orders by date.
+            sql2 = `
+                SELECT * FROM customer_order 
+                WHERE order_status = 2 
+                AND order_date BETWEEN '${viewYear}-${viewMonth}-${viewDate} 00:00:00' AND 
+                '${viewYear}-${viewMonth}-${viewDate} 23:59:59' 
+                ORDER BY order_status DESC, order_id 
+                LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order 
+                WHERE order_status = 2                
+                AND order_date BETWEEN '${viewYear}-${viewMonth}-${viewDate} 00:00:00' AND 
+                '${viewYear}-${viewMonth}-${viewDate} 23:59:59'        
+                `
+        }
+    }
+    else if (view == 'sent') {
+        if (viewBy == 0) {
+            // view all date
+            sql2 = `
+            SELECT * FROM customer_order 
+            WHERE order_status = 1            
+            ORDER BY order_status DESC, order_id 
+            LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order WHERE order_status = 1`
+        }
+        //View orders this day.
+        else if (viewBy == 1) {
+            sql2 = `
+                SELECT * FROM customer_order 
+                WHERE order_status = 1 
+                AND order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
+                '${year}-${month}-${date} 23:59:59' 
+                ORDER BY order_status DESC, order_id 
+                LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order 
+            WHERE order_status = 1
+            AND order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
+            '${year}-${month}-${date} 23:59:59'
+            `
+        } else if (viewBy == 2) {
+            // //View orders by date.
+            sql2 = `
+                SELECT * FROM customer_order 
+                WHERE order_status = 1 
+                AND order_date BETWEEN '${viewYear}-${viewMonth}-${viewDate} 00:00:00' AND 
+                '${viewYear}-${viewMonth}-${viewDate} 23:59:59' 
+                ORDER BY order_status DESC, order_id 
+                LIMIT ${limit} OFFSET ${offset}`;
+
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order 
+                WHERE order_status = 1
+                AND order_date BETWEEN '${viewYear}-${viewMonth}-${viewDate} 00:00:00' AND 
+                '${viewYear}-${viewMonth}-${viewDate} 23:59:59'
+                `
+        }
+    }
+    else if (view == 'cancel') {
+        if (viewBy == 0) {
+            // view all date
+            sql2 = `
+            SELECT * FROM customer_order 
+            WHERE order_status = -1            
+            ORDER BY order_status DESC, order_id 
+            LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order WHERE order_status = -1`
+        }
+        //View orders this day.
+        else if (viewBy == 1) {
+            sql2 = `
+                SELECT * FROM customer_order 
+                WHERE order_status = -1 
+                AND order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
+                '${year}-${month}-${date} 23:59:59' 
+                ORDER BY order_status DESC, order_id 
+                LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order WHERE order_status = -1            
+            AND order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
+                '${year}-${month}-${date} 23:59:59'
+            `
+        } else if (viewBy == 2) {
+            // //View orders by date.
+            sql2 = `
+                SELECT * FROM customer_order 
+                WHERE order_status = -1 
+                AND order_date BETWEEN '${viewYear}-${viewMonth}-${viewDate} 00:00:00' AND 
+                '${viewYear}-${viewMonth}-${viewDate} 23:59:59' 
+                ORDER BY order_status DESC, order_id 
+                LIMIT ${limit} OFFSET ${offset}`;
+
+            countSql = `SELECT COUNT(*) as total FROM customer_order WHERE order_status = -1            
+                AND order_date BETWEEN '${viewYear}-${viewMonth}-${viewDate} 00:00:00' AND 
+                    '${viewYear}-${viewMonth}-${viewDate} 23:59:59'
+                `
+        }
+    }
+
+
+
+
+
+    db.query(sql2, (err, orders) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ error: "Error fetching orders" });

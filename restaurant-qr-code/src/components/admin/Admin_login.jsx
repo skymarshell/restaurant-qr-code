@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FaUser, FaLock } from "react-icons/fa";
+import "./AdminLogin.css";
 
 function Admin_login() {
   const navigate = useNavigate();
@@ -35,45 +37,39 @@ function Admin_login() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="max-w-md w-full bg-white p-8 rounded shadow-lg">
+    <div className="admin-login-container">
+      <div className="login-box">
         <h2 className="text-2xl font-bold mb-6">Admin Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="username"
-              className="block text-gray-700 font-bold mb-2">
-              Username:
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="px-3 py-2 border rounded w-full"
-              required
-            />
+            <label htmlFor="username" className="label">Username:</label>
+            <div className="input-container">
+              <FaUser className="icon" />
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="input-field"
+                required
+              />
+            </div>
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-bold mb-2">
-              Password:
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="px-3 py-2 border rounded w-full"
-              required
-            />
+            <label htmlFor="password" className="label">Password:</label>
+            <div className="input-container">
+              <FaLock className="icon" />
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input-field"
+                required
+              />
+            </div>
           </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none">
-            Login
-          </button>
+          <button type="submit"className="login-button">Login</button>
         </form>
       </div>
     </div>

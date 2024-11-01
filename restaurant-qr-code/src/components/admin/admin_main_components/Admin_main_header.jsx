@@ -20,10 +20,7 @@ function Admin_main_header() {
           <span className="text-base md:text-lg lg:text-xl font-bold italic">DiamondBu</span>
         </div>
         <h1 className="text-lg md:text-xl lg:text-2xl font-bold italic absolute left-1/2 transform -translate-x-1/2">Dashboard</h1>
-        <button
-          onClick={() => setSideBarShow(!sideBarShow)}
-          className="text-blue-600 lg:hidden"
-        >
+        <button onClick={() => setSideBarShow(!sideBarShow)} className="text-blue-600 lg:hidden">
           <GiHamburgerMenu />
         </button>
       </div>

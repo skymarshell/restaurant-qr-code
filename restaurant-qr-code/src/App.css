@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.app {
+.app-main {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,19 +15,19 @@
   color: #333;
 }
 
-.logo {
+.logo-main {
   width: 250px;
   height: auto;
   margin-bottom: 20px;
 }
 
-.title {
+.title-main {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 20px;
 }
 
-.login-button {
+.login-button-main {
   padding: 10px 20px;
   font-size: 1rem;
   color: white;
@@ -35,10 +35,9 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-.login-button:hover {
+.login-button-main:hover {
   background-color: #357abd;
 }
 

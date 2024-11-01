@@ -13,14 +13,17 @@ function Admin_main_header() {
   }
 
   return (
-    <header className="w-full bg-white p-3 shadow-md sticky top-0 z-20  ">
-      <div className="container mx-auto flex flex-row-reverse lg:flex-row justify-between items-center">
-        <h1 className="text-xl font-bold">
-          Admin System username : {sessionStorage.getItem("username")}
-        </h1>
+    <header className="w-full bg-gradient-to-r from-green-200 via-blue-200 to-pink-200 p-3 shadow-md sticky top-0 z-20">
+      <div className="flex justify-between items-center pl-0 pr-4">
+        <div className="flex items-center">
+          <img src="https://static.vecteezy.com/system/resources/thumbnails/008/513/899/small_2x/blue-diamond-illustration-png.png" alt="DiamondBu Logo" className="w-8 h-8 mr-2" />
+          <span className="text-base md:text-lg lg:text-xl font-bold italic">DiamondBu</span>
+        </div>
+        <h1 className="text-lg md:text-xl lg:text-2xl font-bold italic absolute left-1/2 transform -translate-x-1/2">Dashboard</h1>
         <button
           onClick={() => setSideBarShow(!sideBarShow)}
-          className="text-blue-600 lg:hidden">
+          className="text-blue-600 lg:hidden"
+        >
           <GiHamburgerMenu />
         </button>
       </div>

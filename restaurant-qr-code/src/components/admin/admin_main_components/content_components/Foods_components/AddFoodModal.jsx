@@ -61,52 +61,52 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
 
   return (
     <div className="z-20  overflow-auto fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white  p-4 rounded-md shadow-md">
+      <div className="bg-gradient-to-r from-green-200 to-green-100  p-5 rounded-md shadow-lg">
         <h2 className="text-lg font-semibold mb-4">Add New Food Item</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-black-100 ">
               Food Name
             </label>
             <input
               type="text"
               value={foodName}
               onChange={(e) => setFoodName(e.target.value)}
-              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500 shadow-lg"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-black-100">
               Food Description
             </label>
             <textarea
               value={foodDescription}
               onChange={(e) => setFoodDescription(e.target.value)}
               rows="3"
-              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500 shadow-lg"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-black-100">
               Food Image
             </label>
             <input
               type="file"
               accept="image/png,  image/jpeg"
               onChange={handleFileChange}
-              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full px-2 py-1  rounded-md focus:outline-none focus:border-blue-500"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-black-100">
               Category
             </label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500 shadow-lg"
               required>
               <option value="" disabled hidden>
                 Select Category
@@ -122,12 +122,12 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
             <button
               type="button"
               onClick={handleCancel}
-              className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md mr-2">
+              className="bg-red-500 hover:border-2 border-black text-white py-2 px-4 rounded-md mr-2 shadow-lg">
               Close
             </button>
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
+              className="bg-blue-500 hover:border-2 border-black text-white py-2 px-4 rounded-md shadow-lg">
               Add Food
             </button>
           </div>

@@ -77,13 +77,13 @@ function Foods() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Food Menu</h1>
+      <p className="text-lg font-bold">รายการอาหาร</p>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
         <>
           <div className="flex justify-end mb-4">
-            <select onChange={(e) => setViewCategory(e.target.value)}>
+            <select onChange={(e) => setViewCategory(e.target.value)} className="rounded shadow-lg p-2 me-3 hover:border-2 border-black">
               <option value="0" selected>
                 View all menu.
               </option>
@@ -95,11 +95,11 @@ function Foods() {
             </select>
             <button
               onClick={() => setIsAddingFood(true)}
-              className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md">
+              className="bg-green-500 hover:bg-green-900 text-white py-2 px-4 rounded-md shadow-lg">
               Add Food
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
             {filterMenu.map((menu, index) => (
               <FoodItem
                 key={index}

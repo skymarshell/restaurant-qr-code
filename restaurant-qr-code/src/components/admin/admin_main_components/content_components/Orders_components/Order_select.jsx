@@ -27,7 +27,7 @@ function Order_select() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-4 text-gray-800 ">
+      <h1 className="text-xl mt-2 mb-4 text-black ">
         {viewMode === "view all orders"
           ? `Total orders: ${orderLength} orders`
           : viewMode === "waiting orders"
@@ -48,14 +48,14 @@ function Order_select() {
           className="btn btn-warning">
           View waiting orders
         </button> */}
-        <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
+        <select onChange={(e) => setViewMode(e.target.value)} value={viewMode} className="rounded py-1 shadow-lg  hover:border-2 border-black">
           <option value="view all orders">ดูทุกรายการ</option>
           <option value="waiting orders">กำลังรอ</option>
           <option value="sent">จัดส่งแล้ว</option>
           <option value="cancel">ยกเลิก</option>
         </select>
       </div>
-      <select onChange={(e) => setViewBy(e.target.value)} value={viewBy}>
+      <select onChange={(e) => setViewBy(e.target.value)} value={viewBy} className="rounded py-1 shadow-lg  hover:border-2 border-black">
         {/* <option value="0">View all orders.</option> */}
         <option value="0">View all.</option>
         <option value="1">View orders this day.</option>
@@ -85,7 +85,7 @@ function DaySelect() {
       id="select_day"
       value={viewDate}
       onChange={(e) => setViewDate(parseInt(e.target.value))}
-      className="border rounded p-2">
+      className="rounded p-2 mt-1 shadow-lg  hover:border-2 border-black">
       {days.map((d) => (
         <option key={d} value={d}>
           {d}
@@ -118,7 +118,7 @@ function MonthSelect() {
       id="select_month"
       value={viewMonth}
       onChange={(e) => setViewMonth(parseInt(e.target.value))}
-      className="border rounded p-2">
+      className="rounded p-2 mt-1 shadow-lg  hover:border-2 border-black">
       {months.map((month) => (
         <option key={month.value} value={month.value}>
           {month.label}
@@ -141,7 +141,7 @@ function YearSelect() {
       name="select_year"
       id="select_year"
       value={viewYear}
-      className="ms-3 border rounded p-2"
+      className="rounded p-2 mt-1 shadow-lg  hover:border-2 border-black"
       onChange={(e) => setViewYear(parseInt(e.target.value))}>
       {years.map((year) => (
         <option key={year} value={year}>

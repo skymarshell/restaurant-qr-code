@@ -70,14 +70,14 @@ export default function Dashboard() {
       classText = "bg-yellow-400";
     }
 
-    return <span className={`${classText} p-2 py-1 rounded-md border-2 border-black float-right`}>{showText}</span>;
+    return <span className={`${classText} p-2 mt-2 py-1 rounded-md border-2 border-black float-right`}>{showText}</span>;
   }
 
   return (
     <>
       <main className="mt-10">
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <article className="bg-white p-4 shadow rounded  text-center h-full relative lg:col-span-2">
+          <article className="bg-amber-100  p-4 shadow rounded  text-center h-full relative lg:col-span-2 border-2 border-black">
             <div>
               <Day_Month_Year_select
                 selectedDay={selectedDay}
@@ -100,10 +100,10 @@ export default function Dashboard() {
               <p key={category.category_id}>{category.category_name}</p>
             ))}
           </article> */}
-          <article className="bg-white p-4 shadow rounded overflow-auto max-h-[220px] lg:col-span-2">
+          <article className="bg-amber-100 p-4 shadow rounded overflow-auto max-h-[220px] lg:col-span-2 border-2 border-black">
             <p className="font-bold text-center">ออร์เดอร์ล่าสุด</p>
             {latestOrder.map((order) => (
-              <div key={order.order_id} className="border-b-4 ">
+              <div key={order.order_id} className="rounded bg-blue-100 p-2 m-2 shadow">
                 <p>
                   <span>โต๊ะ {order.order_table}</span>
                   <span>({order.order_id}) </span>
@@ -124,10 +124,10 @@ export default function Dashboard() {
               <p key={food.food_id}>{food.food_name}</p>
             ))}
           </article> */}
-          <article className="bg-white p-4 shadow rounded grid-cols-1 md:col-span-2 lg:col-span-4">
+          <article className="bg-amber-100 p-4 shadow rounded grid-cols-1 md:col-span-2 lg:col-span-4 border-2 border-black">
             <FoodChart latestOrder={latestOrder} />
           </article>
-          <article className="bg-white p-4 shadow rounded grid-cols-1 md:col-span-2 lg:col-span-4">
+          <article className="bg-amber-100 p-4 shadow rounded grid-cols-1 md:col-span-2 lg:col-span-4 border-2 border-black">
             <Customer_history />
           </article>
         </section>

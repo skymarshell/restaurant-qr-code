@@ -30,17 +30,17 @@ function Day_Month_Year_select({
         selectedYear={selectedYear}
         currentYear={currentYear}
       />
-      <div className="mt-10">
+      <div className="mt-10 text-xl">
         <p className="font-bold">
-          จำนวนลูกค้าวันที่ {selectedDay}/{selectedMonth}/{selectedYear + 543} :
-          {countCustomerByDate ? `${countCustomerByDate} คน` : "0 คน"}
+          จำนวนลูกค้าวันที่ {selectedDay}/{selectedMonth}/{selectedYear + 543} : 
+          {countCustomerByDate ? ` ${countCustomerByDate} คน` : " 0 คน"}
         </p>
-        <p className="text-sm">
-          เดือน{selectedMonth} :{" "}
+        <p className="">
+          เดือน {selectedMonth} : {" "}
           {countCustomerAllMonth ? `${countCustomerAllMonth} คน` : "0 คน"}
         </p>
-        <p className="text-sm">
-          รวมทั้งปี{selectedYear + 543}:{" "}
+        <p className="">
+          รวมทั้งปี {selectedYear + 543} : {" "}
           {customerCountAllYear ? `${customerCountAllYear} คน` : "0 คน"}
         </p>
       </div>
@@ -60,7 +60,7 @@ function DaySelect({ selectedDay, setSelectedDay, currentDay }) {
       id="select_day"
       value={selectedDay}
       onChange={(e) => setSelectedDay(parseInt(e.target.value))}
-      className="border rounded p-2 me-3">
+      className="rounded-full shadow-lg p-2 me-3 hover:border-2 border-black">
       {day.map((d) => (
         <option key={d} value={d}>
           {d}
@@ -93,7 +93,7 @@ function MonthSelect({ setSelectedMonth, selectedMonth }) {
       id="select_month"
       value={selectedMonth}
       onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-      className="border rounded p-2">
+      className="rounded shadow-lg p-2 me-3 hover:border-2 border-black">
       {months.map((month) => (
         <option key={month.value} value={month.value}>
           {month.label}
@@ -115,7 +115,7 @@ function YearSelect({ setSelectedYear, selectedYear, currentYear }) {
       name="select_year"
       id="select_year"
       value={selectedYear}
-      className="ms-3 border rounded p-2"
+      className="rounded-full shadow-lg p-2 me-3 hover:border-2 border-black"
       onChange={(e) => setSelectedYear(parseInt(e.target.value))}>
       {years.map((year) => (
         <option key={year} value={year}>

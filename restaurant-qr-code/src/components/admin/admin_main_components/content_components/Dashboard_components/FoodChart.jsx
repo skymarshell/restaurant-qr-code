@@ -89,19 +89,21 @@ function FoodChart() {
 
   return (
     <div className="relative">
-      <h1 className="font-bold text-3xl text-center">กราฟยอดสั่งอาหาร</h1>
+      <h1 className="font-bold text-3xl text-center text-xl mb-2">กราฟยอดสั่งอาหาร</h1>
       <div className="flex flex-wrap gap-3 mb-3 items-center ">
         <button
           onClick={() => {
             setViewMode("all");
             setText("ทั้งหมด");
-          }}>
+          }}
+          className="bg-blue-100 p-1 rounded shadow-lg hover:bg-blue-500">
           ทั้งหมด
         </button>
         <div>
-          <label htmlFor="only_month">เดือน</label>
+          <label htmlFor="only_month">เดือน </label>
           <select
             id="only_month"
+            className="rounded shadow-lg p-2 me-3 hover:border-2 border-black"
             onChange={(e) => {
               handleOnlyMonthSelection(e);
             }}
@@ -114,15 +116,17 @@ function FoodChart() {
         <button
           onClick={() => {
             setViewMode("7day");
-            setText("7วันย้อนหลัง");
-          }}>
-          7วันย้อนหลัง
+            setText("7 วันย้อนหลัง");
+          }}
+          className="bg-blue-100 p-1 rounded shadow-lg hover:bg-blue-500">
+          7 วันย้อนหลัง
         </button>
         <button
           onClick={() => {
             setViewMode("today");
             setText("วันนี้");
-          }}>
+          }}
+          className="bg-blue-100 p-1 rounded shadow-lg hover:bg-blue-500">
           วันนี้
         </button>
         <div className="flex flex-wrap justify-center items-center">
@@ -130,6 +134,7 @@ function FoodChart() {
           <div id="select_date">
             <select
               id="day"
+              className="rounded-full shadow-lg p-2 me-3 ml-1 hover:border-2 border-black"
               onChange={(e) => setSelectDay(e.target.value)}
               value={selectDay}>
               {day.map((d) => (
@@ -138,6 +143,7 @@ function FoodChart() {
             </select>
             <select
               id="month"
+              className="rounded shadow-lg p-2 me-3 hover:border-2 border-black"
               onChange={(e) => setSelectMonth(e.target.value)}
               value={selectMonth}>
               {months.map((m) => (
@@ -147,7 +153,7 @@ function FoodChart() {
             <YearSelect selectYear={selectYear} setSelectYear={setSelectYear} />
           </div>
           <button className="ms-3  h-full" onClick={handleButtonClick}>
-            <IoSearchOutline />
+            <IoSearchOutline className="text-blue-500 w-6 h-6 hover:text-blue-700 transition duration-200 ease-in-out"/>
           </button>
         </div>
       </div>
@@ -175,7 +181,7 @@ function YearSelect({ selectYear, setSelectYear }) {
     <select
       name="select_year"
       id="select_year"
-      className="ms-3 border rounded p-2"
+      className="rounded shadow-lg p-2 me-3 hover:border-2 border-black"
       value={selectYear}
       onChange={(e) => setSelectYear(e.target.value)}>
       {years.map((year) => (

@@ -94,7 +94,7 @@ function YearSelect({ selectYear, setSelectYear }) {
       <select
         name="select_year"
         id="select_year"
-        className="ms-3 border rounded p-2"
+        className="rounded shadow-lg p-2 me-3 hover:border-2 border-black ml-1"
         value={selectYear}
         onChange={(e) => setSelectYear(Number(e.target.value))}>
         {years.map((year) => (
@@ -127,6 +127,7 @@ function MonthSelect({ selectMonth, setSelectMonth }) {
     <>
       <label htmlFor="select_month">เดือน</label>
       <select
+        className="rounded shadow-lg p-2 me-3 mb-1 ml-1 hover:border-2 border-black"
         value={selectMonth}
         onChange={(e) => setSelectMonth(Number(e.target.value))}>
         {months.map((m) => (

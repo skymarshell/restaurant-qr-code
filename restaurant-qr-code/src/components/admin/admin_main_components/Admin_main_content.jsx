@@ -19,10 +19,10 @@ function Admin_main_content() {
 
   return (
     <main
-      className="p-5 min-h-dvh w-full"
+      className="pl-5 pt-10 min-h-dvh w-full bg-gradient-to-r from-blue-100 to-pink-100"
       onClick={() => setSideBarShow(false)}>
-      <h1 className="text-2xl font-bold capitalize pb-2">{currectPage}</h1>
-      <article className=" border-4 border-white p-3 min-h-dvh">
+      <h1 className="text-2xl font-bold capitalize ">{currectPage}</h1>
+      <article className="pr-3 min-h-dvh">
         {currectPage == "Categories" && <Categories />}
         {currectPage == "Foods" && <Foods />}
         {currectPage == "Customer view" && <Customer_main isAdmin={true} />}

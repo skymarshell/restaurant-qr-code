@@ -70,7 +70,7 @@ function Customer_main({ isAdmin }) {
     getMenus();
     getCategories();
 
-    const status = setInterval(checkStatus, 1000);
+    const status = setInterval(checkStatus, 10000);
 
     return () => clearInterval(status);
   }, []);

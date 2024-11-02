@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import axios from "axios";
 import { HiMiniEllipsisVertical } from "react-icons/hi2";
@@ -11,6 +11,8 @@ function Table_item({ table, getTable, tableUrl }) {
   const [edit, setEdit] = useState(false);
   const [customerNumber, setCustomerNumber] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
+  const start_ref = useRef(null);
+  const end_ref = useRef(null);
 
   function getDateTime() {
     // Get the current date
@@ -214,6 +216,20 @@ function Table_item({ table, getTable, tableUrl }) {
     return timeString;
   }
 
+  function printQrCode(qrCodeValue) {
+    const tableNumber = table.table_number;
+    const customer_count = table.customer_count;
+    const start_time = start_ref.current.innerText;
+    const end_time = end_ref.current.innerText;
+    // Open a new tab with the Print_QrCode route and pass the value as a query parameter
+    window.open(
+      `/print_QrCode?
+        value=${qrCodeValue}&tableNumber=${tableNumber}&customerCount=${customer_count}&start=${start_time}&end=${end_time}`,
+      "_blank",
+      "width=800,height=600"
+    );
+  }
+
   const tableStatusClass =
     table.status === "available"
       ? "bg-green-600"
@@ -251,9 +267,11 @@ function Table_item({ table, getTable, tableUrl }) {
         <>
           {/* start_time,endTime,Remaining*/}
           <div className="mt-4">
-            <p>Start time: {removeSeconds(table.start_time.split(" ")[1])}</p>
+            <p ref={start_ref}>
+              Start time: {removeSeconds(table.start_time.split(" ")[1])}
+            </p>
             <div>
-              <p>End time: {endTime(table.start_time)}</p>
+              <p ref={end_ref}>End time: {endTime(table.start_time)}</p>
               <div className={`flex`}>
                 <p>Remaining time :</p>
                 <p
@@ -305,7 +323,23 @@ function Table_item({ table, getTable, tableUrl }) {
                   <button className="btn btn-error" onClick={handleViewQrCode}>
                     Close
                   </button>
-                  <button className="btn btn-warning">Print</button>
+                  <button
+                    className="btn btn-warning"
+                    onClick={() =>
+                      printQrCode(
+                        `${qrCodeBase}/${table.start_time}/${table.table_number}`
+                      )
+                    }>
+                    Print
+                  </button>
+                  {/* <Link
+                    className="btn btn-warning"
+                    target="_blank"
+                    to={`/print_QrCode?value=${encodeURIComponent(
+                      `${qrCodeBase}/${table.start_time}/${table.table_number}`
+                    )}&tableNumber=${encodeURIComponent(table.table_number)}`}>
+                    Print QR Code
+                  </Link> */}
                 </div>
               </div>
             )}

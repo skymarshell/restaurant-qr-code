@@ -6,21 +6,25 @@ import Admin_main from "./components/admin/Admin_main.jsx";
 import Customer_main from "./components/customer/Customer_main.jsx";
 import Login_check from "./components/admin/Login_check.jsx";
 import Customer_protect from "./components/customer/Customer_protect.jsx";
+import Print_QrCode from "./components/admin/admin_main_components/content_components/Tables_components/Print_QrCode.jsx";
 
 const Routers = createBrowserRouter([
+  //first page
   {
     path: "/",
     element: <App />,
   },
+  //error not found path
   {
-    //error not found path
     path: "*",
     element: <div>Error page</div>,
   },
+  // Admin Login
   {
     path: "/admin_login",
     element: <Admin_login />,
   },
+  // Admin main
   {
     path: "/Admin_main",
     element: (
@@ -29,6 +33,7 @@ const Routers = createBrowserRouter([
       </Login_check>
     ),
   },
+  // Customer menu
   {
     path: "/customer/:time/:id",
     element: (
@@ -36,6 +41,10 @@ const Routers = createBrowserRouter([
         <Customer_main />
       </Customer_protect>
     ),
+  },
+  {
+    path: "/Print_QrCode",
+    element: <Print_QrCode />,
   },
 ]);
 

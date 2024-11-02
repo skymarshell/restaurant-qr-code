@@ -70,7 +70,7 @@ export default function Dashboard() {
       classText = "bg-yellow-400";
     }
 
-    return <span className={`${classText} px-2 py-1 rounded-md`}>{showText}</span>;
+    return <span className={`${classText} p-2 py-1 rounded-md border-2 border-black float-right`}>{showText}</span>;
   }
 
   return (

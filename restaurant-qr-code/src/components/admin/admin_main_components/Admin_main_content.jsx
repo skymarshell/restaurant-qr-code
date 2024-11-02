@@ -19,13 +19,9 @@ function Admin_main_content() {
 
   return (
     <main
-      className="p-6 min-h-dvh w-full"
+      className="p-5 min-h-dvh w-full"
       onClick={() => setSideBarShow(false)}>
-      <h1 className="text-2xl font-bold capitalize ">{currectPage}</h1>
-      <p>
-        This is the main content area. It should adjust based on the sidebar's
-        visibility.
-      </p>
+      <h1 className="text-2xl font-bold capitalize pb-2">{currectPage}</h1>
       <article className=" border-4 border-white p-3 min-h-dvh">
         {currectPage == "Categories" && <Categories />}
         {currectPage == "Foods" && <Foods />}

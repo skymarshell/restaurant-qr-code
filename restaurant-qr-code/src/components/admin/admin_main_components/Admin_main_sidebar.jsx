@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { GiForkKnifeSpoon,GiSteak,GiTable } from "react-icons/gi";
+import { FaUtensils,FaPersonBooth } from "react-icons/fa";
 import {
   Typography,
   List,
@@ -63,20 +65,15 @@ function Admin_main_sidebar() {
   return (
     <>
       <div
-        className={`fixed top-0 left-0  lg:static lg:translate-x-0  duration-300 z-10 bg-white shadow-lg
+        className={`fixed top-0 left-0  lg:static lg:translate-x-0  duration-300 z-10 bg-gradient-to-r from-green-200 shadow-lg
           ${sideBarShow ? "translate-x-0" : "-translate-x-full"}`}>
-        <Card className="min-h-screen w-full max-w-[15rem] p-1 shadow-xl shadow-blue-gray-900/5 rounded-none rounded-r-lg">
+        <Card className="min-h-screen w-full max-w-[15rem] p-1 shadow-xl bg-blue-50 rounded-none rounded-r-lg">
           <div className="lg:hidden flex justify-end p-2">
             <button
               onClick={() => setSideBarShow(false)}
               className="p-2 min-h-full bg-blue-gray-200 rounded-full shadow-md hover:bg-blue-gray-300 transition duration-200">
               <IoIosArrowBack className="text-xl" />
             </button>
-          </div>
-          <div className="mb-2 p-4">
-            <Typography variant="h5" color="blue-gray">
-              Sidebar
-            </Typography>
           </div>
           <List>
             {/* dashboard */}
@@ -148,7 +145,7 @@ function Admin_main_sidebar() {
                   onClick={() => handleOpen(2)}
                   className="border-b-0 p-3">
                   <ListItemPrefix>
-                    <ShoppingBagIcon className="h-5 w-5" />
+                    <GiForkKnifeSpoon className="h-5 w-5" />
                   </ListItemPrefix>
                   <Typography color="blue-gray" className="mr-auto font-normal">
                     Menu Management
@@ -159,13 +156,13 @@ function Admin_main_sidebar() {
                 <List className="p-0">
                   <ListItem onClick={() => setCurrectPage("Categories")}>
                     <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      <FaUtensils className="h-3 w-5" />
                     </ListItemPrefix>
                     Categories
                   </ListItem>
                   <ListItem onClick={() => setCurrectPage("Foods")}>
                     <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                      <GiSteak className="h-3 w-5" />
                     </ListItemPrefix>
                     Foods
                   </ListItem>
@@ -192,13 +189,13 @@ function Admin_main_sidebar() {
             </ListItem>
             <ListItem onClick={() => setCurrectPage("Tables")}>
               <ListItemPrefix>
-                <Cog6ToothIcon className="h-5 w-5" />
+                <GiTable className="h-5 w-5" />
               </ListItemPrefix>
               Tables
             </ListItem>
             <ListItem onClick={() => setCurrectPage("Customer view")}>
               <ListItemPrefix>
-                <Cog6ToothIcon className="h-5 w-5" />
+                <FaPersonBooth className="h-5 w-5" />
               </ListItemPrefix>
               Customer view
             </ListItem>

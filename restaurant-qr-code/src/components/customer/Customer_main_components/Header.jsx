@@ -35,30 +35,17 @@ import {
 import { DataContext } from "../Customer_main";
 
 import moment from "moment";
-//nav
-function NavList() {
-  const { viewOrdersHistory, setViewOrdersHistory } = useContext(DataContext);
-  return (
-    <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-      <Typography
-        as="a"
-        href="#"
-        variant="small"
-        color="blue-gray"
-        className="font-medium">
-        <ListItem
-          onClick={() => setViewOrdersHistory(true)}
-          className="flex items-center gap-2 py-2 pr-4 text-center">
-          Orders history
-        </ListItem>
-      </Typography>
-    </List>
-  );
-}
 
 export default function Header() {
-  const { id, time, isAdmin, viewOrdersHistory, setViewOrdersHistory } =
-    useContext(DataContext);
+  const {
+    id,
+    time,
+    isAdmin,
+    viewOrdersHistory,
+    setViewOrdersHistory,
+    adminInput,
+    setAdminInput,
+  } = useContext(DataContext);
   const timeFormat = moment(time).add(543, "year").format("DD/MM/YYYY HH:MM");
   const [openNav, setOpenNav] = React.useState(false);
   React.useEffect(() => {
@@ -70,7 +57,7 @@ export default function Header() {
 
   return (
     <Navbar>
-      <div className="flex items-center justify-between text-blue-gray-900">
+      <div className="flex  justify-between text-blue-gray-900">
         <Typography
           as="a"
           href="#"
@@ -80,9 +67,40 @@ export default function Header() {
             <img src={Shabu} alt="shabu logo" width="100px" />
           </div>
         </Typography>
-        <p>{isAdmin == true ? "Admin" : `โต๊ะ ${id} เวลา ${timeFormat}น.`}</p>
-        <NavList />
+        <div className="flex flex-col">
+          <p>{isAdmin == true ? <Admin_table /> : `โต๊ะ ${id}.`}</p>
+          <button
+            onClick={() => setViewOrdersHistory(true)}
+            className="my-2 underline text-end">
+            Orders history
+          </button>
+        </div>
       </div>
     </Navbar>
+  );
+}
+
+function Admin_table() {
+  const {
+    id,
+    time,
+    isAdmin,
+    viewOrdersHistory,
+    setViewOrdersHistory,
+    adminInput,
+    setAdminInput,
+  } = useContext(DataContext);
+  return (
+    <>
+      <label htmlFor="admin-table">โต๊ะ</label>
+      <input
+        type="text"
+        id="admin-table"
+        placeholder="ระบุเลขโต๊ะ"
+        value={adminInput}
+        onChange={(e) => setAdminInput(e.target.value)}
+        className="border border-black p-2 rounded-xl ms-2"
+      />
+    </>
   );
 }

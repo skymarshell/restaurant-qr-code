@@ -4,8 +4,16 @@ import axios from "axios";
 
 function Summary_order() {
   // info
-  const { id, orders, setOrders, isAdmin, alert, setAlert } =
-    useContext(DataContext);
+  const {
+    id,
+    orders,
+    setOrders,
+    isAdmin,
+    alert,
+    setAlert,
+    adminInput,
+    setAdminInput,
+  } = useContext(DataContext);
   // set pop-up summary order
   const [popUp, setPopUp] = useState(false);
 
@@ -25,6 +33,7 @@ function Summary_order() {
         {
           id,
           orders,
+          adminInput
         }
       );
     } catch (error) {
@@ -36,8 +45,7 @@ function Summary_order() {
     <>
       {/* footer */}
       <aside
-        className={`w-full fixed bottom-0 right-0 z-10 text-center bg-blue-500 hover:bg-blue-800 ${
-          isAdmin == true ? "hidden" : " "
+        className={`w-full fixed bottom-0 right-0 z-10 text-center bg-blue-500 hover:bg-blue-800 
         } ${orders.length <= 0 ? "hidden" : "block"}`}>
         <button
           onClick={() => setPopUp(true)}

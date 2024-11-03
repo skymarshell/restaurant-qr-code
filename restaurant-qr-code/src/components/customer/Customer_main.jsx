@@ -23,6 +23,8 @@ function Customer_main({ isAdmin }) {
   const [alert, setAlert] = useState(false);
   //view orders history ?
   const [viewOrdersHistory, setViewOrdersHistory] = useState(false);
+  // admin input
+  const [adminInput, setAdminInput] = useState("");
   //เช็คว่าโต๊ะ status available or unavailable
   const checkStatus = async () => {
     try {
@@ -92,6 +94,8 @@ function Customer_main({ isAdmin }) {
             setAlert,
             viewOrdersHistory,
             setViewOrdersHistory,
+            adminInput,
+            setAdminInput,
           }}>
           <Header />
           <Menu />

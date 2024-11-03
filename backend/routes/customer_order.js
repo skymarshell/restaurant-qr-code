@@ -64,9 +64,7 @@ router.get('/get_order', (req, res) => {
 
             countSql = `SELECT COUNT(*) as total FROM customer_order 
             WHERE order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
-            '${year}-${month}-${date} 23:59:59'
-            ORDER BY order_status DESC, order_id 
-            LIMIT ${limit} OFFSET ${offset}
+            '${year}-${month}-${date} 23:59:59'           
             `
         }
         else if (viewBy == 2) {
@@ -81,11 +79,8 @@ router.get('/get_order', (req, res) => {
             countSql = `SELECT COUNT(*) as total FROM customer_order 
                 WHERE order_date BETWEEN '${viewYear}-${viewMonth}-${viewDate} 00:00:00' AND 
                 '${viewYear}-${viewMonth}-${viewDate} 23:59:59'
-                ORDER BY order_status DESC, order_id 
-                LIMIT ${limit} OFFSET ${offset}
                 `
         }
-
 
     }
     else if (view == "waiting orders") {

@@ -5,6 +5,7 @@ function showOrder(order) {
   const orderSplit = order.split(",");
   return (
     <div>
+<<<<<<< HEAD
       {orderSplit.length == 1 && (
         <p className="ml-4 text-gray-700">- {orderSplit[0]}</p>
       )}
@@ -21,6 +22,13 @@ function showOrder(order) {
           </div>
         </details>
       )}
+=======
+      {orderSplit.map((o, index) => (
+        <p key={index} className="ml-4 text-gray-700">
+          - {o}
+        </p>
+      ))}
+>>>>>>> 80cbf8d348703bb11fd1b57b4f353b6dd7966850
     </div>
   );
 }
@@ -44,16 +52,16 @@ function Order_item() {
             key={index}>
             <div className="flex justify-between items-center mb-2">
               <div className="text-black font-semibold text-center">
-                Order ID : {o.order_id}
+                Order ID: {o.order_id}
               </div>
               <div className="text-gray-600 text-center">{o.order_date}</div>
               <div
                 className={`text-sm px-2 py-1 rounded text-center ${
                   o.order_status == 2
-                    ? "bg-yellow-100 text-orange-800 shadow-lg ml-5"
+                    ? "bg-yellow-100 text-yellow-800"
                     : o.order_status == 1
-                    ? "bg-green-100 text-green-800 shadow-lg"
-                    : "bg-red-100 text-red-800 shadow-lg"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
                 }`}>
                 {o.order_status == 2
                   ? "Waiting"
@@ -62,28 +70,29 @@ function Order_item() {
                   : "Order canceled"}
               </div>
             </div>
-            <div className="w-full sm:text-center lg:flex lg:justify-between lg:items-center ">
+            <div className="w-full sm:text-center lg:justify-between lg:items-center ">
               <div>
-                <p className="text-center font-medium">
-                  Table : <span className="text-2xl">{o.order_table}</span>
+                <p className="text-center">
+                  Table : <span className="text-4xl">{o.order_table}</span>
                 </p>
               </div>
               <div
-                className={`  flex justify-end gap-1 mb-3 lg:flex-row flex-col  ${
+                className={`flex flex-col justify-end gap-1 mb-3    ${
                   o.order_status == "2" ? "" : "hidden"
                 }`}>
                 <button
                   onClick={() => cancelOrder(o.order_id)}
-                  className="btn btn-error shadow-lg ">
+                  className="btn btn-error">
                   Cancel
                 </button>
                 <button
                   onClick={() => confirmOrder(o.order_id)}
-                  className="btn btn-success shadow-lg">
+                  className="btn btn-success">
                   Confirm
                 </button>
               </div>
             </div>
+
             <div className="border-t border-gray-500 mt-2 pt-2">
               {showOrder(o.orders)}
             </div>

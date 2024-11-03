@@ -85,7 +85,7 @@ router.get('/get_order', (req, res) => {
                 LIMIT ${limit} OFFSET ${offset}
                 `
         }
-        
+
 
     }
     else if (view == "waiting orders") {
@@ -318,21 +318,25 @@ router.post('/cancel_order', (req, res) => {
 });
 
 router.post('/send_order', (req, res) => {
-    const { id, orders } = req.body;
+    const { id, orders, adminInput } = req.body;
+
+    let order_table;
+    if (adminInput != "") {
+        order_table = `Admin order table ${adminInput.trim()}`
+    } else {
+        order_table = id
+    }
 
     // Construct the order_text
     let order_text = orders.map(order => `${order["name"]} : ${order["quantity"]}`).join(',');
 
-
     const currentTime = getDateTime()
-
-
 
     // SQL query (changed table name to orders)
     const sql = "INSERT INTO customer_order (orders, order_date, order_table , order_status) VALUES (?, ?, ?,?)";
 
     // Execute the query
-    db.query(sql, [order_text, currentTime, id, 2], (err, result) => {
+    db.query(sql, [order_text, currentTime, order_table, 2], (err, result) => {
         if (err) {
             console.error('Error sending order:', err);
             res.status(500).json({ error: "Error sending order" });

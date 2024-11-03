@@ -37,18 +37,28 @@ function Order_select() {
           : `Cancel orders: ${orderLength} orders`}
       </h1>
       <div className="flex gap-3 mb-5 flex-col md:flex-row">
-        <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
-          <option value="view all orders">ดูทุกรายการ</option>
+      <label htmlFor="status">ดูสถานะ</label>
+        <select
+          id="status"
+          onChange={(e) => setViewMode(e.target.value)}
+          value={viewMode}
+          className="rounded shadow-lg p-2 me-3 hover:border-2 border-black">
+          <option value="view all orders">ดูทุกสถานะ</option>
           <option value="waiting orders">กำลังรอ</option>
           <option value="sent">จัดส่งแล้ว</option>
           <option value="cancel">ยกเลิก</option>
         </select>
       </div>
-      <select onChange={(e) => setViewBy(e.target.value)} value={viewBy}>
+      <label htmlFor="select-view-type">เลือกวัน-เวลา</label>
+      <select
+      className="rounded shadow-lg p-2 ms-2 hover:border-1 border-black"
+        id="select-view-type"
+        onChange={(e) => setViewBy(e.target.value)}
+        value={viewBy}>
         {/* <option value="0">View all orders.</option> */}
-        <option value="0">View all.</option>
-        <option value="1">View orders this day.</option>
-        <option value="2">View orders by date.</option>
+        <option value="0">ดูทุกวัน-เวลา</option>
+        <option value="1">ดูออเดอร์วันนี้</option>
+        <option value="2">เลือกวันดูออเดอร์</option>
       </select>
       {viewBy === "2" && (
         <div className="flex gap-3 mt-3">

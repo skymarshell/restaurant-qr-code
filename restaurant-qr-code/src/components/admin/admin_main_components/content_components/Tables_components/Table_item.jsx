@@ -232,13 +232,13 @@ function Table_item({ table, getTable, tableUrl }) {
 
   const tableStatusClass =
     table.status === "available"
-      ? "bg-green-600"
+      ? "bg-green-300"
       : table.status === "unavailable"
-      ? "bg-red-300"
-      : "bg-orange-600";
+      ? "bg-red-500"
+      : "bg-yellow-500";
 
   return (
-    <div className="border border-white p-4 relative">
+    <div className="p-4 relative shadow-lg bg-gradient-to-r from-pink-100 to-amber-50">
       {/* ..., delete ,edit */}
       <div className="w-full mb-3 flex sm:flex-row flex-col-reverse justify-end sm:items-center items-end">
         {edit && (
@@ -254,12 +254,12 @@ function Table_item({ table, getTable, tableUrl }) {
       </div>
       {/* table,status */}
       <div className="flex flex-col  justify-between border-b-2 border-black pb-3">
-        <p className="text-center">
-          Table number: <span className="text-4xl">{table.table_number}</span>
+        <p className="text-center text-black font-semibold">
+          Table number : <span className="text-2xl font-normal">{table.table_number}</span>
         </p>
         <p
-          className={`p-3 rounded-lg text-center flex justify-center items-center ${tableStatusClass}`}>
-          Status: <span className="capitalize"> {table.status}</span>
+          className={`p-3 rounded-lg text-center flex justify-center items-center shadow-lg border-2 border-black ${tableStatusClass}`}>
+          Status : <span className="capitalize font-semibold">{table.status}</span>
         </p>
       </div>
       {/* show all info if unavailable */}
@@ -268,19 +268,19 @@ function Table_item({ table, getTable, tableUrl }) {
           {/* start_time,endTime,Remaining*/}
           <div className="mt-4">
             <p ref={start_ref}>
-              Start time: {removeSeconds(table.start_time.split(" ")[1])}
+              Start time : <span className="text-red-500 font-semibold">{removeSeconds(table.start_time.split(" ")[1])} </span>
             </p>
             <div>
-              <p ref={end_ref}>End time: {endTime(table.start_time)}</p>
+              <p ref={end_ref}>End time: <span className="text-red-500 font-semibold">{endTime(table.start_time)}</span></p>
               <div className={`flex`}>
                 <p>Remaining time :</p>
                 <p
-                  className={`ms-1 ${
+                  className={`ms-1 text-red-500 font-semibold ${
                     remaining_time(
                       table.start_time,
                       endTime(table.start_time)
-                    ) === "Time's up."
-                      ? "bg-orange-600 rounded-lg px-3"
+                    )=== "Time's up."
+                      ? "underline "
                       : ""
                   }`}>
                   {remaining_time(table.start_time, endTime(table.start_time))}
@@ -290,8 +290,8 @@ function Table_item({ table, getTable, tableUrl }) {
           </div>
           {/* Number of customers */}
           <p>
-            Number of customers:{" "}
-            {table.customer_count === 0 ? "-" : table.customer_count}
+            Number of customers :{" "}
+            <span className="text-red-500 font-semibold">{table.customer_count === 0 ? "-" : table.customer_count}</span>
           </p>
         </>
       )}
@@ -304,12 +304,12 @@ function Table_item({ table, getTable, tableUrl }) {
             <div className="flex justify-center items-center gap-x-3">
               <button
                 onClick={() => handleReset(table.table_number)}
-                className="btn btn-accent">
+                className="rounded-md p-3 bg-green-400 hover:bg-green-800 shadow-lg">
                 Reset
               </button>
               <button
                 onClick={handleViewQrCode}
-                className="btn btn-secondary text-black">
+                className="rounded-md p-3 bg-blue-400 hover:bg-blue-800 shadow-lg">
                 View QR code
               </button>
             </div>
@@ -320,11 +320,11 @@ function Table_item({ table, getTable, tableUrl }) {
                   value={`${qrCodeBase}/${table.start_time}/${table.table_number}`}
                 />
                 <div className="mt-2 flex items-center justify-center gap-4">
-                  <button className="btn btn-error" onClick={handleViewQrCode}>
+                  <button className="rounded-md p-3 bg-red-400 hover:bg-red-800 shadow-lg" onClick={handleViewQrCode}>
                     Close
                   </button>
                   <button
-                    className="btn btn-warning"
+                    className="rounded-md p-3 px-5 bg-yellow-400 hover:bg-yellow-800 shadow-lg"
                     onClick={() =>
                       printQrCode(
                         `${qrCodeBase}/${table.start_time}/${table.table_number}`
@@ -350,7 +350,7 @@ function Table_item({ table, getTable, tableUrl }) {
           <div className="text-center">
             <label htmlFor="customer_count">Number of customers</label>
             <form
-              className="flex flex-col justify-center items-center"
+              className="flex flex-col justify-center items-center mt-1"
               onSubmit={(e) => handleStart(e, table.table_number)}>
               <input
                 type="number"
@@ -361,7 +361,7 @@ function Table_item({ table, getTable, tableUrl }) {
                 onChange={handleChange}
               />
               {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-              <button type="submit" className="btn btn-success w-1/2 mt-3">
+              <button type="submit" className="rounded-md mt-5 p-10  py-2 bg-yellow-400 hover:bg-yellow-800 shadow-lg">
                 Start
               </button>
             </form>

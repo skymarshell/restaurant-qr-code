@@ -1,39 +1,25 @@
 import React, { useContext } from "react";
 import { OrderContext } from "../Orders";
-import { useState } from 'react';
 
 function showOrder(order) {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const orderSplit = order.split(",");
   return (
     <div>
-      <p className="ml-4 text-gray-700">- {orderSplit[0]}</p>
-      {/*ใส่จำนนวน*/}
-      {orderSplit.length > 1 && (
-        <button
-          onClick={() => setIsPopupOpen(true)}
-          className="ml-4 text-black hover:underline"
-        >
-          ดูเพิ่มเติม
-        </button>
+      {orderSplit.length == 1 && (
+        <p className="ml-4 text-gray-700">- {orderSplit[0]}</p>
       )}
-      {isPopupOpen && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gradient-to-r from-blue-100 to-pink-100 p-4 rounded-lg shadow-lg w-1/2 max-w-lg">
-            <h2 className="text-xl font-bold mb-4">รายการอาหารท้้งหมด</h2>
+      {orderSplit.length > 1 && (
+        <details className="ml-4 text-black ">
+          <summary className="hover:underline">ดูเพิ่มเติม</summary>
+          <div className="bg-gradient-to-r from-blue-100 to-pink-100 p-4 rounded-lg shadow-lg mt-2">
+            <h2 className="text-xl font-bold mb-4">รายการอาหารทั้งหมด</h2>
             {orderSplit.map((o, index) => (
               <p key={index} className="text-gray-700">
                 - {o}
               </p>
             ))}
-            <button
-              onClick={() => setIsPopupOpen(false)}
-              className="mt-4 bg-red-500 hover:bg-red-900  py-2 px-4 rounded"
-            >
-              ปิด
-            </button>
           </div>
-        </div>
+        </details>
       )}
     </div>
   );

@@ -221,8 +221,7 @@ export default function Header() {
           variant="h6"
           className="mr-4 cursor-pointer py-1.5 lg:ml-2">
           <div className="lg:flex lg:justify-center lg:items-center gap-2 text-center">
-            <img src={Shabu} alt="shabu logo" width="100px" />
-          
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/008/513/899/small_2x/blue-diamond-illustration-png.png" alt="shabu logo" width="100px" />
           </div>
         </Typography>
           <p>{isAdmin == true ? "Admin" : `โต๊ะ ${id} เวลา ${time}`}</p>

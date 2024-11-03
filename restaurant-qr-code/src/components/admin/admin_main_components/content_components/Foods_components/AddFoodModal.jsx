@@ -9,6 +9,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     try {
       const formData = new FormData();
@@ -60,8 +61,12 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
   };
 
   return (
-    <div className="z-20  overflow-auto fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-gradient-to-r from-green-200 to-green-100  p-5 rounded-md shadow-lg">
+    <div
+      onClick={() => setIsAddingFood(false)}
+      className="z-20  overflow-auto fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white  p-4 rounded-md shadow-md">
         <h2 className="text-lg font-semibold mb-4">Add New Food Item</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

@@ -49,7 +49,7 @@ router.get('/get_order', (req, res) => {
         if (viewBy == 0) {
             sql2 = `
         SELECT * FROM customer_order       
-        ORDER BY order_status DESC, order_id 
+        ORDER BY order_status DESC, order_id DESC
         LIMIT ${limit} OFFSET ${offset}`;
 
             countSql = "SELECT COUNT(*) as total FROM customer_order"
@@ -59,7 +59,7 @@ router.get('/get_order', (req, res) => {
                 SELECT * FROM customer_order 
                 WHERE order_date BETWEEN '${year}-${month}-${date} 00:00:00' AND 
                 '${year}-${month}-${date} 23:59:59' 
-                ORDER BY order_status DESC, order_id 
+                ORDER BY order_status DESC, order_id DESC
                 LIMIT ${limit} OFFSET ${offset}`;
 
             countSql = `SELECT COUNT(*) as total FROM customer_order 
@@ -240,6 +240,7 @@ router.get('/get_order', (req, res) => {
         });
     });
 });
+
 
 router.get('/orders_history/:time/:id', (req, res) => {
     const maxTime = fullTime; // Duration in minutes

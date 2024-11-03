@@ -37,16 +37,6 @@ function Order_select() {
           : `Cancel orders: ${orderLength} orders`}
       </h1>
       <div className="flex gap-3 mb-5 flex-col md:flex-row">
-        {/* <button
-          onClick={() => setViewMode("view all orders")}
-          className="btn btn-info">
-          View all orders
-        </button>
-        <button
-          onClick={() => setViewMode("waiting orders")}
-          className="btn btn-warning">
-          View waiting orders
-        </button> */}
         <select onChange={(e) => setViewMode(e.target.value)} value={viewMode}>
           <option value="view all orders">ดูทุกรายการ</option>
           <option value="waiting orders">กำลังรอ</option>

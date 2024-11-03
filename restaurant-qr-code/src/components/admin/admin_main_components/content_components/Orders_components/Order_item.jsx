@@ -5,7 +5,6 @@ function showOrder(order) {
   const orderSplit = order.split(",");
   return (
     <div>
-<<<<<<< HEAD
       {orderSplit.length == 1 && (
         <p className="ml-4 text-gray-700">- {orderSplit[0]}</p>
       )}
@@ -22,13 +21,6 @@ function showOrder(order) {
           </div>
         </details>
       )}
-=======
-      {orderSplit.map((o, index) => (
-        <p key={index} className="ml-4 text-gray-700">
-          - {o}
-        </p>
-      ))}
->>>>>>> 80cbf8d348703bb11fd1b57b4f353b6dd7966850
     </div>
   );
 }

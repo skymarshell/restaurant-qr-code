@@ -77,9 +77,9 @@ function CategoryItem({ category_id, category_name, get_categories, index }) {
   }
 
   return (
-    <li className="flex md:flex-row flex-col gap-4 items-center py-3 border-b">
+    <li className="flex md:flex-row flex-col gap-4 items-center py-3 mt-5 shadow-lg rounded bg-amber-50">
       <div className="w-12 text-center">
-        <p className="text-lg font-semibold">{index + 1}</p>
+        <p className="">{index + 1}</p>
       </div>
       <div className="flex-grow">
         {!edit ? (
@@ -99,14 +99,14 @@ function CategoryItem({ category_id, category_name, get_categories, index }) {
       </div>
       <div className="flex gap-2">
         <button
-          className="btn btn-error"
+          className="bg-red-500 p-1 rounded shadow-lg px-5 hover:border-2 border-black "
           onClick={() => deleteCategory(category_id, category_name)}
           disabled={loading}
         >
           Delete
         </button>
         <button
-          className="btn btn-active btn-accent"
+          className="bg-green-500 p-1 rounded shadow-lg mr-2 px-4 hover:border-2 border-black "
           onClick={handleEditToggle}
           disabled={loading}
         >
@@ -114,7 +114,7 @@ function CategoryItem({ category_id, category_name, get_categories, index }) {
         </button>
         {edit && (
           <button
-            className="btn btn-primary"
+            className="btn btn-primary mr-2 hover:bg-blue-500"
             onClick={() => submitEditCategory(category_id)}
             disabled={!isChanged || loading}
           >
@@ -165,7 +165,7 @@ function AddCategory({ categories, get_categories }) {
   }
 
   return (
-    <div className="max-w-screen-md p-6 mx-auto mt-8 card card-compact bg-base-100 shadow-xl">
+    <div className="max-w-screen-md p-6 mx-auto mt-8 card card-compact bg-gradient-to-r from-green-200 to-green-100 shadow-xl">
       <p className="text-center text-2xl font-bold mb-4">Add Category</p>
       <div className="flex items-center justify-center gap-2">
         <input
@@ -186,7 +186,7 @@ function AddCategory({ categories, get_categories }) {
       )}
       <div className="mt-4 text-center">
         <button
-          className={`btn btn-primary ${loading ? "loading" : ""}`}
+          className={`btn btn-primary hover:bg-blue-500 ${loading ? "loading" : ""}`}
           disabled={isError || !value || loading}
           onClick={insertCategory}
         >
@@ -222,9 +222,6 @@ function Categories() {
 
   return (
     <section>
-      <p className="text-center text-2xl font-bold mt-8 mb-4">
-        Current Categories
-      </p>
       <div className="max-w-screen-2xl mx-auto">
         {loading ? (
           <p className="text-center">Loading categories...</p>

@@ -17,7 +17,7 @@ function FoodChart() {
 
   const [onlyMonth, setOnlyMonth] = useState(now.getMonth() + 1);
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState("วันนี้");
 
   async function getOrders() {
     try {
@@ -89,7 +89,7 @@ function FoodChart() {
 
   return (
     <div className="relative">
-      <h1 className="font-bold text-3xl text-center text-xl mb-2">กราฟยอดสั่งอาหาร</h1>
+      <h1 className="font-bold text-3xl text-center  mb-2">กราฟยอดสั่งอาหาร</h1>
       <div className="flex flex-wrap gap-3 mb-3 items-center ">
         <button
           onClick={() => {
@@ -153,7 +153,7 @@ function FoodChart() {
             <YearSelect selectYear={selectYear} setSelectYear={setSelectYear} />
           </div>
           <button className="ms-3  h-full" onClick={handleButtonClick}>
-            <IoSearchOutline className="text-blue-500 w-6 h-6 hover:text-blue-700 transition duration-200 ease-in-out"/>
+            <IoSearchOutline className="text-blue-500 w-6 h-6 hover:text-blue-700 transition duration-200 ease-in-out" />
           </button>
         </div>
       </div>

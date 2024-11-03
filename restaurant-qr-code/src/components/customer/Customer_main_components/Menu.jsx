@@ -17,9 +17,9 @@ function Menu() {
       {categories.map((category, index) =>
         itemCount(category.category_id) === 0 ? null : (
           <section
-            className="mt-7 border-2 border-solid border-gray-300 rounded-lg p-4 shadow-lg"
+            className="bg-red-100 mt-7 border-2  border-black rounded-lg p-4 shadow-lg"
             key={index}>
-            <h1>{category.category_name}</h1>
+            <h1 className="font-semibold">{category.category_name}</h1>
             {menus
               .filter((menu) => menu.category_id == category.category_id)
               .map((menu) => (

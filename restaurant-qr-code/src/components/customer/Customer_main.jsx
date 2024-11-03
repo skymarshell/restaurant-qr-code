@@ -79,7 +79,7 @@ function Customer_main({ isAdmin }) {
 
   return (
     <div className="min-h-dvh w-full">
-      <div className="mx-auto max-w-screen-xl px-4 py-2 bg-white">
+      <div className="mx-auto max-w-screen-xl px-4 py-2 bg-gradient-to-r from-amber-100 to-green-100 rounded-lg shadow-lg">
         <DataContext.Provider
           value={{
             menus,

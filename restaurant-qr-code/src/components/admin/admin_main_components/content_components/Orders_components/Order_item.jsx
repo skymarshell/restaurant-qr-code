@@ -5,11 +5,22 @@ function showOrder(order) {
   const orderSplit = order.split(",");
   return (
     <div>
-      {orderSplit.map((o, index) => (
-        <p key={index} className="ml-4 text-gray-700">
-          - {o}
-        </p>
-      ))}
+      {orderSplit.length == 1 && (
+        <p className="ml-4 text-gray-700">- {orderSplit[0]}</p>
+      )}
+      {orderSplit.length > 1 && (
+        <details className="ml-4 text-black ">
+          <summary className="hover:underline">ดูเพิ่มเติม</summary>
+          <div className="bg-gradient-to-r from-blue-100 to-pink-100 p-4 rounded-lg shadow-lg mt-2">
+            <h2 className="text-xl font-bold mb-4">รายการอาหารทั้งหมด</h2>
+            {orderSplit.map((o, index) => (
+              <p key={index} className="text-gray-700">
+                - {o}
+              </p>
+            ))}
+          </div>
+        </details>
+      )}
     </div>
   );
 }

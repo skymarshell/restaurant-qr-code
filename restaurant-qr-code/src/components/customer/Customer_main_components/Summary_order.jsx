@@ -33,7 +33,7 @@ function Summary_order() {
         {
           id,
           orders,
-          adminInput
+          adminInput,
         }
       );
     } catch (error) {
@@ -48,7 +48,13 @@ function Summary_order() {
         className={`w-full fixed bottom-0 right-0 z-10 text-center bg-blue-500 hover:bg-blue-800 
         } ${orders.length <= 0 ? "hidden" : "block"}`}>
         <button
-          onClick={() => setPopUp(true)}
+          onClick={() => {
+            if (isAdmin == true && adminInput == "") {
+              window.alert("โปรดใส่เลขที่โต๊ะ");
+              return;
+            }
+            setPopUp(true);
+          }}
           disabled={orders.length <= 0}
           className="w-full">
           Confirm order

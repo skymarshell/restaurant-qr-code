@@ -245,6 +245,26 @@ router.get('/orders_history/:time/:id', (req, res) => {
     const maxTime = fullTime; // Duration in minutes
     const { time, id } = req.params;
 
+
+    if (time == "admin" && id == "admin") {
+        const getPage = req.query.getPage
+        console.log(getPage);
+
+
+        let adminSQL = `SELECT * FROM customer_order 
+        WHERE order_table LIKE ? ORDER BY order_id DESC LIMIT ${parseInt(getPage) * 5},5`;
+
+        db.query(adminSQL, ['%admin%'], (err, results) => {
+            if (err) {
+                console.error('SQL error:', err);
+                return res.status(500).json({ error: 'Database query failed' });
+            }
+
+            res.json(results);
+        });
+        return
+    }
+
     // Parse the input time
     const [datePart, timePart] = time.split(' ');
     const [year, month, day] = datePart.split('-').map(Number);

@@ -5,10 +5,12 @@ import axios from "axios";
 import { format } from "date-fns"; // Import date-fns for formatting
 
 function Orders_history() {
-  const { viewOrdersHistory, setViewOrdersHistory } = useContext(DataContext);
+  const { viewOrdersHistory, setViewOrdersHistory, isAdmin } =
+    useContext(DataContext);
   const { time, id } = useParams();
   const [OrderHistory, setOrderHistory] = useState([]);
   const [error, setError] = useState(null);
+  const [getPage, setGetPage] = useState(0);
 
   const orderStatusMessages = {
     2: "Waiting for delivery",
@@ -23,10 +25,25 @@ function Orders_history() {
 
   async function getOrdersHistory() {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/customer_order/orders_history/${time}/${id}`
-      );
-      setOrderHistory(response.data);
+      let response;
+      if (isAdmin) {
+        response = await axios.get(
+          `http://localhost:3000/customer_order/orders_history/admin/admin`,
+          { params: { getPage } }
+        );
+        const data = response.data;
+        if (getPage == 0) {
+          setOrderHistory((old) => [...data]);
+        } else {
+          setOrderHistory((old) => [...old, ...data]);
+        }
+      } else {
+        response = await axios.get(
+          `http://localhost:3000/customer_order/orders_history/${time}/${id}`
+        );
+        const data = response.data;
+        setOrderHistory(data);
+      }
     } catch (err) {
       setError("Failed to fetch order history");
       console.error(err);
@@ -35,7 +52,7 @@ function Orders_history() {
 
   useEffect(() => {
     getOrdersHistory();
-  }, [time, id]); // Re-fetch data if time or id changes
+  }, [time, id, getPage]); // Re-fetch data if time or id changes
 
   // Function to format the date and time
   const formatDate = (dateString) => {
@@ -96,6 +113,13 @@ function Orders_history() {
                   </p>
                 </li>
               ))}
+              {isAdmin && (
+                <button
+                  className="btn btn-square"
+                  onClick={() => setGetPage(getPage + 1)}>
+                  ดูเพิ่ม
+                </button>
+              )}
             </ul>
           ) : (
             <p>No orders found</p>

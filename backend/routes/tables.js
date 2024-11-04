@@ -133,5 +133,15 @@ router.put('/table/start', (req, res) => {
   });
 });
 
+// ลบโต๊ะ
+router.delete('/table/delete', (req, res) => {
+
+});
+
+// แก้โต๊ะ
+router.put('/table/edit', (req, res) => {
+
+});
+
 
 module.exports = router;

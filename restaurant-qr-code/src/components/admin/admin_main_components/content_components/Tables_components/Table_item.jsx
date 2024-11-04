@@ -229,6 +229,20 @@ function Table_item({ table, getTable, tableUrl }) {
       "width=800,height=600"
     );
   }
+  
+  // http://localhost:3000/tables/table/delete
+  function deleteTable(id) {
+    console.log(id);
+    //อย่าลบ
+    getTable();
+  }
+
+  // http://localhost:3000/tables/table/edit
+  function editTable(id) {
+    console.log(id);
+    //อย่าลบ
+    getTable();
+  }
 
   const tableStatusClass =
     table.status === "available"
@@ -243,8 +257,16 @@ function Table_item({ table, getTable, tableUrl }) {
       <div className="w-full mb-3 flex sm:flex-row flex-col-reverse justify-end sm:items-center items-end">
         {edit && (
           <div className="w-full flex gap-4 mt-3 sm:mt-0 sm:me-3 sm:flex-row flex-col justify-center sm:justify-end items-center">
-            <button className="w-1/2  sm:w-auto btn btn-error">Delete</button>
-            <button className="w-1/2 sm:w-auto btn btn-info">Edit</button>
+            <button
+              onClick={(e) => deleteTable(table.table_number)}
+              className="w-1/2  sm:w-auto btn btn-error">
+              Delete
+            </button>
+            <button
+              onClick={(e) => editTable(table.table_number)}
+              className="w-1/2 sm:w-auto btn btn-info">
+              Edit
+            </button>
           </div>
         )}
         <HiMiniEllipsisVertical
@@ -255,11 +277,13 @@ function Table_item({ table, getTable, tableUrl }) {
       {/* table,status */}
       <div className="flex flex-col  justify-between border-b-2 border-black pb-3">
         <p className="text-center text-black font-semibold mb-2">
-          Table number : <span className="text-xl font-bold">{table.table_number}</span>
+          Table number :{" "}
+          <span className="text-xl font-bold">{table.table_number}</span>
         </p>
         <p
           className={`p-3 rounded-lg text-center flex justify-center items-center shadow-lg border-2 border-black mb-1 ${tableStatusClass}`}>
-          Status : <span className="capitalize font-semibold">{table.status}</span>
+          Status :{" "}
+          <span className="capitalize font-semibold">{table.status}</span>
         </p>
       </div>
       {/* show all info if unavailable */}
@@ -268,10 +292,18 @@ function Table_item({ table, getTable, tableUrl }) {
           {/* start_time,endTime,Remaining*/}
           <div className="mt-4">
             <p ref={start_ref}>
-              Start time : <span className="text-red-500 font-semibold">{removeSeconds(table.start_time.split(" ")[1])} </span>
+              Start time :{" "}
+              <span className="text-red-500 font-semibold">
+                {removeSeconds(table.start_time.split(" ")[1])}{" "}
+              </span>
             </p>
             <div>
-              <p ref={end_ref}>End time: <span className="text-red-500 font-semibold">{endTime(table.start_time)}</span></p>
+              <p ref={end_ref}>
+                End time:{" "}
+                <span className="text-red-500 font-semibold">
+                  {endTime(table.start_time)}
+                </span>
+              </p>
               <div className={`flex`}>
                 <p>Remaining time :</p>
                 <p
@@ -279,7 +311,7 @@ function Table_item({ table, getTable, tableUrl }) {
                     remaining_time(
                       table.start_time,
                       endTime(table.start_time)
-                    )=== "Time's up."
+                    ) === "Time's up."
                       ? "underline "
                       : ""
                   }`}>
@@ -291,7 +323,9 @@ function Table_item({ table, getTable, tableUrl }) {
           {/* Number of customers */}
           <p>
             Number of customers :{" "}
-            <span className="text-red-500 font-semibold">{table.customer_count === 0 ? "-" : table.customer_count}</span>
+            <span className="text-red-500 font-semibold">
+              {table.customer_count === 0 ? "-" : table.customer_count}
+            </span>
           </p>
         </>
       )}
@@ -320,7 +354,9 @@ function Table_item({ table, getTable, tableUrl }) {
                   value={`${qrCodeBase}/${table.start_time}/${table.table_number}`}
                 />
                 <div className="mt-2 flex items-center justify-center gap-4">
-                  <button className="rounded-md p-3 bg-red-400 hover:bg-red-800 shadow-lg" onClick={handleViewQrCode}>
+                  <button
+                    className="rounded-md p-3 bg-red-400 hover:bg-red-800 shadow-lg"
+                    onClick={handleViewQrCode}>
                     Close
                   </button>
                   <button
@@ -361,7 +397,9 @@ function Table_item({ table, getTable, tableUrl }) {
                 onChange={handleChange}
               />
               {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-              <button type="submit" className="rounded-md mt-5 p-10  py-2 bg-yellow-400 hover:bg-yellow-800 shadow-lg">
+              <button
+                type="submit"
+                className="rounded-md mt-5 p-10  py-2 bg-yellow-400 hover:bg-yellow-800 shadow-lg">
                 Start
               </button>
             </form>

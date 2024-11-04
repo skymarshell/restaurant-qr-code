@@ -229,18 +229,27 @@ function Table_item({ table, getTable, tableUrl }) {
       "width=800,height=600"
     );
   }
-  
+
   // http://localhost:3000/tables/table/delete
   const deleteTable = (table_number) => {
-  const response = axios.delete(`${tableUrl}/tables/table/delete/${table_number}`)
-    .then(response => {
-      console.log('Success:', response.data);
-      getTable();
-  })
-  .catch(error => {
-    console.error('Error:', error.response ? error.response.data : error.message);
-  });
-}
+    if (confirm(`Delete table ${table_number}`) == true) {
+      const response = axios
+        .delete(`${tableUrl}/tables/table/delete/${table_number}`)
+        .then((response) => {
+          console.log("Success:", response.data);
+          getTable();
+        })
+        .catch((error) => {
+          console.error(
+            "Error:",
+            error.response ? error.response.data : error.message
+          );
+        });
+      alert(`Table ${table_number} deleted .`);
+    } else {
+      return;
+    }
+  };
 
   // http://localhost:3000/tables/table/edit
   function editTable(id) {

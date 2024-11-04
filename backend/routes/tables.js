@@ -134,8 +134,23 @@ router.put('/table/start', (req, res) => {
 });
 
 // ลบโต๊ะ
-router.delete('/table/delete/:id', (req, res) => {
+router.delete('/tables/table/delete/:table_number', (req, res) => {
+  const { table_number } = req.params; // Extract the table number from the request parameters
 
+  const sql = 'DELETE FROM tables WHERE table_number = ?';
+  
+  db.query(sql, [table_number], (error, results) => {
+      if (error) {
+          console.error(error); // Log the error for debugging
+          return res.status(500).json({ message: 'Server error' }); // Send a 500 response on error
+      }
+
+      if (results.affectedRows === 0) {
+          return res.status(404).json({ message: 'Table not found' }); // Handle case where no rows were deleted
+      }
+
+      res.status(200).json({ message: 'Table deleted successfully' }); // Send success response
+  });
 });
 
 // แก้โต๊ะ

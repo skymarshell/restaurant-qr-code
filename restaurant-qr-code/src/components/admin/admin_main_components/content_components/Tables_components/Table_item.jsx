@@ -231,11 +231,16 @@ function Table_item({ table, getTable, tableUrl }) {
   }
   
   // http://localhost:3000/tables/table/delete
-  function deleteTable(id) {
-    console.log(id);
-    //อย่าลบ
-    getTable();
-  }
+  const deleteTable = (table_number) => {
+  const response = axios.delete(`${tableUrl}/tables/table/delete/${table_number}`)
+    .then(response => {
+      console.log('Success:', response.data);
+      getTable();
+  })
+  .catch(error => {
+    console.error('Error:', error.response ? error.response.data : error.message);
+  });
+}
 
   // http://localhost:3000/tables/table/edit
   function editTable(id) {

@@ -134,12 +134,12 @@ router.put('/table/start', (req, res) => {
 });
 
 // ลบโต๊ะ
-router.delete('/table/delete', (req, res) => {
+router.delete('/table/delete/:id', (req, res) => {
 
 });
 
 // แก้โต๊ะ
-router.put('/table/edit', (req, res) => {
+router.put('/table/edit/:id', (req, res) => {
 
 });
 

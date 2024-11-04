@@ -66,7 +66,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
       className="z-20  overflow-auto fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white  p-4 rounded-md shadow-md">
+        className="bg-amber-100  p-4 rounded-md shadow-lg">
         <h2 className="text-lg font-semibold mb-4">Add New Food Item</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -78,6 +78,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
               value={foodName}
               onChange={(e) => setFoodName(e.target.value)}
               className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500 shadow-lg"
+              placeholder="ระบุชื่อเมนูอาหาร"
               required
             />
           </div>
@@ -90,6 +91,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
               onChange={(e) => setFoodDescription(e.target.value)}
               rows="3"
               className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500 shadow-lg"
+              placeholder="รายละเอียดอาหาร"
             />
           </div>
           <div className="mb-4">

@@ -44,16 +44,16 @@ function Order_item() {
             key={index}>
             <div className="flex justify-between items-center mb-2">
               <div className="text-black font-semibold text-center">
-                Order ID: {o.order_id}
+                Order ID : {o.order_id}
               </div>
-              <div className="text-gray-600 text-center">{o.order_date}</div>
+              <div className="text-gray-600 text-center ml-5">{o.order_date}</div>
               <div
                 className={`text-sm px-2 py-1 rounded text-center ${
                   o.order_status == 2
-                    ? "bg-yellow-100 text-yellow-800"
+                    ? "bg-yellow-100 shadow-lg text-orange-800"
                     : o.order_status == 1
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
+                    ? "bg-green-100 text-green-800 shadow-lg"
+                    : "bg-red-100 text-red-800 shadow-lg"
                 }`}>
                 {o.order_status == 2
                   ? "Waiting"
@@ -64,22 +64,22 @@ function Order_item() {
             </div>
             <div className="w-full sm:text-center lg:justify-between lg:items-center ">
               <div>
-                <p className="text-center">
-                  Table : <span className="text-4xl">{o.order_table}</span>
+                <p className="ml-3 text-left font-bold text-lg">
+                  Table : <span className="">{o.order_table}</span>
                 </p>
               </div>
               <div
-                className={`flex flex-col justify-end gap-1 mb-3    ${
+                className={`flex py-2 ${
                   o.order_status == "2" ? "" : "hidden"
                 }`}>
                 <button
                   onClick={() => cancelOrder(o.order_id)}
-                  className="btn btn-error">
+                  className="btn bg-red-500 ml-16 hover:bg-red-900">
                   Cancel
                 </button>
                 <button
                   onClick={() => confirmOrder(o.order_id)}
-                  className="btn btn-success">
+                  className="btn bg-green-700 ml-5 hover:bg-green-900">
                   Confirm
                 </button>
               </div>

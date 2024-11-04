@@ -254,11 +254,11 @@ function Table_item({ table, getTable, tableUrl }) {
       </div>
       {/* table,status */}
       <div className="flex flex-col  justify-between border-b-2 border-black pb-3">
-        <p className="text-center text-black font-semibold">
-          Table number : <span className="text-2xl font-normal">{table.table_number}</span>
+        <p className="text-center text-black font-semibold mb-2">
+          Table number : <span className="text-xl font-bold">{table.table_number}</span>
         </p>
         <p
-          className={`p-3 rounded-lg text-center flex justify-center items-center shadow-lg border-2 border-black ${tableStatusClass}`}>
+          className={`p-3 rounded-lg text-center flex justify-center items-center shadow-lg border-2 border-black mb-1 ${tableStatusClass}`}>
           Status : <span className="capitalize font-semibold">{table.status}</span>
         </p>
       </div>

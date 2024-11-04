@@ -36,7 +36,7 @@ function Order_select() {
           ? `Sent orders: ${orderLength} orders`
           : `Cancel orders: ${orderLength} orders`}
       </h1>
-      <div className="flex gap-3 mb-5 flex-col md:flex-row">
+      <div className="flex gap-3 mb-5 flex-col md:flex-row ">
       <label htmlFor="status">ดูสถานะ</label>
         <select
           id="status"
@@ -51,7 +51,7 @@ function Order_select() {
       </div>
       <label htmlFor="select-view-type">เลือกวัน-เวลา</label>
       <select
-      className="rounded shadow-lg p-2 ms-2 hover:border-1 border-black"
+      className="rounded shadow-lg p-2 ms-2 hover:border-2 border-black"
         id="select-view-type"
         onChange={(e) => setViewBy(e.target.value)}
         value={viewBy}>

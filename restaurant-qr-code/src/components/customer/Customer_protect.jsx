@@ -11,7 +11,7 @@ function Customer_protect({ children }) {
     const fetchTableData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/tables/table/${time}/${id}`
+          `https://webdev-backend-2e1ad2316dae.herokuapp.com/tables/table/${time}/${id}`
         );
         console.log(response.data);
         if (response.data.len == 1) {

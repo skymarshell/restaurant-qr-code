@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, Suspense, lazy } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 import "./AdminLogin.css";
+
+
 
 function Admin_login() {
   const navigate = useNavigate();
@@ -17,7 +19,7 @@ function Admin_login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/admin/login",
+        "https://webdev-backend-2e1ad2316dae.herokuapp.com/admin/login",
         data
       );
 
@@ -42,7 +44,9 @@ function Admin_login() {
         <h2 className="text-2xl font-bold mb-6">Admin Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="username" className="label">Username:</label>
+            <label htmlFor="username" className="label">
+              Username:
+            </label>
             <div className="input-container">
               <FaUser className="icon" />
               <input
@@ -56,7 +60,9 @@ function Admin_login() {
             </div>
           </div>
           <div className="mb-6">
-            <label htmlFor="password" className="label">Password:</label>
+            <label htmlFor="password" className="label">
+              Password:
+            </label>
             <div className="input-container">
               <FaLock className="icon" />
               <input
@@ -69,7 +75,9 @@ function Admin_login() {
               />
             </div>
           </div>
-          <button type="submit"className="login-button">Login</button>
+          <button type="submit" className="login-button">
+            Login
+          </button>
         </form>
       </div>
     </div>

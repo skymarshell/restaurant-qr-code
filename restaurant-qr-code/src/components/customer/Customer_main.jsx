@@ -29,7 +29,7 @@ function Customer_main({ isAdmin }) {
   const checkStatus = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/tables/table/${time}/${id}`
+        `https://webdev-backend-2e1ad2316dae.herokuapp.com/tables/table/${time}/${id}`
       );
       console.log(res.data);
 
@@ -52,7 +52,7 @@ function Customer_main({ isAdmin }) {
   //get menu
   async function getMenus() {
     try {
-      const res = await axios.get("http://localhost:3000/food/menu");
+      const res = await axios.get("https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu");
       setMenus(res.data);
     } catch (error) {
       console.error("Error fetching menu:", error);
@@ -61,7 +61,7 @@ function Customer_main({ isAdmin }) {
   //get category
   async function getCategories() {
     try {
-      const res = await axios.get("http://localhost:3000/category/categories");
+      const res = await axios.get("https://webdev-backend-2e1ad2316dae.herokuapp.com/category/categories");
       setCategories(res.data);
     } catch (error) {
       console.error("Error fetching categories:", error);

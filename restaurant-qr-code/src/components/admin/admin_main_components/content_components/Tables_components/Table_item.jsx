@@ -128,7 +128,7 @@ function Table_item({ table, getTable, tableUrl }) {
     if (remainingMinutes < 0 || Difference_In_Time >= 2) {
       try {
         const response = axios.put(
-          `http://localhost:3000/tables/table/time_up`,
+          `https://webdev-backend-2e1ad2316dae.herokuapp.com/tables/table/time_up`,
           { table_number: table.table_number }
         );
       } catch (error) {
@@ -230,7 +230,6 @@ function Table_item({ table, getTable, tableUrl }) {
     );
   }
 
-  // http://localhost:3000/tables/table/delete
   const deleteTable = (table_number) => {
     if (confirm(`Delete table ${table_number}`) == true) {
       const response = axios
@@ -251,7 +250,7 @@ function Table_item({ table, getTable, tableUrl }) {
     }
   };
 
-  // http://localhost:3000/tables/table/edit
+
   function editTable(id) {
     console.log(id);
     //อย่าลบ

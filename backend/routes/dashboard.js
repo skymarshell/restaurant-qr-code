@@ -1,76 +1,92 @@
+
 const { express, router, db, fullTime } = require('./common_import');
 const moment = require('moment')
 
 // orders chart
 router.get('/analysis/:day/:month/:year', async (req, res) => {
       const { day, month, year } = req.params;
+
       // Basic validation
-      if (!day || !month || !year || isNaN(Date.parse(`${year}-${month}-${day}`))) {
+      const dayNum = parseInt(day);
+      const monthNum = parseInt(month);
+      const yearNum = parseInt(year);
+
+      let sendData = []
+
+      if (!day || !month || !year ||
+            isNaN(dayNum) || isNaN(monthNum) || isNaN(yearNum) ||
+            dayNum < 1 || dayNum > 31 ||
+            monthNum < 1 || monthNum > 12 ||
+            isNaN(Date.parse(`${year}-${month}-${day}`))) {
             return res.status(400).json({ error: 'Invalid date parameters' });
       }
 
-      // Define queries
-      const getCategory = `SELECT * FROM category`;
-      const getFood = `SELECT * FROM food`;
-      const getCustomerOrder = `SELECT * FROM customer_order`;
-
       const countCustomerByDate = `
-      SELECT SUM(customer_count) AS "customer_count" FROM customer_history 
-      WHERE customer_date BETWEEN "${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} 00:00:00" 
-      AND "${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} 23:59:59"`;
+           SELECT SUM(customer_count) AS "customer_count" FROM customer_history 
+           WHERE customer_date BETWEEN "${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} 00:00:00" 
+           AND "${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} 23:59:59"`;
+
 
       const countCustomerAllMonth = `
-      SELECT SUM(customer_count) AS "customer_count" FROM customer_history
-      WHERE customer_date BETWEEN '${year}-${month.padStart(2, '0')}-01 00:00:00' 
-      AND '${year}-${month.padStart(2, '0')}-31 23:59:59'`;
+           SELECT SUM(customer_count) AS "customer_count" FROM customer_history
+           WHERE customer_date BETWEEN '${year}-${month.padStart(2, '0')}-01 00:00:00' 
+           AND '${year}-${month.padStart(2, '0')}-31 23:59:59'`;
 
       const countCustomerAllYear = `
-      SELECT SUM(customer_count) AS "customer_count" FROM customer_history
-      WHERE customer_date BETWEEN '${year}-01-01 00:00:00' 
-      AND '${year}-12-31 23:59:59'`;
+           SELECT SUM(customer_count) AS "customer_count" FROM customer_history
+           WHERE customer_date BETWEEN '${year}-01-01 00:00:00' 
+           AND '${year}-12-31 23:59:59'`;
 
-      // Promisify db.query
-      const query = (sql) => {
-            return new Promise((resolve, reject) => {
-                  db.query(sql, (err, result) => {
+
+
+      db.query(countCustomerByDate, (err, resultByDate) => {
+            if (err) {
+                  console.log(err);
+                  return res.status(500).json({ error: 'Database query failed for specific date' });
+            }
+
+            db.query(countCustomerAllMonth, (err, resultMonth) => {
+                  if (err) {
+                        console.log(err);
+                        return res.status(500).json({ error: 'Database query failed for month' });
+                  }
+
+                  db.query(countCustomerAllYear, (err, resultYear) => {
                         if (err) {
-                              return reject(err);
+                              console.log(err);
+                              return res.status(500).json({ error: 'Database query failed for year' });
                         }
-                        resolve(result);
+
+                        // Extract results
+                        const customerCountByDate = resultByDate[0] ? resultByDate[0].customer_count : 0;
+                        const customerCountByMonth = resultMonth[0] ? resultMonth[0].customer_count : 0;
+                        const customerCountByYear = resultYear[0] ? resultYear[0].customer_count : 0;
+
+                        // Send the response
+                        return res.json({
+                              customerCountByDate,
+                              customerCountByMonth,
+                              customerCountByYear,
+                        });
                   });
             });
-      };
+      });
 
-      try {
-            // Execute all queries in parallel using Promise.all
-            const [categories, foods, countCustomerByDateResult, countCustomerAllMonthResult, customerOrders, countCustomerAllYearResult] = await Promise.all([
-                  query(getCategory),
-                  query(getFood),
-                  query(countCustomerByDate),
-                  query(countCustomerAllMonth),
-                  query(getCustomerOrder),
-                  query(countCustomerAllYear)
-            ]);
-
-            // Extract counts from the results
-            const data = {
-                  countCustomerByDate: countCustomerByDateResult[0]?.customer_count || 0,
-                  countCustomerAllMonth: countCustomerAllMonthResult[0]?.customer_count || 0,
-                  customerAllYearCount: countCustomerAllYearResult[0]?.customer_count || 0,
-                  category: categories,
-                  customerOrders: customerOrders,
-                  food: foods,
-            };
-
-            res.json(data); // Send the collected data as a response
-      } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Database query failed' });
-      }
 });
+
+router.get('/latest_order', async (req, res) => {
+      db.query("SELECT * FROM customer_order", (err, result) => {
+            if (err) {
+                  console.log(err);
+                  return
+            }
+            res.json(result)
+      })
+})
 
 router.get('/chart', async (req, res) => {
       const { viewMode } = req.query;
+
 
 
       let sql;

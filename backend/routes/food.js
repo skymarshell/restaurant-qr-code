@@ -6,7 +6,7 @@ const fs = require('fs');
 // Set up multer storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.resolve(__dirname, '../../restaurant-qr-code/public')); // Specify the destination path
+        cb(null, path.join(__dirname, '../../restaurant-qr-code/public')); // Specify the destination path
     },
     filename: function (req, file, cb) {
         const [name, type] = file.originalname.split('.');
@@ -35,7 +35,6 @@ router.get('/menu', (req, res) => {
 });
 
 
-// Update a food item
 // Update a food item
 router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
     const { foodId } = req.params;
@@ -93,36 +92,14 @@ router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
 router.delete('/menu/:foodId', (req, res) => {
     const { foodId } = req.params;
 
-    // Step 1: Fetch food item details to get the filename
-    const fetchSql = "SELECT food_image FROM food WHERE food_id = ?";
-    db.query(fetchSql, [foodId], (fetchErr, fetchResult) => {
-        if (fetchErr) {
-            console.error('Error fetching food item:', fetchErr);
-            res.status(500).json({ error: "Error fetching food item" });
+    const deleteSql = "DELETE FROM food WHERE food_id = ?";
+    db.query(deleteSql, [foodId], (deleteErr, deleteResult) => {
+        if (deleteErr) {
+            console.error('Error deleting food item:', deleteErr);
+            res.status(500).json({ error: "Error deleting food item" });
         } else {
-            const { food_image } = fetchResult[0];
-
-            // Step 2: Delete the file from the filesystem
-            const filePath = path.resolve(__dirname, '../../restaurant-qr-code/public', food_image);
-            fs.unlink(filePath, (unlinkErr) => {
-                if (unlinkErr) {
-
-                    console.error('Error deleting food image:', unlinkErr);
-                    res.status(500).json({ error: "Error deleting food image" });
-                } else {
-                    // Step 3: Delete the food item from the database
-                    const deleteSql = "DELETE FROM food WHERE food_id = ?";
-                    db.query(deleteSql, [foodId], (deleteErr, deleteResult) => {
-                        if (deleteErr) {
-                            console.error('Error deleting food item:', deleteErr);
-                            res.status(500).json({ error: "Error deleting food item" });
-                        } else {
-                            console.log(`Food item with ID ${foodId} and image deleted successfully`);
-                            res.status(200).json({ message: `Food item with ID ${foodId} deleted successfully` });
-                        }
-                    });
-                }
-            });
+            console.log(`Food item with ID ${foodId} and image deleted successfully`);
+            res.status(200).json({ message: `Food item with ID ${foodId} deleted successfully` });
         }
     });
 });

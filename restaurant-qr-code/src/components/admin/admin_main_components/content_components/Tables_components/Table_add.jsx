@@ -25,7 +25,7 @@ function Table_add() {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:3000/tables/table", {
+      const response = await axios.post("https://webdev-backend-2e1ad2316dae.herokuapp.com/tables/table", {
         tableInput,
       });
       if (response.status === 201) {

@@ -8,15 +8,17 @@ function Customer_history() {
   const [allDate, setAllDate] = useState([]);
   const [onlyDate, setOnlyDate] = useState([]);
   const [sum, setSum] = useState(0);
+  const [loading, setLoading] = useState(false); // Loading state
 
   const now = new Date();
   const [selectMonth, setSelectMonth] = useState(now.getMonth() + 1);
   const [selectYear, setSelectYear] = useState(now.getFullYear());
 
   async function getCustomer_history() {
+    setLoading(true); // Start loading
     try {
       const response = await axios.get(
-        `http://localhost:3000/dashboard/customer_history_chart`,
+        `https://webdev-backend-2e1ad2316dae.herokuapp.com/dashboard/customer_history_chart`,
         {
           params: {
             month: selectMonth,
@@ -33,9 +35,12 @@ function Customer_history() {
       response.data.forEach((ad) => {
         totalSum += Number(ad.total_customers);
       });
-      setSum(totalSum); 
+      setSum(totalSum);
     } catch (error) {
-      alert(error);
+      console.error("Error fetching customer history:", error);
+      // Optionally handle the error
+    } finally {
+      setLoading(false); // End loading
     }
   }
 
@@ -43,7 +48,7 @@ function Customer_history() {
     getCustomer_history();
     const intervalGetCustomer_history = setInterval(() => {
       getCustomer_history();
-    }, 10 * 1000);
+    }, 10000);
 
     return () => clearInterval(intervalGetCustomer_history);
   }, [selectMonth, selectYear]);
@@ -58,24 +63,24 @@ function Customer_history() {
         <YearSelect selectYear={selectYear} setSelectYear={setSelectYear} />
       </div>
       <p>รวม {sum} คน </p>
-      <LineChart
-        xAxis={[
-          {
+      {loading ? ( // Conditional rendering based on loading state
+        <p>Loading...</p> // You can replace this with a spinner or other loading indicator
+      ) : (
+        <LineChart
+          xAxis={[{
             label: "วันที่",
             data: [0, ...onlyDate],
             scaleType: "linear",
-          },
-        ]}
-        yAxis={[{ label: "ยอดลูกค้า" }]}
-        series={[
-          {
+          }]}
+          yAxis={[{ label: "ยอดลูกค้า" }]}
+          series={[{
             label: `เดือน ${selectMonth} ปี ${selectYear + 543}`,
             data: [0, ...customer_count],
-          },
-        ]}
-        barLabel="value"
-        height={400}
-      />
+          }]}
+          barLabel="value"
+          height={400}
+        />
+      )}
     </div>
   );
 }

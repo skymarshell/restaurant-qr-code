@@ -22,7 +22,7 @@ function FoodChart() {
   async function getOrders() {
     try {
       const response = await axios.get(
-        `http://localhost:3000/dashboard/chart`,
+        `https://webdev-backend-2e1ad2316dae.herokuapp.com/dashboard/chart`,
         {
           params: {
             viewMode,
@@ -38,7 +38,8 @@ function FoodChart() {
       setFoodkey(response.data.foodKey);
       setFoodValue(response.data.foodValue);
     } catch (error) {
-      alert(error);
+      // alert(error);
+      console.log("food chart", error);
     }
   }
 

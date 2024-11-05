@@ -10,6 +10,7 @@ import { FaSearch } from "react-icons/fa";
 import Day_Month_Year_select from "./Dashboard_components/Day_Month_Year_select";
 import FoodChart from "./Dashboard_components/FoodChart";
 import Customer_history from "./Dashboard_components/Customer_history";
+import LatestOrder from "./Dashboard_components/LatestOrder";
 // Dashboard Component
 export default function Dashboard() {
   const date = new Date();
@@ -21,7 +22,6 @@ export default function Dashboard() {
   const [countCustomerAllMonth, setCountCustomerAllMonth] = useState(0);
   const [customerCountAllYear, setCustomerCountAllYear] = useState(0);
   const [categories, setCategories] = useState([]);
-  const [latestOrder, setLatestOrder] = useState([]);
   const [foods, setFoods] = useState([]);
 
   const [selectedDay, setSelectedDay] = useState(currentDay);
@@ -32,16 +32,16 @@ export default function Dashboard() {
   async function getData() {
     try {
       const response = await axios.get(
-        `http://localhost:3000/dashboard/analysis/${selectedDay}/${selectedMonth}/${selectedYear}`
+        `https://webdev-backend-2e1ad2316dae.herokuapp.com/dashboard/analysis/${selectedDay}/${selectedMonth}/${selectedYear}`
       );
-      setCountCustomerByDate(response.data.countCustomerByDate);
-      setCustomerCountAllYear(response.data.customerAllYearCount);
-      setCountCustomerAllMonth(response.data.countCustomerAllMonth);
-      setCategories(response.data.category);
-      setLatestOrder(response.data.customerOrders.reverse());
-      setFoods(response.data.food);
+
+      // Ensure the response data matches the expected structure
+      setCountCustomerByDate(response.data.customerCountByDate); // Adjusted property name
+      setCountCustomerAllMonth(response.data.customerCountByMonth); // Adjusted property name
+      setCustomerCountAllYear(response.data.customerCountByYear); // Adjusted property name
     } catch (error) {
-      alert(error);
+      console.error("Error fetching data:", error);
+      //alert("Failed to fetch data. Please try again."); // More user-friendly message
     }
   }
   // Fetch data on mount or when the selected month/year changes
@@ -70,7 +70,12 @@ export default function Dashboard() {
       classText = "bg-yellow-400";
     }
 
-    return <span className={`${classText} p-2 mt-2 py-1 rounded-md border-2 border-black float-right`}>{showText}</span>;
+    return (
+      <span
+        className={`${classText} p-2 mt-2 py-1 rounded-md border-2 border-black float-right`}>
+        {showText}
+      </span>
+    );
   }
 
   return (
@@ -100,24 +105,9 @@ export default function Dashboard() {
               <p key={category.category_id}>{category.category_name}</p>
             ))}
           </article> */}
-          <article className="bg-amber-100 p-4 shadow-lg rounded overflow-auto max-h-[220px] lg:col-span-2 border-2 border-black">
-            <p className="font-bold text-center">ออร์เดอร์ล่าสุด</p>
-            {latestOrder.map((order) => (
-              <div key={order.order_id} className="rounded bg-blue-100 p-2 m-2 shadow-lg">
-                <p>
-                  <span>โต๊ะ {order.order_table}</span>
-                  <span>({order.order_id}) </span>
-                  <span>
-                    {moment(order.order_date)
-                      .add(543, "year")
-                      .format("DD-MM-YYYY")}
-                  </span>
-                  <span> {order_status_text(order.order_status)}</span>
-                </p>
-                <p>- {order.orders}</p>
-              </div>
-            ))}
-          </article>
+
+          <LatestOrder />
+
           {/* <article className="bg-white p-4 shadow rounded">
             <p className="font-bold">อาหารที่ขาย</p>
             {foods.map((food) => (
@@ -125,7 +115,7 @@ export default function Dashboard() {
             ))}
           </article> */}
           <article className="bg-amber-100 p-4 shadow-lg rounded grid-cols-1 md:col-span-2 lg:col-span-4 border-2 border-black">
-            <FoodChart latestOrder={latestOrder} />
+            <FoodChart />
           </article>
           <article className="bg-amber-100 p-4 shadow-lg rounded grid-cols-1 md:col-span-2 lg:col-span-4 border-2 border-black">
             <Customer_history />

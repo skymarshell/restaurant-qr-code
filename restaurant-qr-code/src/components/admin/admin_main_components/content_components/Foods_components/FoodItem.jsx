@@ -48,7 +48,7 @@ const FoodItem = ({
       }
 
       const response = await axios.put(
-        `http://localhost:3000/food/menu/${food_id}`,
+        `https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu/${food_id}`,
         formData,
         {
           headers: {

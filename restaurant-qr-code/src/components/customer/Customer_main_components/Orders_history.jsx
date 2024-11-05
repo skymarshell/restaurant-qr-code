@@ -28,7 +28,7 @@ function Orders_history() {
       let response;
       if (isAdmin) {
         response = await axios.get(
-          `http://localhost:3000/customer_order/orders_history/admin/admin`,
+          `https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/orders_history/admin/admin`,
           { params: { getPage } }
         );
         const data = response.data;
@@ -39,7 +39,7 @@ function Orders_history() {
         }
       } else {
         response = await axios.get(
-          `http://localhost:3000/customer_order/orders_history/${time}/${id}`
+          `https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/orders_history/${time}/${id}`
         );
         const data = response.data;
         setOrderHistory(data);

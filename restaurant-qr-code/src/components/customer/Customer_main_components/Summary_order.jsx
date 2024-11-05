@@ -29,7 +29,7 @@ function Summary_order() {
       }
 
       const send = await axios.post(
-        "http://localhost:3000/customer_order/send_order",
+        "https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/send_order",
         {
           id,
           orders,

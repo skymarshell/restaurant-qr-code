@@ -5,7 +5,7 @@ import axios from "axios";
 
 function Tables() {
   const [tables, setTables] = useState([]);
-  const tableUrl = "http://localhost:3000/tables";
+  const tableUrl = "https://webdev-backend-2e1ad2316dae.herokuapp.com/tables";
   async function getTable() {
     try {
       const response = await axios.get(`${tableUrl}/table`);

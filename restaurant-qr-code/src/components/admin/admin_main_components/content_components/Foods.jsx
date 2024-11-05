@@ -13,7 +13,9 @@ function Foods() {
   async function getMenu() {
     setIsLoading(true); // Set loading state while fetching data
     try {
-      const response = await axios.get("http://localhost:3000/food/menu");
+      const response = await axios.get(
+        "https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu"
+      );
       setFoodMenus(response.data);
       setFilterMenu(response.data);
     } catch (error) {
@@ -28,7 +30,7 @@ function Foods() {
     setIsLoading(true); // Set loading state while fetching data
     try {
       const response = await axios.get(
-        "http://localhost:3000/category/categories"
+        "https://webdev-backend-2e1ad2316dae.herokuapp.com/category/categories"
       );
       setCategories(response.data);
     } catch (error) {
@@ -46,7 +48,7 @@ function Foods() {
 
   const handleDelete = async (foodId) => {
     try {
-      await axios.delete(`http://localhost:3000/food/menu/${foodId}`);
+      await axios.delete(`https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu/${foodId}`);
       getCategory();
       getMenu();
     } catch (error) {
@@ -83,7 +85,9 @@ function Foods() {
       ) : (
         <>
           <div className="flex justify-end mb-4">
-            <select onChange={(e) => setViewCategory(e.target.value)} className="rounded shadow-lg p-2 me-3 hover:border-2 border-black">
+            <select
+              onChange={(e) => setViewCategory(e.target.value)}
+              className="rounded shadow-lg p-2 me-3 hover:border-2 border-black">
               <option value="0" selected>
                 View all menu.
               </option>

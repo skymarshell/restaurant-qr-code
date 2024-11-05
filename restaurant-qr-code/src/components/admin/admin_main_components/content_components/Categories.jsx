@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext } from "react-beautiful-dnd";
 
 function CategoryItem({ category_id, category_name, get_categories, index }) {
   const [editCategoryName, setEditCategoryName] = useState(category_name);
@@ -21,10 +21,10 @@ function CategoryItem({ category_id, category_name, get_categories, index }) {
 
     setLoading(true);
     try {
-      const data = { category_id, category_name: editCategoryName };
+      const data = { category_id, category_name: editCategoryName.trim() };
 
       const sendData = await axios.post(
-        "http://localhost:3000/category/update",
+        "https://webdev-backend-2e1ad2316dae.herokuapp.com/category/update",
         data
       );
 
@@ -48,14 +48,16 @@ function CategoryItem({ category_id, category_name, get_categories, index }) {
   }
 
   async function deleteCategory(category_id, category_name) {
-    if (!window.confirm(`Are you sure you want to delete "${category_name}"?`)) {
+    if (
+      !window.confirm(`Are you sure you want to delete "${category_name}"?`)
+    ) {
       return;
     }
 
     setLoading(true);
     try {
       const deleteCategory = await axios.delete(
-        `http://localhost:3000/category/delete/${category_id}/${category_name}`
+        `https://webdev-backend-2e1ad2316dae.herokuapp.com/category/delete/${category_id}/${category_name}`
       );
 
       if (deleteCategory.status === 200) {
@@ -101,23 +103,20 @@ function CategoryItem({ category_id, category_name, get_categories, index }) {
         <button
           className="bg-red-500 p-1 rounded shadow-lg px-5 hover:border-2 border-black "
           onClick={() => deleteCategory(category_id, category_name)}
-          disabled={loading}
-        >
+          disabled={loading}>
           Delete
         </button>
         <button
           className="bg-green-500 p-1 rounded shadow-lg mr-2 px-4 hover:border-2 border-black "
           onClick={handleEditToggle}
-          disabled={loading}
-        >
+          disabled={loading}>
           {!edit ? "Edit" : "Cancel"}
         </button>
         {edit && (
           <button
             className="btn btn-primary mr-2 hover:bg-blue-500"
             onClick={() => submitEditCategory(category_id)}
-            disabled={!isChanged || loading}
-          >
+            disabled={!isChanged || loading}>
             {loading ? "Submitting..." : "Submit"}
           </button>
         )}
@@ -141,9 +140,12 @@ function AddCategory({ categories, get_categories }) {
 
     setLoading(true);
     try {
-      const insert = await axios.post("http://localhost:3000/category/insert", {
-        category_name: insert_value,
-      });
+      const insert = await axios.post(
+        "https://webdev-backend-2e1ad2316dae.herokuapp.com/category/insert",
+        {
+          category_name: insert_value,
+        }
+      );
 
       if (insert.status === 200) {
         alert(`Category "${insert_value}" added successfully.`);
@@ -186,10 +188,11 @@ function AddCategory({ categories, get_categories }) {
       )}
       <div className="mt-4 text-center">
         <button
-          className={`btn btn-primary hover:bg-blue-500 ${loading ? "loading" : ""}`}
+          className={`btn btn-primary hover:bg-blue-500 ${
+            loading ? "loading" : ""
+          }`}
           disabled={isError || !value || loading}
-          onClick={insertCategory}
-        >
+          onClick={insertCategory}>
           {loading ? "Inserting..." : "Insert Category"}
         </button>
       </div>
@@ -205,7 +208,7 @@ function Categories() {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:3000/category/categories"
+        "https://webdev-backend-2e1ad2316dae.herokuapp.com/category/categories"
       );
       setCategories(response.data);
     } catch (error) {
@@ -236,7 +239,6 @@ function Categories() {
               />
             ))}
           </ul>
-          
         )}
       </div>
       <AddCategory categories={categories} get_categories={getCategories} />

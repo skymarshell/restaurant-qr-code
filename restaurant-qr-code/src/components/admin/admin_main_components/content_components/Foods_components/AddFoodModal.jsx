@@ -19,7 +19,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
       formData.append("food_image", foodImageFile); // Append the file object
 
       const response = await axios.post(
-        "http://localhost:3000/food/menu",
+        "https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu",
         formData,
         {
           headers: {

@@ -43,7 +43,7 @@ function Admin_main_sidebar() {
   async function getWaitingOrderCount() {
     try {
       const response = await axios.get(
-        "http://localhost:3000/customer_order/waiting_orderCount"
+        "https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/waiting_orderCount"
       );
       setWaitingOrderCount(response.data[0]["count(order_status)"]);
     } catch (error) {

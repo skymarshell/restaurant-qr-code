@@ -22,7 +22,7 @@ function Orders() {
   async function getOrder(page = 1) {
     try {
       const response = await axios.get(
-        `http://localhost:3000/customer_order/get_order`,
+        `https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/get_order`,
         {
           params: {
             page,
@@ -70,7 +70,7 @@ function Orders() {
 
   const confirmOrder = async (orderId) => {
     try {
-      await axios.post(`http://localhost:3000/customer_order/confirm_order`, {
+      await axios.post(`https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/confirm_order`, {
         orderId,
       });
       getOrder(currentPage); // Refresh orders
@@ -84,7 +84,7 @@ function Orders() {
 
   const cancelOrder = async (orderId) => {
     try {
-      await axios.post(`http://localhost:3000/customer_order/cancel_order`, {
+      await axios.post(`https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/cancel_order`, {
         orderId,
       });
       getOrder(currentPage); // Refresh orders

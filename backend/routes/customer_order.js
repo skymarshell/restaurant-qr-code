@@ -49,7 +49,7 @@ router.get('/get_order', (req, res) => {
         if (viewBy == 0) {
             sql2 = `
         SELECT * FROM customer_order       
-        ORDER BY order_status DESC, order_id DESC
+        ORDER BY order_id DESC
         LIMIT ${limit} OFFSET ${offset}`;
 
             countSql = "SELECT COUNT(*) as total FROM customer_order"

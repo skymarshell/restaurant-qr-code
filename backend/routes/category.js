@@ -54,8 +54,8 @@ router.post('/insert', (req, res) => {
       const sql = "INSERT INTO category (category_name) VALUE (?)";
       db.query(sql, [category_name], (err, result) => {
             if (err) {
-                  console.error("Error inserting category:", err);
-                  res.status(500).json({ error: "Error inserting category" });
+                  console.error("Category already exists!", err);
+                  res.status(500).json({ error: "Category already exists!" });
                   return
             }
             else {

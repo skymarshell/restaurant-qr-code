@@ -95,10 +95,11 @@ const FoodItem = ({
       {/* if editing */}
       {editMode ? (
         <div className="mb-4">
+      
           <input
             type="text"
             value={editFoodName}
-            onChange={(e) => setEditFoodName(e.target.value)}
+            onChange={(e) => setEditFoodName((e.target.value).trim())}
             className="w-full px-2 py-1 border rounded-md focus:outline-none focus:border-blue-500"
           />
           <textarea

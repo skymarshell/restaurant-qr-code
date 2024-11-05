@@ -1,4 +1,3 @@
-import Shabu from "/Shabu.png";
 import React, { useContext } from "react";
 
 // import style

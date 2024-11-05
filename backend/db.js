@@ -1,10 +1,11 @@
 const mysql = require('mysql2');
+require('dotenv').config()
 
 const db = mysql.createPool({
-      host: 'localhost',
-      user: 'root',
-      password: '123456',
-      database: 'restaurant',
+      host: process.env.HOST,
+      user: process.env.USER,
+      password: process.env.PASSWORD,
+      database: process.env.DATABASE,
 });
 
 
@@ -14,7 +15,7 @@ db.getConnection((err, connection) => {
             return;
       }
       console.log('Connected to MySQL database');
-      connection.release();      
+      connection.release();
 });
 
 

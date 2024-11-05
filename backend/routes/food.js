@@ -22,7 +22,7 @@ const upload = multer({ storage: storage });
 
 // Get all food items
 router.get('/menu', (req, res) => {
-    const sql = "SELECT * FROM restaurant.food ORDER BY category_id";
+    const sql = "SELECT * FROM food ORDER BY category_id";
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error querying food table:', err);
@@ -73,7 +73,7 @@ router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
             }
             console.log(`Food item with ID ${foodId} updated successfully`);
             // Fetch the updated food item
-            const getUpdatedFoodSql = `SELECT * FROM restaurant.food WHERE food_id = ?`;
+            const getUpdatedFoodSql = `SELECT * FROM food WHERE food_id = ?`;
             db.query(getUpdatedFoodSql, [foodId], (err, updatedFoodResult) => {
                 if (err) {
                     console.error('Error fetching updated food item:', err);
@@ -94,7 +94,7 @@ router.delete('/menu/:foodId', (req, res) => {
     const { foodId } = req.params;
 
     // Step 1: Fetch food item details to get the filename
-    const fetchSql = "SELECT food_image FROM restaurant.food WHERE food_id = ?";
+    const fetchSql = "SELECT food_image FROM food WHERE food_id = ?";
     db.query(fetchSql, [foodId], (fetchErr, fetchResult) => {
         if (fetchErr) {
             console.error('Error fetching food item:', fetchErr);
@@ -111,7 +111,7 @@ router.delete('/menu/:foodId', (req, res) => {
                     res.status(500).json({ error: "Error deleting food image" });
                 } else {
                     // Step 3: Delete the food item from the database
-                    const deleteSql = "DELETE FROM restaurant.food WHERE food_id = ?";
+                    const deleteSql = "DELETE FROM food WHERE food_id = ?";
                     db.query(deleteSql, [foodId], (deleteErr, deleteResult) => {
                         if (deleteErr) {
                             console.error('Error deleting food item:', deleteErr);

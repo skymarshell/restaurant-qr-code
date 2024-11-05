@@ -78,25 +78,25 @@ router.get('/chart', async (req, res) => {
       if (viewMode == "7day") {
             sql = `
             SELECT *
-            FROM restaurant.customer_order
+            FROM customer_order
             WHERE order_date BETWEEN CURDATE() - INTERVAL 7 DAY AND CONCAT(CURDATE(), ' 23:59:59')
         `;
       } else if (viewMode == "today") {
             sql = `
           SELECT orders
-          FROM restaurant.customer_order
+          FROM customer_order
           WHERE DATE(order_date) = CURDATE()
         `;
       } else if (viewMode == "thisMonth") {
             sql = `
           SELECT orders
-          FROM restaurant.customer_order
+          FROM customer_order
           WHERE DATE(order_date) BETWEEN DATE_FORMAT(CURDATE(), '%Y-%m-01') AND CURDATE()
         `;
       } else if (viewMode == "all") {
             sql = `
           SELECT orders
-          FROM restaurant.customer_order
+          FROM customer_order
         `;
       } else if (viewMode == "select_day") {
 
@@ -108,7 +108,7 @@ router.get('/chart', async (req, res) => {
 
             sql = `  
                   SELECT orders
-                  FROM restaurant.customer_order
+                  FROM customer_order
                   WHERE order_date BETWEEN '${selectYear}-${String(selectMonth).padStart(2, '0')}-${String(selectDay).padStart(2, '0')} 00:00:00' 
                   AND '${selectYear}-${String(selectMonth).padStart(2, '0')}-${String(selectDay).padStart(2, '0')} 23:59:59'
 
@@ -120,7 +120,7 @@ router.get('/chart', async (req, res) => {
 
             const now = new Date()
             sql = `SELECT orders
-                  FROM restaurant.customer_order
+                  FROM customer_order
                   WHERE order_date BETWEEN '${now.getFullYear()}-${String(onlyMonth).padStart(2, '0')}-01 00:00:00' 
                   AND '${now.getFullYear()}-${String(onlyMonth).padStart(2, '0')}-${new Date(now.getFullYear(), onlyMonth, 0).getDate()} 23:59:59'
                   `
@@ -173,7 +173,7 @@ router.get('/customer_history_chart', async (req, res) => {
       SELECT 
       CAST(customer_date AS DATE) AS uni_date,
       SUM(customer_count) AS total_customers
-      FROM restaurant.customer_history
+      FROM customer_history
       WHERE CAST(customer_date AS DATE) 
       BETWEEN '${year}-${String(inputMonth).padStart(2, "0")}-01' 
       AND LAST_DAY('${year}-${String(inputMonth).padStart(2, "0")}-01')

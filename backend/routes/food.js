@@ -52,7 +52,7 @@ router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
       SET food_name = ?, food_description = ?, food_image = IFNULL(?, food_image), category_id = ? 
       WHERE food_id = ?
     `;
-    const values = [food_name, food_description, food_image, category_id, foodId];
+    const values = [food_name.trim(), food_description, food_image, category_id, foodId];
 
     db.query(sql, values, (err, result) => {
         if (err) {
@@ -139,7 +139,7 @@ router.post('/menu', upload.single('food_image'), (req, res) => {
       INSERT INTO food (food_name, food_description, food_image, category_id)
       VALUES (?, ?, ?, ?)
     `;
-    const values = [food_name, food_description, food_image, category_id];
+    const values = [food_name.trim(), food_description, food_image, category_id];
 
     db.query(sql, values, (err, result) => {
         if (err) {

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { DataContext } from "../../Customer_main";
 import axios from "axios";
 
-function Menu_item({ name, image }) {
+function Menu_item({ name, image, desc }) {
   const { menus, categories, orders, setOrders } = useContext(DataContext);
 
   const [quantity, setQuantity] = useState(0); // State to manage quantity
@@ -62,6 +62,7 @@ function Menu_item({ name, image }) {
             className={`w-[250px] lg:w-auto lg:h-[200px]`}
           />
           <p className="text-center">{name}</p>
+          <p className="text-center">{desc}</p>
         </div>
         <div className="flex items-center justify-center md:gap-11  gap-4 me-6">
           <button onClick={() => decrease_quantity(name)}>-</button>

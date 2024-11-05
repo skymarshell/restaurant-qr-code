@@ -276,11 +276,11 @@ function Table_item({ table, getTable, tableUrl }) {
               className="w-1/2  sm:w-auto btn btn-error">
               Delete
             </button>
-            <button
+            {/* <button
               onClick={(e) => editTable(table.table_number)}
               className="w-1/2 sm:w-auto btn btn-info">
               Edit
-            </button>
+            </button> */}
           </div>
         )}
         <HiMiniEllipsisVertical

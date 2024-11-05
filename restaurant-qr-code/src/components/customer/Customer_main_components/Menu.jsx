@@ -24,7 +24,11 @@ function Menu() {
               .filter((menu) => menu.category_id == category.category_id)
               .map((menu) => (
                 <ul key={menu.food_id}>
-                  <Menu_item name={menu.food_name} image={menu.food_image} />
+                  <Menu_item
+                    name={menu.food_name}
+                    image={menu.food_image}
+                    desc={menu.food_description}
+                  />
                 </ul>
               ))}
           </section>

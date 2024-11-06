@@ -6,7 +6,7 @@ import { fullTime } from "../../../../../common_info";
 
 function Table_item({ table, getTable, tableUrl }) {
   const maxTime = fullTime; // Maximum time in minutes
-  const qrCodeBase = `http://localhost:5173/customer`; // Base URL for QR code
+  const qrCodeBase = `https://webdev-frontend.vercel.app/customer`; // Base URL for QR code
   const [viewQrCode, setViewQrCode] = useState(false);
   const [edit, setEdit] = useState(false);
   const [customerNumber, setCustomerNumber] = useState(0);

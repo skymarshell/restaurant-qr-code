@@ -93,6 +93,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
               type="text"
               onChange={(e) => setFileURL(e.target.value)}
               required
+              placeholder="ระบุ URL รูปภาพ"
             />
             {/* <input
               type="file"

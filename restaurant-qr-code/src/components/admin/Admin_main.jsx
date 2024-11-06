@@ -13,7 +13,7 @@ function Admin_main() {
   const [currectPage, setCurrectPage] = useState("Dashboard");
 
   function handleLogOut() {
-    localStorage.removeItem("username");
+    sessionStorage.removeItem("username");
     navigate("/Admin_login");
   }
 

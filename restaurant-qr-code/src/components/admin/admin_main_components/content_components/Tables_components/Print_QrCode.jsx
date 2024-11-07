@@ -3,6 +3,7 @@ import QRCode from "react-qr-code";
 import { useSearchParams } from "react-router-dom";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 
+
 function Print_QrCode(props) {
   const [searchParams] = useSearchParams();
   const qrCodeValue = searchParams.get("value");

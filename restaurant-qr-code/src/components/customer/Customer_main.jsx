@@ -9,6 +9,8 @@ import Alert from "./Customer_main_components/Alert";
 import Orders_history from "./Customer_main_components/Orders_history";
 export const DataContext = createContext();
 
+import { backend_api } from "../../../backend_api";
+
 function Customer_main({ isAdmin }) {
   const navigate = useNavigate();
   //all menu
@@ -29,7 +31,7 @@ function Customer_main({ isAdmin }) {
   const checkStatus = async () => {
     try {
       const res = await axios.get(
-        `https://webdev-backend-2e1ad2316dae.herokuapp.com/tables/table/${time}/${id}`
+        `${backend_api}/tables/table/${time}/${id}`
       );
       console.log(res.data);
 
@@ -52,7 +54,7 @@ function Customer_main({ isAdmin }) {
   //get menu
   async function getMenus() {
     try {
-      const res = await axios.get("https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu");
+      const res = await axios.get(`${backend_api}/food/menu`);
       setMenus(res.data);
     } catch (error) {
       console.error("Error fetching menu:", error);
@@ -61,7 +63,7 @@ function Customer_main({ isAdmin }) {
   //get category
   async function getCategories() {
     try {
-      const res = await axios.get("https://webdev-backend-2e1ad2316dae.herokuapp.com/category/categories");
+      const res = await axios.get(`${backend_api}/category/categories`);
       setCategories(res.data);
     } catch (error) {
       console.error("Error fetching categories:", error);

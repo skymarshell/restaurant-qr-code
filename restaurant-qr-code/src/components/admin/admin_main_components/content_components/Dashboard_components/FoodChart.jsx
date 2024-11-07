@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BarChart } from "@mui/x-charts";
 import { IoSearchOutline } from "react-icons/io5";
+import { backend_api } from "../../../../../../backend_api";
 
 function FoodChart() {
   const [orders, setOrders] = useState({});
@@ -22,7 +23,7 @@ function FoodChart() {
   async function getOrders() {
     try {
       const response = await axios.get(
-        `https://webdev-backend-2e1ad2316dae.herokuapp.com/dashboard/chart`,
+        `${backend_api}/dashboard/chart`,
         {
           params: {
             viewMode,

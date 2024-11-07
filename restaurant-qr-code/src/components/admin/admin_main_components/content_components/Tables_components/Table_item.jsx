@@ -3,6 +3,7 @@ import QRCode from "react-qr-code";
 import axios from "axios";
 import { HiMiniEllipsisVertical } from "react-icons/hi2";
 import { fullTime } from "../../../../../common_info";
+import { backend_api } from "../../../../../../backend_api";
 
 function Table_item({ table, getTable, tableUrl }) {
   const maxTime = fullTime; // Maximum time in minutes
@@ -128,7 +129,7 @@ function Table_item({ table, getTable, tableUrl }) {
     if (remainingMinutes < 0 || Difference_In_Time >= 2) {
       try {
         const response = axios.put(
-          `https://webdev-backend-2e1ad2316dae.herokuapp.com/tables/table/time_up`,
+          `${backend_api}/tables/table/time_up`,
           { table_number: table.table_number }
         );
       } catch (error) {

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { backend_api } from "../../../backend_api";
+
 
 function Customer_protect({ children }) {
   const { time, id } = useParams();
@@ -11,7 +13,7 @@ function Customer_protect({ children }) {
     const fetchTableData = async () => {
       try {
         const response = await axios.get(
-          `https://webdev-backend-2e1ad2316dae.herokuapp.com/tables/table/${time}/${id}`
+          `${backend_api}/tables/table/${time}/${id}`
         );
         console.log(response.data);
         if (response.data.len == 1) {

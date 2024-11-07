@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { backend_api } from "../../../../../../backend_api";
 
 const FoodItem = ({
   food_id,
@@ -48,7 +49,7 @@ const FoodItem = ({
       }
 
       const response = await axios.put(
-        `https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu/${food_id}`,
+        `${backend_api}/food/menu/${food_id}`,
         formData,
         {
           headers: {
@@ -83,11 +84,10 @@ const FoodItem = ({
     const category = categories.find((cat) => cat.category_id == categoryId);
     return category ? category.category_name : "Unknown Category";
   };
-  // https://webdev-backend-2e1ad2316dae.herokuapp.com
   return (
     <div className="p-4 rounded-md shadow-lg bg-gradient-to-r from-pink-100 via-green-100 to-blue-100">
       <img
-        src={`https://webdev-backend-2e1ad2316dae.herokuapp.com/uploads/${food_image}`}
+        src={`${backend_api}/uploads/${food_image}`}
         alt={food_name}
         className="w-full h-32 object-cover mb-4 border-black border-2 rounded-md"
         key={food_image} // Force re-render when image changes

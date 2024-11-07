@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import { backend_api } from "../../../../../../backend_api";
 const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
   const [foodName, setFoodName] = useState("");
   const [foodDescription, setFoodDescription] = useState("");
@@ -19,7 +19,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
       formData.append("food_image", foodImageFile); // Append the file object
 
       const response = await axios.post(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu",
+        `${backend_api}/food/menu`,
         formData,
         {
           headers: {

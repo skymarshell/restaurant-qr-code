@@ -4,6 +4,7 @@ import { BarChart } from "@mui/x-charts";
 import { ChartContainer } from "@mui/x-charts/ChartContainer";
 import { BarPlot } from "@mui/x-charts/BarChart";
 import moment from "moment/moment";
+
 //icon
 import { FaSearch } from "react-icons/fa";
 //Componentts
@@ -11,6 +12,7 @@ import Day_Month_Year_select from "./Dashboard_components/Day_Month_Year_select"
 import FoodChart from "./Dashboard_components/FoodChart";
 import Customer_history from "./Dashboard_components/Customer_history";
 import LatestOrder from "./Dashboard_components/LatestOrder";
+import { backend_api } from "../../../../../backend_api";
 // Dashboard Component
 export default function Dashboard() {
   const date = new Date();
@@ -32,7 +34,7 @@ export default function Dashboard() {
   async function getData() {
     try {
       const response = await axios.get(
-        `https://webdev-backend-2e1ad2316dae.herokuapp.com/dashboard/analysis/${selectedDay}/${selectedMonth}/${selectedYear}`
+        `${backend_api}/dashboard/analysis/${selectedDay}/${selectedMonth}/${selectedYear}`
       );
 
       // Ensure the response data matches the expected structure

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { DataContext } from "../Customer_main";
 import axios from "axios";
+import { backend_api } from './../../../../backend_api';
 
 function Summary_order() {
   // info
@@ -29,7 +30,7 @@ function Summary_order() {
       }
 
       const send = await axios.post(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/send_order",
+        `${backend_api}/customer_order/send_order`,
         {
           id,
           orders,

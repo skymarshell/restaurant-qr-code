@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import FoodItem from "./Foods_components/FoodItem";
 import AddFoodModal from "./Foods_components/AddFoodModal";
+import { backend_api } from "../../../../../backend_api";
 
 function Foods() {
   const [foodMenus, setFoodMenus] = useState([]);
@@ -14,7 +15,7 @@ function Foods() {
     setIsLoading(true); // Set loading state while fetching data
     try {
       const response = await axios.get(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu"
+        `${backend_api}/food/menu`
       );
       setFoodMenus(response.data);
       setFilterMenu(response.data);
@@ -30,7 +31,7 @@ function Foods() {
     setIsLoading(true); // Set loading state while fetching data
     try {
       const response = await axios.get(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/category/categories"
+        `${backend_api}/category/categories`
       );
       setCategories(response.data);
     } catch (error) {
@@ -48,7 +49,7 @@ function Foods() {
 
   const handleDelete = async (foodId) => {
     try {
-      await axios.delete(`https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu/${foodId}`);
+      await axios.delete(`${backend_api}/food/menu/${foodId}`);
       getCategory();
       getMenu();
     } catch (error) {

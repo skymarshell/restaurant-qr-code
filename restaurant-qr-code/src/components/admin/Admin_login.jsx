@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 import "./AdminLogin.css";
+import { backend_api } from "../../../backend_api";
 
 
 
@@ -18,10 +19,7 @@ function Admin_login() {
     const data = { username, password };
 
     try {
-      const response = await axios.post(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/admin/login",
-        data
-      );
+      const response = await axios.post(`${backend_api}/admin/login`, data);
 
       if (response.status === 200) {
         sessionStorage.setItem("username", username);

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
+import { backend_api } from "../../../../../../backend_api";
 
 function Customer_history() {
   const [allData, setAllData] = useState([]);
@@ -18,7 +19,7 @@ function Customer_history() {
     setLoading(true); // Start loading
     try {
       const response = await axios.get(
-        `https://webdev-backend-2e1ad2316dae.herokuapp.com/dashboard/customer_history_chart`,
+        `${backend_api}/dashboard/customer_history_chart`,
         {
           params: {
             month: selectMonth,

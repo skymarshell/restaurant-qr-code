@@ -3,6 +3,7 @@ import { DataContext } from "../Customer_main";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { format } from "date-fns"; // Import date-fns for formatting
+import { backend_api } from "../../../../backend_api";
 
 function Orders_history() {
   const { viewOrdersHistory, setViewOrdersHistory, isAdmin } =
@@ -28,7 +29,7 @@ function Orders_history() {
       let response;
       if (isAdmin) {
         response = await axios.get(
-          `https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/orders_history/admin/admin`,
+          `${backend_api}/customer_order/orders_history/admin/admin`,
           { params: { getPage } }
         );
         const data = response.data;
@@ -39,7 +40,7 @@ function Orders_history() {
         }
       } else {
         response = await axios.get(
-          `https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/orders_history/${time}/${id}`
+          `${backend_api}/customer_order/orders_history/${time}/${id}`
         );
         const data = response.data;
         setOrderHistory(data);

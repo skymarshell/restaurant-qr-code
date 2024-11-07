@@ -5,6 +5,7 @@ import Order_item from "./Orders_components/Order_item";
 import Order_pagination from "./Orders_components/Order_pagination";
 import Order_search from "./Orders_components/Order_search";
 import Order_select from "./Orders_components/Order_select";
+import { backend_api } from "../../../../../backend_api";
 
 export const OrderContext = createContext("");
 
@@ -22,7 +23,7 @@ function Orders() {
   async function getOrder(page = 1) {
     try {
       const response = await axios.get(
-        `https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/get_order`,
+        `${backend_api}/customer_order/get_order`,
         {
           params: {
             page,
@@ -70,7 +71,7 @@ function Orders() {
 
   const confirmOrder = async (orderId) => {
     try {
-      await axios.post(`https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/confirm_order`, {
+      await axios.post(`${backend_api}/customer_order/confirm_order`, {
         orderId,
       });
       getOrder(currentPage); // Refresh orders
@@ -84,7 +85,7 @@ function Orders() {
 
   const cancelOrder = async (orderId) => {
     try {
-      await axios.post(`https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/cancel_order`, {
+      await axios.post(`${backend_api}/customer_order/cancel_order`, {
         orderId,
       });
       getOrder(currentPage); // Refresh orders

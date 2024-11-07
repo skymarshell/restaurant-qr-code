@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import moment from "moment/moment";
+import { backend_api } from "../../../../../../backend_api";
 
 function LatestOrder() {
   const [latestOrder, setLatestOrder] = useState([]);
@@ -29,7 +30,7 @@ function LatestOrder() {
   async function getOrder() {
     try {
       const response = await axios.get(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/dashboard/latest_order"
+        `${backend_api}/dashboard/latest_order`
       );
       setLatestOrder(response.data);
     } catch (error) {

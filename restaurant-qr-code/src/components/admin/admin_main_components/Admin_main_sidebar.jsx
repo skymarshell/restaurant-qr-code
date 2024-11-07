@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
-import { GiForkKnifeSpoon,GiSteak,GiTable } from "react-icons/gi";
-import { FaUtensils,FaPersonBooth } from "react-icons/fa";
+import { GiForkKnifeSpoon, GiSteak, GiTable } from "react-icons/gi";
+import { FaUtensils, FaPersonBooth } from "react-icons/fa";
 import {
   Typography,
   List,
@@ -26,6 +26,7 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
 import { AdminContext } from "../Admin_main";
 import axios from "axios";
+import { backend_api } from "./../../../../backend_api";
 
 function Admin_main_sidebar() {
   const {
@@ -43,7 +44,7 @@ function Admin_main_sidebar() {
   async function getWaitingOrderCount() {
     try {
       const response = await axios.get(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/customer_order/waiting_orderCount"
+        `${backend_api}/customer_order/waiting_orderCount`
       );
       setWaitingOrderCount(response.data[0]["count(order_status)"]);
     } catch (error) {

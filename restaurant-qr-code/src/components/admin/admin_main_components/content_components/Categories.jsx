@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-
+import { backend_api } from "../../../../../backend_api";
 function CategoryItem({ category_id, category_name, get_categories, index }) {
   const [editCategoryName, setEditCategoryName] = useState(category_name);
   const [edit, setEdit] = useState(false);
@@ -24,7 +24,7 @@ function CategoryItem({ category_id, category_name, get_categories, index }) {
       const data = { category_id, category_name: editCategoryName.trim() };
 
       const sendData = await axios.post(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/category/update",
+        `${backend_api}/category/update`,
         data
       );
 
@@ -57,7 +57,7 @@ function CategoryItem({ category_id, category_name, get_categories, index }) {
     setLoading(true);
     try {
       const deleteCategory = await axios.delete(
-        `https://webdev-backend-2e1ad2316dae.herokuapp.com/category/delete/${category_id}/${category_name}`
+        `${backend_api}/category/delete/${category_id}/${category_name}`
       );
 
       if (deleteCategory.status === 200) {
@@ -141,7 +141,7 @@ function AddCategory({ categories, get_categories }) {
     setLoading(true);
     try {
       const insert = await axios.post(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/category/insert",
+        `${backend_api}/category/insert`,
         {
           category_name: insert_value,
         }
@@ -208,7 +208,7 @@ function Categories() {
     try {
       setLoading(true);
       const response = await axios.get(
-        "https://webdev-backend-2e1ad2316dae.herokuapp.com/category/categories"
+        `${backend_api}/category/categories`
       );
       setCategories(response.data);
     } catch (error) {

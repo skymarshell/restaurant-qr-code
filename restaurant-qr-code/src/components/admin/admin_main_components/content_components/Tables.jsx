@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import Table_add from "./Tables_components/Table_add";
 import Table_item from "./Tables_components/Table_item";
 import axios from "axios";
+import { backend_api } from "../../../../../backend_api";
 
 function Tables() {
   const [tables, setTables] = useState([]);
-  const tableUrl = "https://webdev-backend-2e1ad2316dae.herokuapp.com/tables";
+  const tableUrl = `${backend_api}/tables`;
   async function getTable() {
     try {
       const response = await axios.get(`${tableUrl}/table`);

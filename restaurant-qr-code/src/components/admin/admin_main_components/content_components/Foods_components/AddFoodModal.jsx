@@ -40,7 +40,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
       }
     } catch (error) {
       console.log("Error adding new food item:", error);
-      alert("Error adding new food item:", error);
+      alert("มี Error หรือชื่ออาหารซํ้า", error);
     }
     getMenu();
   };

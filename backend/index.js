@@ -8,6 +8,8 @@ const db = require('./db');
 //setting
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+
 
 //import routes
 const admin = require('./routes/admin')

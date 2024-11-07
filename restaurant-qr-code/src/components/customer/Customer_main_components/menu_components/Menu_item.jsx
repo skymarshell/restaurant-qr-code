@@ -57,7 +57,7 @@ function Menu_item({ name, image, desc }) {
       <li className="flex items-center justify-between  p-3 my-3 sm:gap-20 gap-6 border-0 border-solid shadow-md backdrop-saturate-200 backdrop-blur-2xl bg-opacity-80 border-white/80 bg-white">
         <div>
           <img
-            src={`${image}`}
+            src={`https://webdev-backend-2e1ad2316dae.herokuapp.com/uploads/${image}`}
             alt={`${image}`}
             className={`w-[250px] lg:w-auto lg:h-[200px]`}
           />

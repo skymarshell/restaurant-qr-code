@@ -9,14 +9,17 @@ const storage = multer.diskStorage({
         cb(null, path.join(__dirname, '../uploads')); // Specify the destination path
     },
     filename: function (req, file, cb) {
-        const [name, type] = file.originalname.split('.');
-        const getFileName = `${Date.now()}-${name}.${type}`; // Add the dot before the file extension
+        // Use path methods to get a sanitized base name and extension
+        const name = path.basename(file.originalname, path.extname(file.originalname)).replace(/[^a-zA-Z0-9_-]/g, ''); // Removes special characters
+        const extension = path.extname(file.originalname);
+
+        // Generate the unique file name
+        const getFileName = `${Date.now()}-${name}${extension}`;
+
         cb(null, getFileName);
     }
 });
 
-
-// Create multer instance
 const upload = multer({ storage: storage });
 
 
@@ -74,16 +77,6 @@ router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
                 });
             }
             console.log(`Food item with ID ${foodId} updated successfully`);
-            // Fetch the updated food item
-            const getUpdatedFoodSql = `SELECT * FROM restaurant.food WHERE food_id = ?`;
-            db.query(getUpdatedFoodSql, [foodId], (err, updatedFoodResult) => {
-                if (err) {
-                    console.error('Error fetching updated food item:', err);
-                    res.status(500).json({ error: "Error fetching updated food item" });
-                } else {
-                    res.status(200).json(updatedFoodResult[0]);
-                }
-            });
         }
     });
 });
@@ -107,13 +100,18 @@ router.delete('/menu/:foodId', (req, res) => {
     });
 });
 
-// Insert a new food item
+
 // POST route for adding a new food item with image upload
 router.post('/menu', upload.single('food_image'), (req, res) => {
-
-
     const { food_name, food_description, category_id } = req.body;
-    const food_image = req.file.filename; // Get the uploaded file name from multer
+
+    // Check if the required fields are present
+    if (!food_name || !food_description || !category_id || !req.file) {
+        return res.status(400).json({ error: "All fields are required, including an image file" });
+    }
+
+    // Get the uploaded file name from multer
+    const food_image = req.file.filename;
 
     const sql = `
       INSERT INTO food (food_name, food_description, food_image, category_id)
@@ -124,17 +122,20 @@ router.post('/menu', upload.single('food_image'), (req, res) => {
     db.query(sql, values, (err, result) => {
         if (err) {
             console.error('Error inserting new food item:', err);
-            res.status(500).json({ error: "Error inserting new food item" });
-        } else {
-            const insertedFoodId = result.insertId;
-            console.log(`New food item inserted with ID: ${insertedFoodId}`);
-            res.status(201).json({
-                message: 'New food item inserted successfully',
-                insertedFoodId
-            });
+            return res.status(500).json({ error: "Error inserting new food item" });
         }
+
+        const insertedFoodId = result.insertId;
+        console.log(`New food item inserted with ID: ${insertedFoodId}`);
+
+        res.status(201).json({
+            message: 'New food item inserted successfully',
+            insertedFoodId,
+            food_image_url: `/uploads/${food_image}` // Construct URL for image
+        });
     });
 });
+
 
 
 module.exports = router;

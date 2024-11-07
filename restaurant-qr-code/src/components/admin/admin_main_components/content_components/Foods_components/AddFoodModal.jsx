@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
   const [foodName, setFoodName] = useState("");
   const [foodDescription, setFoodDescription] = useState("");
-  // const [foodImageFile, setFoodImageFile] = useState(null); // State for file input
-  const [fileURL, setFileURL] = useState("");
+  const [foodImageFile, setFoodImageFile] = useState(null); // State for file input
   const [categoryId, setCategoryId] = useState("");
 
   const handleSubmit = async (e) => {
@@ -13,18 +12,21 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
     e.stopPropagation();
 
     try {
-      // const formData = new FormData();
-      // formData.append("food_name", foodName);
-      // formData.append("food_description", foodDescription);
-      // formData.append("category_id", categoryId);
-      // formData.append("food_image", fileURL.trim()); // Append the file object
+      const formData = new FormData();
+      formData.append("food_name", foodName);
+      formData.append("food_description", foodDescription);
+      formData.append("category_id", categoryId);
+      formData.append("food_image", foodImageFile); // Append the file object
 
-      const response = await axios.post("https://webdev-backend-2e1ad2316dae.herokuapp.com/food/menu", {
-        foodName,
-        foodDescription,
-        fileURL,
-        categoryId,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/food/menu",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.status === 201) {
         alert("New food item added successfully");
@@ -32,6 +34,7 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
         // Clear form fields after successful addition
         setFoodName("");
         setFoodDescription("");
+        setFoodImageFile(null);
         setCategoryId("");
         setIsAddingFood(false); // Close modal after successful addition
       }
@@ -47,8 +50,14 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
     // Clear form fields and close modal
     setFoodName("");
     setFoodDescription("");
+    setFoodImageFile(null);
     setCategoryId("");
     setIsAddingFood(false);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFoodImageFile(file);
   };
 
   return (
@@ -90,18 +99,12 @@ const AddFoodModal = ({ categories, onAdd, setIsAddingFood, getMenu }) => {
               Food Image
             </label>
             <input
-              type="text"
-              onChange={(e) => setFileURL(e.target.value)}
-              required
-              placeholder="ระบุ URL รูปภาพ"
-            />
-            {/* <input
               type="file"
               accept="image/png,  image/jpeg"
               onChange={handleFileChange}
               className="w-full px-2 py-1  rounded-md focus:outline-none focus:border-blue-500"
               required
-            /> */}
+            />
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-black-100">

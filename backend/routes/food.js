@@ -6,7 +6,7 @@ const fs = require('fs');
 // Set up multer storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '../../restaurant-qr-code/public')); // Specify the destination path
+        cb(null, path.join(__dirname, '../uploads')); // Specify the destination path
     },
     filename: function (req, file, cb) {
         const [name, type] = file.originalname.split('.');
@@ -38,28 +38,53 @@ router.get('/menu', (req, res) => {
 
 
 
-router.put('/menu/:foodId', (req, res) => {
+// Update a food item
+router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
     const { foodId } = req.params;
-    const { food_name, food_url, food_description, category_id } = req.body;
-    const sql = `
-     UPDATE food 
-SET 
-    food_name = ?, 
-    food_description = ?, 
-    food_image = ?, 
-    category_id = ? 
-WHERE 
-    food_id = ?;
-    `;
-    const values = [food_name, food_description, food_url, category_id, foodId];
+    const { food_name, food_description, category_id, old_food_name } = req.body;
 
-    db.query(sql, values, (err, result) => {  // Pass `values` directly, not `[values]`
+    // Check if req.file exists and is not null before assigning food_image
+    let food_image = null;
+    if (req.file) {
+        food_image = req.file.filename;
+    }
+
+    const sql = `
+      UPDATE food 
+      SET food_name = ?, food_description = ?, food_image = IFNULL(?, food_image), category_id = ? 
+      WHERE food_id = ?
+    `;
+    const values = [food_name, food_description, food_image, category_id, foodId];
+
+    db.query(sql, values, (err, result) => {
         if (err) {
-            console.log("Update error:", err);
-            res.status(500).json({ error: "ชื่ออาหารซํ้ากันหรืออาจมี Error" });
-            return;
+            console.error('Error updating food item:', err);
+            res.status(500).json({ error: "ชื่ออาหารซํ้ากัน" });
+        } else {
+            //delete old image
+            if (req.file) {
+
+                // Step 2: Delete the file from the filesystem
+                const filePath = path.resolve(__dirname, '../uploads', old_food_name);
+                fs.unlink(filePath, (unlinkErr) => {
+                    if (unlinkErr) {
+                        console.error('Error deleting food image:', unlinkErr);
+                        res.status(500).json({ error: "Error deleting food image" });
+                    }
+                });
+            }
+            console.log(`Food item with ID ${foodId} updated successfully`);
+            // Fetch the updated food item
+            const getUpdatedFoodSql = `SELECT * FROM restaurant.food WHERE food_id = ?`;
+            db.query(getUpdatedFoodSql, [foodId], (err, updatedFoodResult) => {
+                if (err) {
+                    console.error('Error fetching updated food item:', err);
+                    res.status(500).json({ error: "Error fetching updated food item" });
+                } else {
+                    res.status(200).json(updatedFoodResult[0]);
+                }
+            });
         }
-        res.status(200).json({ message: `Food item with ID ${foodId} updated successfully` });
     });
 });
 
@@ -84,31 +109,28 @@ router.delete('/menu/:foodId', (req, res) => {
 
 // Insert a new food item
 // POST route for adding a new food item with image upload
-router.post('/menu', (req, res) => {
+router.post('/menu', upload.single('food_image'), (req, res) => {
 
 
-    const { foodName,
-        foodDescription,
-        fileURL,
-        categoryId, } = req.body;
-
-    // const food_image = req.file.filename; // Get the uploaded file name from multer
+    const { food_name, food_description, category_id } = req.body;
+    const food_image = req.file.filename; // Get the uploaded file name from multer
 
     const sql = `
       INSERT INTO food (food_name, food_description, food_image, category_id)
       VALUES (?, ?, ?, ?)
     `;
-    const values = [foodName, foodDescription, fileURL, categoryId];
+    const values = [food_name, food_description, food_image, category_id];
 
     db.query(sql, values, (err, result) => {
         if (err) {
             console.error('Error inserting new food item:', err);
             res.status(500).json({ error: "Error inserting new food item" });
         } else {
-
-            console.log(`New food item inserted`);
+            const insertedFoodId = result.insertId;
+            console.log(`New food item inserted with ID: ${insertedFoodId}`);
             res.status(201).json({
-                message: 'New food item inserted successfully'
+                message: 'New food item inserted successfully',
+                insertedFoodId
             });
         }
     });

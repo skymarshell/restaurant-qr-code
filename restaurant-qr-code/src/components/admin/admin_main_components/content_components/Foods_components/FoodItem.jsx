@@ -59,7 +59,7 @@ const FoodItem = ({
       );
 
       if (response.status === 200) {
-        alert(`Food item with ID ${food_id} updated successfully`);
+        alert(response.data.msg);
         const updatedFood = response.data;
         onEdit(updatedFood); // Update local state or trigger reload
       }

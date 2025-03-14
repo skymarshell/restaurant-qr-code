@@ -69,12 +69,16 @@ router.put('/menu/:foodId', upload.single('food_image'), (req, res) => {
 
                 // Step 2: Delete the file from the filesystem
                 const filePath = path.resolve(__dirname, '../uploads', old_food_name);
-                fs.unlink(filePath, (unlinkErr) => {
-                    if (unlinkErr) {
-                        console.error('ลบรูปเก่าไม่ได้', unlinkErr);
-                        res.status(500).json({ error: "Error deleting food image" });
-                    }
-                });
+                if(fs.existsSync(filePath)){
+                    fs.unlink(filePath, (unlinkErr) => {
+                        if (unlinkErr) {
+                            console.error('ลบรูปเก่าไม่ได้', unlinkErr);
+                            res.status(500).json({ error: "Error deleting food image" });
+                        }
+                    });
+                }
+
+          
             }
             res.status(200).json({ msg: `Food item with ID ${foodId} updated successfully` });
             console.log(`Food item with ID ${foodId} updated successfully`);

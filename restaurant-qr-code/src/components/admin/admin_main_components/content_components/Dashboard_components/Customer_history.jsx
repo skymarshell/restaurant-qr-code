@@ -1,12 +1,13 @@
+/* eslint-disable react/prop-types */
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { backend_api } from "../../../../../../backend_api";
 
 function Customer_history() {
-  const [allData, setAllData] = useState([]);
+
   const [customer_count, setCustomer_count] = useState([]);
-  const [allDate, setAllDate] = useState([]);
+
   const [onlyDate, setOnlyDate] = useState([]);
   const [sum, setSum] = useState(0);
   const [loading, setLoading] = useState(false); // Loading state
@@ -15,38 +16,37 @@ function Customer_history() {
   const [selectMonth, setSelectMonth] = useState(now.getMonth() + 1);
   const [selectYear, setSelectYear] = useState(now.getFullYear());
 
-  async function getCustomer_history() {
-    setLoading(true); // Start loading
-    try {
-      const response = await axios.get(
-        `${backend_api}/dashboard/customer_history_chart`,
-        {
-          params: {
-            month: selectMonth,
-            year: selectYear,
-          },
-        }
-      );
-      // Update state
-      setAllData(response.data);
-      setAllDate(response.data.map((ad) => ad.date));
-      setCustomer_count(response.data.map((ad) => ad.total_customers));
-      setOnlyDate(response.data.map((ad) => ad.date.split("-")[2]));
-      let totalSum = 0;
-      response.data.forEach((ad) => {
-        totalSum += Number(ad.total_customers);
-      });
-      setSum(totalSum);
-    } catch (error) {
-      console.error("Error fetching customer history:", error);
-      // Optionally handle the error
-    } finally {
-      setLoading(false); // End loading
-    }
-  }
+
 
   useEffect(() => {
-    getCustomer_history();
+    async function getCustomer_history() {
+      setLoading(true); // Start loading
+      try {
+        const response = await axios.get(
+          `${backend_api}/dashboard/customer_history_chart`,
+          {
+            params: {
+              month: selectMonth,
+              year: selectYear,
+            },
+          }
+        );
+        // Update state
+  
+        setCustomer_count(response.data.map((ad) => ad.total_customers));
+        setOnlyDate(response.data.map((ad) => ad.date.split("-")[2]));
+        let totalSum = 0;
+        response.data.forEach((ad) => {
+          totalSum += Number(ad.total_customers);
+        });
+        setSum(totalSum);
+      } catch (error) {
+        console.error("Error fetching customer history:", error);
+        // Optionally handle the error
+      } finally {
+        setLoading(false); // End loading
+      }
+    }
     const intervalGetCustomer_history = setInterval(() => {
       getCustomer_history();
     }, 10000);

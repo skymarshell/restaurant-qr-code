@@ -26,6 +26,8 @@ router.get('/table/:time/:id', (req, res) => {
     }
 
 
+    
+
     res.json({ len: result.length, result: { ...result } });
   });
 });

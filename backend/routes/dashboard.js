@@ -75,7 +75,7 @@ router.get('/analysis/:day/:month/:year', async (req, res) => {
 });
 
 router.get('/latest_order', async (req, res) => {
-      db.query("SELECT * FROM customer_order", (err, result) => {
+      db.query("SELECT * FROM customer_order a order by a.order_id desc", (err, result) => {
             if (err) {
                   console.log(err);
                   return

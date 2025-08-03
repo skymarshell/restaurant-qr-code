@@ -16,6 +16,7 @@ function Customer_protect({ children }) {
           `${backend_api}/tables/table/${time}/${id}`
         );
         console.log(response.data);
+        
         if (response.data.len == 1) {
           setIsValid(true);
         } else {

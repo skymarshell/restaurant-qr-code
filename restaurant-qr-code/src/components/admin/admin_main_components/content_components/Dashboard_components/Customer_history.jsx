@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState , useRef } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { backend_api } from "../../../../../../backend_api";
 
@@ -18,41 +18,46 @@ function Customer_history() {
 
 
 
+  const intervalRef = useRef(null); // เก็บ interval id
+
   useEffect(() => {
     async function getCustomer_history() {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
-        const response = await axios.get(
-          `${backend_api}/dashboard/customer_history_chart`,
-          {
-            params: {
-              month: selectMonth,
-              year: selectYear,
-            },
-          }
-        );
-        // Update state
-  
-        setCustomer_count(response.data.map((ad) => ad.total_customers));
-        setOnlyDate(response.data.map((ad) => ad.date.split("-")[2]));
-        let totalSum = 0;
-        response.data.forEach((ad) => {
-          totalSum += Number(ad.total_customers);
+        const response = await axios.get(`${backend_api}/dashboard/customer_history_chart`, {
+          params: {
+            month: selectMonth,
+            year: selectYear,
+          },
         });
-        setSum(totalSum);
+
+        setCustomer_count(response.data.map((ad) => Number(ad.total_customers)));
+        setOnlyDate(response.data.map((ad) => Number(ad.date.split("-")[2])));
+        setSum(response.data.reduce((acc, ad) => acc + Number(ad.total_customers), 0));
       } catch (error) {
         console.error("Error fetching customer history:", error);
-        // Optionally handle the error
       } finally {
-        setLoading(false); // End loading
+        setLoading(false);
       }
     }
-    const intervalGetCustomer_history = setInterval(() => {
-      getCustomer_history();
-    }, 10000);
 
-    return () => clearInterval(intervalGetCustomer_history);
-  }, [selectMonth, selectYear]);
+  // ✅ ดึงข้อมูลทันทีเมื่อ selectMonth หรือ selectYear เปลี่ยน
+  getCustomer_history();
+
+  // ✅ เคลียร์ interval เดิมถ้ามี
+  if (intervalRef.current) {
+    clearInterval(intervalRef.current);
+  }
+
+  // ✅ ตั้ง interval ใหม่
+  intervalRef.current = setInterval(() => {
+    getCustomer_history();
+  }, 10000);
+
+  // ✅ เคลียร์ interval เมื่อ component ถูก unmount
+  return () => clearInterval(intervalRef.current);
+
+}, [selectMonth, selectYear]);
 
   return (
     <div>

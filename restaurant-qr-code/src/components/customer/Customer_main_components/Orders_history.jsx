@@ -43,6 +43,8 @@ function Orders_history() {
           `${backend_api}/customer_order/orders_history/${time}/${id}`
         );
         const data = response.data;
+        console.log("history",data);
+        
         setOrderHistory(data);
       }
     } catch (err) {

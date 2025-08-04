@@ -1,17 +1,15 @@
-import React, { useState, Suspense, lazy } from "react";
+import React, { useState, Suspense, lazy, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 import "./AdminLogin.css";
 import { backend_api } from "../../../backend_api";
 
-
-
 function Admin_login() {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("admin");
+  const [password, setPassword] = useState("123");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,6 +33,10 @@ function Admin_login() {
       }
     }
   };
+
+  useEffect(() => {
+    alert("โปรดใช้รหัสดังนี้\nUsername: admin\nPassword: 123");
+  }, []);
 
   return (
     <div className="admin-login-container">

@@ -33,9 +33,9 @@ app.use('/tables', tables)
 app.use('/dashboard', dashboard)
 
 // comment ตอน deploy
-app.listen(port, () => {
-      console.log(`app listening on port ${port} \nhttp://localhost:${port}/`)
-})
+// app.listen(port, () => {
+//       console.log(`app listening on port ${port} \nhttp://localhost:${port}/`)
+// })
 //
 
 // ✅ export app ให้ Vercel ใช้เป็น handler

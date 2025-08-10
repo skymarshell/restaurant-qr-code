@@ -39,4 +39,4 @@ app.listen(port, () => {
 //
 
 // ✅ export app ให้ Vercel ใช้เป็น handler
-//module.exports = app
+module.exports = app

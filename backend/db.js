@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const db = mysql.createPool({
 <<<<<<< HEAD
+<<<<<<< HEAD
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
@@ -14,10 +15,15 @@ const db = mysql.createPool({
     rejectUnauthorized: false // ✅ แก้ตรงนี้
   }
 =======
+=======
+>>>>>>> parent of 9945658 (แก้ railway deploy)
       host: "localhost",
       user: "root",
       password: "123456",
       database: "restaurant",
+<<<<<<< HEAD
+>>>>>>> parent of 9945658 (แก้ railway deploy)
+=======
 >>>>>>> parent of 9945658 (แก้ railway deploy)
 });
 
@@ -36,12 +42,19 @@ db.getConnection((err, connection) => {
     return;
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
   console.log("✅ Connected to MySQL database");
+=======
+  console.log("Connected to MySQL database");
+>>>>>>> parent of 9945658 (แก้ railway deploy)
   connection.release();
 });
 
+//200 OK:
+//201 Created:
 //400 Bad Request:
 //404 Not Found:
+
 module.exports = db;
 =======
   console.log("Connected to MySQL database");

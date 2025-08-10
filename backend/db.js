@@ -40,6 +40,8 @@ db.getConnection((err, connection) => {
   connection.release();
 });
 
+//400 Bad Request:
+//404 Not Found:
 module.exports = db;
 =======
   console.log("Connected to MySQL database");

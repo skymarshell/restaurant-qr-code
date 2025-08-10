@@ -55,12 +55,12 @@ require("dotenv").config();
 
 const db = mysql.createPool({
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT, // ใส่ port เช่น 27885
+  port: process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   ssl: {
-    rejectUnauthorized: true
+    rejectUnauthorized: false // ✅ แก้ตรงนี้
   }
 });
 
@@ -70,7 +70,7 @@ db.getConnection((err, connection) => {
     return;
   }
   console.log("✅ Connected to MySQL database");
-  connection.release(); // สำคัญ: ปล่อย connection กลับเข้า pool
+  connection.release();
 });
 
 module.exports = db;

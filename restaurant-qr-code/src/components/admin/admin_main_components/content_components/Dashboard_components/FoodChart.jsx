@@ -91,7 +91,7 @@ function FoodChart() {
 
   return (
     <div className="relative">
-      <h1 className="font-bold text-3xl text-center  mb-2">กราฟยอดสั่งอาหาร</h1>
+      <h1 className="font-bold text-3xl text-center  mb-2">กราฟยอดสั่งอาหาร (Top 5)</h1>
       <div className="flex flex-wrap gap-3 mb-3 items-center ">
         <button
           onClick={() => {

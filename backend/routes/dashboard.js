@@ -161,8 +161,12 @@ router.get('/chart', async (req, res) => {
                   });
             });
 
-            const foodKey = Object.keys(foodData);
-            const foodValue = Object.values(foodData);
+            const top5 = Object.entries(foodData)           // [['ข้าวผัด',10], ['กะเพรา',7], ...]
+            .sort((a, b) => b[1] - a[1])                  // เรียงจากยอดขายมากไปน้อย
+            .slice(0, 5);                                 // เอาแค่ 5 อันดับ
+
+            const foodKey = top5.map(([name]) => name);
+            const foodValue = top5.map(([, qty]) => qty);
 
             res.status(200).json({ foodKey, foodValue });
       });

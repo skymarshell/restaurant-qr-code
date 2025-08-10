@@ -8,8 +8,8 @@ import { backend_api } from "../../../backend_api";
 function Admin_login() {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("123");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,9 +34,6 @@ function Admin_login() {
     }
   };
 
-  useEffect(() => {
-    alert("โปรดใช้รหัสดังนี้\nUsername: admin\nPassword: 123");
-  }, []);
 
   return (
     <div className="admin-login-container">

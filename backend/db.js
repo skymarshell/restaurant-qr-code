@@ -6,6 +6,7 @@ require("dotenv").config();
 const db = mysql.createPool({
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
@@ -17,11 +18,16 @@ const db = mysql.createPool({
 =======
 =======
 >>>>>>> parent of 9945658 (แก้ railway deploy)
+=======
+>>>>>>> parent of 9945658 (แก้ railway deploy)
       host: "localhost",
       user: "root",
       password: "123456",
       database: "restaurant",
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 9945658 (แก้ railway deploy)
+=======
 >>>>>>> parent of 9945658 (แก้ railway deploy)
 =======
 >>>>>>> parent of 9945658 (แก้ railway deploy)
@@ -43,7 +49,11 @@ db.getConnection((err, connection) => {
   }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   console.log("✅ Connected to MySQL database");
+=======
+  console.log("Connected to MySQL database");
+>>>>>>> parent of 9945658 (แก้ railway deploy)
 =======
   console.log("Connected to MySQL database");
 >>>>>>> parent of 9945658 (แก้ railway deploy)

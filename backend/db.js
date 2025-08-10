@@ -50,7 +50,11 @@ db.getConnection((err, connection) => {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   console.log("✅ Connected to MySQL database");
+=======
+  console.log("Connected to MySQL database");
+>>>>>>> parent of 9945658 (แก้ railway deploy)
 =======
   console.log("Connected to MySQL database");
 >>>>>>> parent of 9945658 (แก้ railway deploy)
